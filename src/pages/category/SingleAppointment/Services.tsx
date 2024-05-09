@@ -6,7 +6,6 @@ const Services = () => {
     return (
         <>
 
-            <Header />
             <div className="w-full h-full">
 
                 <div className="w-full flex h-full justify-between max-w-[1200px] mx-auto px-[20px] py-[40px]">

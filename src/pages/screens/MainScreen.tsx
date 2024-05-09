@@ -1,5 +1,7 @@
 import assets from "@/assets";
+import { useNavigate } from "react-router-dom";
 const MainScreen = () => {
+    const navigate = useNavigate();
 
     return (
         <>
@@ -20,13 +22,13 @@ const MainScreen = () => {
                             Choose an option
                         </h1>
                         <div className="py-[20px]">
-                            <button className=" bg-white rounded-[10px] w-full px-[25px] text-heading-color text-[16px] font-bold leading-normal flex-col py-[28px] items-start">
+                            <button onClick={() => navigate('/booking/appointment')} className=" bg-white rounded-[10px] w-full px-[25px] text-heading-color text-[16px] font-bold leading-normal flex-col py-[28px] items-start">
                                 Book an Appointment
                                 <span className="block mt-[5px] text-txt-color text-[10px] leading-normal font-semibold">Schedule service for yourself</span>
                             </button>
                         </div>
                         <div className="py-[20px]">
-                            <button className="bg-white rounded-[10px] w-full px-[25px] text-heading-color text-[16px] font-bold leading-normal flex-col py-[28px] items-start">
+                            <button onClick={() => navigate('/booking/group-appointment')} className="bg-white rounded-[10px] w-full px-[25px] text-heading-color text-[16px] font-bold leading-normal flex-col py-[28px] items-start">
                                 Group Appointment
                                 <span className="block mt-[5px] text-txt-color text-[10px] leading-normal font-semibold text-left">For yourself & others</span>
                             </button>
