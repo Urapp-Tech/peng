@@ -1,7 +1,18 @@
-import assets from "../../assets"
-import SubHeading from "../common/typography/SubHeading"
+import { useState } from "react";
+import assets from "../../assets";
+import PaymentModal from "../common/modal/PaymentModal";
+import SubHeading from "../common/typography/SubHeading";
 
 function RightSideBar() {
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const openModal = () => {
+      setModalOpen(true);
+    };
+  
+    const closeModal = () => {
+      setModalOpen(false);
+    };
     return (
         <>
             <div className="w-full p-5 pb-0  border-2 border-primary rounded-[20px] min-h-[600px]">
@@ -71,8 +82,9 @@ function RightSideBar() {
                 </div>
 
                 <div className="flex mt-[30px] py-[15px] justify-between">
-                    <button className="w-full rounded-[10px] bg-primary text-white text-[16px] font-semibold leading-normal">
+                    <button onClick={openModal} className="w-full rounded-[10px] bg-primary text-white text-[16px] font-semibold leading-normal">
                         Continue
+                        {modalOpen && <PaymentModal />}
                     </button>
                 </div>
 

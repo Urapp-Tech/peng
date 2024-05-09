@@ -322,3 +322,26 @@ color: #fff;
   color: #8CAC89;
 
 }
+.mdl-btn {
+  display: flex;
+  border-radius: 50px;
+  width: 40px;
+  padding: 10px 0;
+  justify-content: center;
+  color: #fff;
+}
+/* .brk-points{
+  margin: 10px 0;
+}
+.brk-points span::before{
+  content: '';
+  width:50%;
+  height: 1px;
+  @apply bg-primary;
+  position: absolute;
+  top: 0;
+  bottom: auto;
+  left: 0;
+  z-index: 1;
+  
+} */

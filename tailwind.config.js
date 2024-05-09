@@ -21,6 +21,7 @@ module.exports = {
         'heading-color': '#1A1A1A',
         'txt-color': ' #6A6A6A',
         'primary': '#8CAC89',
+        'lime-green': '#F3FFF2' 
       },
       borderRadius: {
         lg: "var(--radius)",

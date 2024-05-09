@@ -1,14 +1,14 @@
 import assets from "@/assets";
 import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
 } from "@/components/ui/dialog";
-import CustomButton from "../buttons/CustomButton";
+import { DateOfBirthInput } from "../buttons/DobBtn";
 
-const LoginModal = () => {
+const RegisterModal = () => {
     return (
         <div className="bg-modals rounded-[30px] bg-[#000]">
            <Dialog>
@@ -26,12 +26,13 @@ const LoginModal = () => {
         </DialogHeader>
         <div className="w-full">
   <form className="bg-white px-1 pt-6 pb-8 mb-4">
-    <div className="mb-4">
+    <div className="flex justify-between items-center mb-2">
+    <div className="pr-1">
       <label
-        className="block text-txt-color text-[12px] font-semibold mb-2"
+        className="block text-txt-color text-[12px] font-semibold mb-1"
         htmlFor="username"
       >
-        Username or email
+        Full Name
       </label>
       <input
         className="appearance-none border border-primary rounded w-full py-2 px-3 text-txt-color leading-tight focus:outline-none"
@@ -40,9 +41,52 @@ const LoginModal = () => {
         placeholder="Username"
       />
     </div>
+    <div className="pl-1">
+      <label
+        className="block text-txt-color text-[12px] font-semibold mb-1"
+        htmlFor="username"
+      >
+           Last Name
+      </label>
+      <input
+        className="appearance-none border border-primary rounded w-full py-2 px-3 text-txt-color leading-tight focus:outline-none"
+        id="username"
+        type="text"
+        placeholder="Username"
+      />
+    </div>
+   
+    </div>
+    <p className="my-[10px] text-[10px] text-txt-color leading-normal font-semibold">  Make sure it matches your ID name</p>
     <div className="mb-1">
       <label
-        className="block text-txt-color text-[12px] font-semibold mb-2"
+        className="block text-txt-color text-[12px] font-semibold mb-1"
+        htmlFor="email"
+      >
+        Email Address
+      </label>
+      <input
+        className="appearance-none border border-primary rounded w-full py-2 px-3 text-txt-color mb-3 leading-tight focus:outline-none "
+        id="email"
+        type="email"
+        placeholder="Email..."
+      />
+
+    </div>
+  
+    <div className="mb-2">
+    <label
+        className="block text-txt-color text-[12px] font-semibold mb-1"
+        htmlFor="email"
+      >
+        DOB
+      </label>
+    <DateOfBirthInput />
+  
+    </div>
+    <div className="mb-1">
+      <label
+        className="block text-txt-color text-[12px] font-semibold mb-1"
         htmlFor="password"
       >
         Password
@@ -55,39 +99,21 @@ const LoginModal = () => {
       />
   
     </div>
-    <div className="flex items-center justify-end mb-2">
-      <a
-        className="inline-block align-baseline font-bold text-[12px] text-primary"
-        href="#"
-      >
-        Forgot Password?
-      </a>
-    </div>
+
     <div className="flex items-center justify-center">
       <button
         className="w-full bg-primary text-white font-bold py-2 px-4 text-[12px] leading-noramal rounded focus:outline-none focus:shadow-outline"
         type="button"
       >
-        Sign In
+        Sign up
       </button>
    
     </div>
-    <div className="relative brk-points flex justify-between items-center my-[20px] opacity-[0.5]">
-        <span className="w-[45%] bg-primary h-[1px] block"></span>
-       <span className="block text-txt-color w-[10%] text-center">or</span>
-       <span className="w-[45%] bg-primary h-[1px] block"></span>
-    </div>
-    <div className="my-[15px] flex justify-between items-center">
-        <div className="mr-[10px] flex-1">
-        <CustomButton title="Google" iconLeft={assets.images.google} customWidth="w-full" bgColor="bg-lime-green" customclass={'hover:bg-primary leading-normal font-bold hover:text-white'} fontSize="text-[12px]" textColor="text-txt-color"/>
-        </div>
-        <div className="mr-[10px] flex-1">
-        <CustomButton title="Facebook" iconLeft={assets.images.facebook} customWidth="w-full" bgColor="bg-lime-green" customclass={' hover:bg-primary leading-normal font-bold hover:text-white'} fontSize="text-[12px]" textColor="text-txt-color" />
-        </div>
-    </div>
+ 
+
     <div className="my-[15px] text-center flex justify-center">
-          <span className="text-heading-color text-[12px] font-bold leading-normal block mr-1">Are you new? </span>
-        <a  href="#" className="text-primary text-[12px] font-semibold">Create and account</a>
+          <span className="text-heading-color text-[12px] font-bold leading-normal block mr-1">Do you have already an Account? </span>
+        <a  href="#" className="text-primary text-[12px] font-semibold">Sign in </a>
     </div>
   </form>
   {/* <p className="text-center text-gray-500 text-xs">
@@ -105,4 +131,4 @@ const LoginModal = () => {
 
     )
 }
-export default LoginModal;
+export default RegisterModal;

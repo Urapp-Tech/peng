@@ -8,9 +8,17 @@ import DateSldier from "../sliders/DateSldier";
 import MainHeading from "../typography/MainHeading";
 import SubTabs from "./SubTabs";
 
+
 const MainTabs = () => {
+    
+    const move = () => {
+         
+    }
+
     return (
-        <div className="px-[5%]">            <Tabs defaultValue="account" className="w-full">
+    
+        <div className="px-[5%]">            
+        <Tabs defaultValue="account" className="w-full">
                 <TabsList className="main-tabs">
                     <TabsTrigger value="account" className="bg-white text-primary mr-[20px] ">Services</TabsTrigger>
                     <TabsTrigger value="professional" className="bg-white text-primary mr-[20px] ">Professional</TabsTrigger>
@@ -33,7 +41,7 @@ const MainTabs = () => {
                     </div>
                     <div className="w-full flex justify-between items-center flex-wrap">
                         <ImageBtn title="Selena Swift" ratingTxt="4.9" ratingIcon={assets.images.rank} avatarIcon={assets.images.avatar} category="Beautician" customClass="mr-[5px] mb-[10px] " />
-                        <IconButtons title="Select Professional Per Service" avatarIcon={assets.images.service} />
+                        <IconButtons title="Select Professional Per Service" avatarIcon={assets.images.service} onclick={}/>
                         <IconButtons title="Any Professional" avatarIcon={assets.images.groups} subTitle="for maximum availability from AED 250" />
 
                     </div>
@@ -63,8 +71,7 @@ const MainTabs = () => {
                    <TimeSlotsBtn time="3:00 PM"/>
                    <TimeSlotsBtn time="4:00 PM"/>
                    <TimeSlotsBtn time="5:00 PM"/>
-                   </div>
-                  
+                   </div> 
                    </TabsContent>
                 <TabsContent value="confirm">Change your password here.</TabsContent>
             </Tabs>
