@@ -1,15 +1,13 @@
-// import Tabs from "../common/tabs/Tabs";
-import Services from "@/pages/category/SingleAppointment/Services";
+import Header from "../common/header/Header";
+import { Outlet } from "react-router-dom";
 
 function AppLayout() {
   return (
     <>
-
-      {/* <MainScreen /> */}
-      <Services />
+      <Header />
+      <Outlet />
     </>
-
-  )
+  );
 }
 
 export default AppLayout;

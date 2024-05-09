@@ -1,5 +1,5 @@
 import assets from "@/assets";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import IconButtons from "../buttons/IconButtons";
 import ImageBtn from "../buttons/ImageBtn";
 import TimeSlotsBtn from "../buttons/TimeSlotsBtn";
