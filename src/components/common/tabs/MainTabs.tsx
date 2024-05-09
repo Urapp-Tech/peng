@@ -10,10 +10,6 @@ import SubTabs from "./SubTabs";
 
 
 const MainTabs = () => {
-    
-    const move = () => {
-         
-    }
 
     return (
     
@@ -41,7 +37,7 @@ const MainTabs = () => {
                     </div>
                     <div className="w-full flex justify-between items-center flex-wrap">
                         <ImageBtn title="Selena Swift" ratingTxt="4.9" ratingIcon={assets.images.rank} avatarIcon={assets.images.avatar} category="Beautician" customClass="mr-[5px] mb-[10px] " />
-                        <IconButtons title="Select Professional Per Service" avatarIcon={assets.images.service} onclick={}/>
+                        <IconButtons title="Select Professional Per Service" avatarIcon={assets.images.service}/>
                         <IconButtons title="Any Professional" avatarIcon={assets.images.groups} subTitle="for maximum availability from AED 250" />
 
                     </div>
