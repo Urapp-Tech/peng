@@ -1,9 +1,9 @@
 import AppLayout from "@/components/layouts/AppLayout";
 import MainLayout from "@/components/layouts/MainLayout";
-import GroupAppointmentPage from "@/pages/book/group-appointment/GroupAppointmentPage";
-import Services from "@/pages/category/SingleAppointment/Services";
+import GroupAppointmentPage from "@/pages/booking/GroupAppointment/GroupAppointmentPage";
+import Services from "@/pages/booking/SingleAppointment/Services";
 import MainScreen from "@/pages/screens/MainScreen";
-import { Navigate, RouteObject } from "react-router-dom";
+import { RouteObject } from "react-router-dom";
 
 export const routeObjects: RouteObject[] = [
   {
