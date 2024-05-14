@@ -329,6 +329,11 @@ color: #fff;
   padding: 10px 0;
   justify-content: center;
   color: #fff;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: black;
+  opacity: 1;
 }
 /* .brk-points{
   margin: 10px 0;
