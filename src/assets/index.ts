@@ -1,4 +1,3 @@
-import { assets } from '@/assets';
 import avatar from '../assets/images/avatarr-01.png';
 import cross from '../assets/images/cross-icon.png';
 import greenLogo from '../assets/images/green-logo.svg';
@@ -12,6 +11,8 @@ import logo from '../assets/images/logo.svg';
 import rank from '../assets/images/rating-star.png';
 import service from '../assets/images/service-01.png';
 import groups from '../assets/images/services-022.png';
+import speechBubble from './images/speech-bubble.png';
+
 const assets ={
     images:{
         logo,
@@ -26,7 +27,8 @@ const assets ={
         groups,
         greenLogo,
         google,
-        facebook
+        facebook,
+        speechBubble
     },
 
     
