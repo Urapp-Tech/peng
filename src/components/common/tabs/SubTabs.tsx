@@ -1,14 +1,14 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
-import { useState } from 'react';
+// import { useState } from 'react';
 import Modal from "../modal/Modal";
 import MainHeading from "../typography/MainHeading";
 
 const SubTabs = () => {
-    const [modalOpen, setModalOpen] = useState(false);
+    // const [modalOpen, setModalOpen] = useState(false);
 
-    const handleBtnClick = () => {
-        setModalOpen(true);
-    };
+    // const handleBtnClick = () => {
+    //     setModalOpen(true);
+    // };
 
     return (
         <>

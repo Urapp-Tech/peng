@@ -14,7 +14,7 @@ type Props = {
 const ImageBtn = ({ title, category, ratingTxt, ratingIcon, customClass, onclick, customHeight, customWidth, avatarIcon }: Props) => {
     return (
         <>
-            <div className={`border-2 border-primary rounded-[10px] px-2 py-[15px]  ${customClass} ${customWidth ? customWidth : 'w-[30%]'} ${customHeight ? customHeight : 'h-[174px]'}`} >
+            <div onClick={onclick} className={`border-2 border-primary rounded-[10px] px-2 py-[15px]  ${customClass} ${customWidth ? customWidth : 'w-[30%]'} ${customHeight ? customHeight : 'h-[174px]'}`} >
                 <div className="flex justify-between items-center mb-[15px]">
                     <span className="text-[10px] font-semibold leading-normal text-txt-color ">{category}</span>
                     <div className="flex "><span className="block pr-[5px]">

@@ -11,7 +11,7 @@ type Props = {
 const IconButtons = ({ title, customClass, subTitle, onclick, customHeight, customWidth, avatarIcon }: Props) => {
     return (
         <>
-            <div className={`border-2 border-primary rounded-[10px] px-2 py-[15px]  ${customClass} ${customWidth ? customWidth : 'w-[30%]'} ${customHeight ? customHeight : 'h-[174px]'}`} >
+            <div className={`border-2 border-primary rounded-[10px] px-2 py-[15px]  ${customClass} ${customWidth ? customWidth : 'w-[30%]'} ${customHeight ? customHeight : 'h-[174px]'}`}  onClick={onclick}>
 
                 <div className="my-[5px] text-center mb-[10px] mt-[30px]">
                     {avatarIcon && <img src={avatarIcon} alt="avatar" className={`${customClass} ${customWidth ? customWidth : 'w-[auto]'} ${customHeight ? customHeight : 'h-auto'} object-contain mx-auto `} />}

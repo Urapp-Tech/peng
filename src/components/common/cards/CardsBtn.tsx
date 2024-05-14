@@ -12,7 +12,7 @@ const CardsBtn = ({ mainTitle, time, features, pricing, onclick }: Props) => {
     return (
         <>
 
-            <div className="border-2 border-primary rounded-[20px] p-[20px] my-[20px] min-h-[160px]">
+            <div onClick={onclick} className="border-2 border-primary rounded-[20px] p-[20px] my-[20px] min-h-[160px]">
                 <div className="flex justify-between items-center">
                     <div className="p-2">
                         <span className="block text-[16px] leading-normal font-bold text-heading-color mb-[10px]">{mainTitle}</span>
