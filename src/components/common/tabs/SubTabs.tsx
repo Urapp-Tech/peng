@@ -12,7 +12,7 @@ const SubTabs = () => {
 
     return (
         <>
-            <Tabs defaultValue="account" className="w-full">
+            <Tabs defaultValue="feature" className="w-full">
                 <TabsList className="main-tabs">
                     <TabsTrigger value="feature" className="bg-white text-primary mr-[20px] ">Featured</TabsTrigger>
                     <TabsTrigger value="hair" className="bg-white text-primary mr-[20px] ">Hair</TabsTrigger>

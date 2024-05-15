@@ -2,7 +2,11 @@ import assets from "../../assets";
 // import PaymentModal from "../common/modal/PaymentModal";
 import SubHeading from "../common/typography/SubHeading";
 
-function RightSideBar() {
+interface RightSideBarProps  {
+    continueAction: (p:string) => void;
+}
+
+const RightSideBar:React.FC<RightSideBarProps> = ({continueAction}) =>  {
     // const [modalOpen, setModalOpen] = useState(false);
 
     // const openModal = () => {
@@ -81,7 +85,7 @@ function RightSideBar() {
                 </div>
 
                 <div className="flex mt-[30px] py-[15px] justify-between">
-                    <button  className="w-full rounded-[10px] bg-primary text-white text-[16px] font-semibold leading-normal">
+                    <button onClick={() => continueAction('')} className="w-full rounded-[10px] bg-primary text-white text-[16px] font-semibold leading-normal">
                         Continue
                         {/* {modalOpen && <PaymentModal />} */}
                     </button>

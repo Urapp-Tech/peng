@@ -1,58 +1,61 @@
-import MainTabs from "@/components/common/tabs/MainTabs";
-import RightSideBar from "@/components/layouts/RightSideBar";
+import Modal from "@/components/common/modal/Modal";
+import MainHeading from "@/components/common/typography/MainHeading";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { fetchCategories } from "@/redux/features/storeCategorySlice";
+import { useAppDispatch, useAppSelector } from "@/redux/redux-hooks";
+import _ from "lodash";
+import { useEffect } from "react";
 
 const Services = () => {
-    return (
-        <>
+  const {
+    categories,
+    loading: CatLoading,
+    notify,
+    notifyMessage,
+    selectedCategory,
+    short_categories,
+  } = useAppSelector((x) => x.storeCategoryState);
+  const dispatch = useAppDispatch(); 
+  const { systemConfig } = useAppSelector(x => x.appState)
 
-            <div className="w-full h-full">
+  const handleTabChange = (e: any) => {
+    console.log("🚀 ~ Services ~ e:", e);
+  };
 
-                <div className="w-full flex h-full justify-between max-w-[1200px] mx-auto px-[20px] py-[40px]">
-                    <div className=" w-[65%] main-tabs px-[20px]">
+  useEffect(() => {
+    if(systemConfig && !_.isEmpty(systemConfig.tenant)) {
+        dispatch(fetchCategories(systemConfig.tenant))
+    }
+  }, [])
 
-                        {/* <Tabs defaultValue="account" className="w-full">
-                            <TabsList className="main-tabs">
-                                <TabsTrigger value="account" className="bg-[#fff] text-primary mr-[20px] ">Services</TabsTrigger>
-                                <TabsTrigger value="professional" className="bg-[#fff] text-primary mr-[20px] ">Professional</TabsTrigger>
-                                <TabsTrigger value="time" className="bg-[#fff] text-primary mr-[20px] ">Time</TabsTrigger>
-                                <TabsTrigger value="confirm" className="bg-[#fff] text-primary mr-[20px] ">Confirm</TabsTrigger>
-                            </TabsList>
-                            <TabsContent value="account">
+  return (
+    <>
+      <MainHeading title="Select Services" />
+      { CatLoading && (
+        <Skeleton className="w-full h-[50px]" /> 
+      )}
 
-                                <h1 className="my-[20px] text-[30px] font-normal text-heading-color">Select Services</h1>
-                                <SubTabs />
-                            </TabsContent>
-                            <TabsContent value="professional">
-
-                                <div className="w-full flex justify-between items-center flex-wrap">
-                                    <ImageBtn title="Selena Swift" ratingTxt="4.9" ratingIcon={assets.images.rank} avatarIcon={assets.images.avatar} category="Beautician" customClass="mr-[5px] mb-[10px] " />
-                                    <ImageBtn title="Selena Swift" ratingTxt="4.9" ratingIcon={assets.images.rank} avatarIcon={assets.images.avatar} category="Beautician" customClass="mr-[5px] mb-[10px]" />
-                                    <ImageBtn title="Selena Swift" ratingTxt="4.9" ratingIcon={assets.images.rank} avatarIcon={assets.images.avatar} category="Beautician" customClass="mr-[5px] mb-[10px]" />
-
-                                </div>
-                                <div className="w-full flex justify-between items-center flex-wrap">
-                                    <ImageBtn title="Selena Swift" ratingTxt="4.9" ratingIcon={assets.images.rank} avatarIcon={assets.images.avatar} category="Beautician" customClass="mr-[5px] mb-[10px] " />
-                                    <ImageBtn title="Selena Swift" ratingTxt="4.9" ratingIcon={assets.images.rank} avatarIcon={assets.images.avatar} category="Beautician" customClass="mr-[5px] mb-[10px]" />
-                                    <ImageBtn title="Selena Swift" ratingTxt="4.9" ratingIcon={assets.images.rank} avatarIcon={assets.images.avatar} category="Beautician" customClass="mr-[5px] mb-[10px]" />
-
-                                </div>
-
-
-                            </TabsContent>
-                            <TabsContent value="time">Change your password here.</TabsContent>
-                            <TabsContent value="confirm">Change your password here.</TabsContent>
-                        </Tabs> */}
-                        <MainTabs />
-
-                    </div>
-                    <div className="w-[35%]">
-                        <RightSideBar />
-                    </div>
-                </div>
-            </div>
-        </>
-
-    )
-}
+      <Tabs
+        onValueChange={handleTabChange}
+        defaultValue="feature"
+        className="w-full"
+      >
+        <TabsList className="main-tabs">
+        { !CatLoading && categories.map( (c, i) => (
+          <TabsTrigger
+            value={c.id}
+            key={i}
+            className="bg-white text-primary mr-[20px] "
+          >
+            {c.name}
+          </TabsTrigger>
+        )) }
+          
+        </TabsList>
+      </Tabs>
+    </>
+  );
+};
 
 export default Services;
