@@ -21,7 +21,7 @@ const CardsBtn = ({ mainTitle, time, features, pricing, onclick }: Props) => {
                         <span className="block text-[14px] leading-normal font-semibold text-heading-color  mb-[10px]">{pricing}</span>
                     </div>
                     <div className="p-2">
-                        <UserDropDown/>
+                        <UserDropDown title="AnyProfessional"/>
                     </div>
                 </div>
             </div>

@@ -1,14 +1,10 @@
-import assets from "@/assets";
-import IconButtons from "@/components/common/buttons/IconButtons";
-import ImageBtn from "@/components/common/buttons/ImageBtn";
 import TimeSlotsBtn from "@/components/common/buttons/TimeSlotsBtn";
 import UserDropDown from "@/components/common/dropdown/UserDropDown";
 import DateSldier from "@/components/common/sliders/DateSldier";
 import MainHeading from "@/components/common/typography/MainHeading";
-import { useNavigate } from "react-router-dom";
 
 const Time = () => {
-  const navigate = useNavigate();
+ 
   // const handleClick = () => {
   //   // Perform navigation and open modal
   //   navigate("/booking/appointment/professional"); // Navigate to the login route

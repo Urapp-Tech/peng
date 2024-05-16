@@ -1,6 +1,5 @@
-import Header from "@/components/common/header/Header";
 import LoginModal from "@/components/common/modal/LoginModal";
-import MainTabs from "@/components/common/tabs/MainTabs";
+import RegisterModal from "@/components/common/modal/RegisterModal";
 import RightSideBar from "@/components/layouts/RightSideBar";
 import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/redux/redux-hooks";
@@ -12,6 +11,8 @@ const Booking = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [showLogin, setShowLogin] = useState<boolean>(false);
+  const [showRegister, setShowRegister] = useState<boolean>(false);
+  const [showMsg, setShowMsg] = useState<boolean>(false);
   const { user } = useAppSelector( x => x.authState)
 
 
@@ -128,7 +129,9 @@ const Booking = () => {
           </div>
         </div>
       </div>
-      <LoginModal openModal={showLogin} closeModal={setShowLogin} />
+      <LoginModal openModal={showLogin} closeModal={setShowLogin} openRegisterModal={setShowRegister} />
+       <RegisterModal openModal={showRegister} closeModal={setShowRegister} />  
+
     </>
   );
 };

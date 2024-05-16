@@ -3,16 +3,16 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  DialogTitle
 } from "@/components/ui/dialog";
 import CustomButton from "../buttons/CustomButton";
 
 interface LoginModalProps {
   openModal: boolean;
   closeModal: React.Dispatch<React.SetStateAction<boolean>>;
+  openRegisterModal: any;
 } 
-const LoginModal: React.FC<LoginModalProps> = ({openModal, closeModal}) => {
+const LoginModal: React.FC<LoginModalProps> = ({openModal, closeModal,openRegisterModal}) => {
   const toggleModal = (val:boolean) => {
     closeModal(val);
   }
@@ -117,9 +117,22 @@ const LoginModal: React.FC<LoginModalProps> = ({openModal, closeModal}) => {
                 <span className="text-heading-color text-[12px] font-bold leading-normal block mr-1">
                   Are you new?{" "}
                 </span>
-                <a href="#" className="text-primary text-[12px] font-semibold">
+                <div className="text-primary text-[12px] font-semibold cursor-pointer"
+                onClick={()=>{
+                  closeModal(false)
+                  openRegisterModal(true)
+                 }}
+                >
+                  Create an Account
+                </div>
+                {/* <button
+                //  onClick={()=>{
+                //   closeModal(true)
+                //   // openRegisterModal(true)
+                // }}
+                 className="text-primary text-[12px] font-semibold">
                   Create and account
-                </a>
+                </button> */}
               </div>
             </form>
             {/* <p className="text-center text-gray-500 text-xs">

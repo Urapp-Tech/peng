@@ -3,18 +3,26 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger
+  DialogTitle
 } from "@/components/ui/dialog";
-import { DateOfBirthInput } from "../buttons/DobBtn";
 
-const RegisterModal = () => {
+import { DateOfBirthInput } from "../buttons/DobBtn";
+interface LoginModalProps {
+  openModal: boolean;
+  closeModal: React.Dispatch<React.SetStateAction<boolean>>;
+} 
+
+
+const RegisterModal: React.FC<LoginModalProps> = ({openModal, closeModal}) => {
+  const toggleModal = (val:boolean) => {
+    closeModal(val);
+  }
     return (
         <div className="bg-modals rounded-[30px] bg-[#000]">
-           <Dialog>
-      <DialogTrigger asChild>
+           <Dialog  open={openModal} onOpenChange={toggleModal}>
+      {/* <DialogTrigger asChild>
         <button >Edit Profile</button>
-      </DialogTrigger>
+      </DialogTrigger> */}
       <DialogContent className="sm:max-w-[425px] bg-white rounded-[30px]">
         <DialogHeader>
           <DialogTitle className="text-center w-full mt-[15px]">
@@ -101,11 +109,16 @@ const RegisterModal = () => {
     </div>
 
     <div className="flex items-center justify-center">
-      <button
-        className="w-full bg-primary text-white font-bold py-2 px-4 text-[12px] leading-noramal rounded focus:outline-none focus:shadow-outline"
-        type="button"
+      <button  
+      
+        className="w-full text-center bg-primary text-white font-bold py-3 px-4 text-[12px] leading-noramal rounded focus:outline-none focus:shadow-outline"
+        // onClick={()=>{
+        //   closeModal(false)
+        //   openMsg(true)
+        //  }}
       >
         Sign up
+     
       </button>
    
     </div>
