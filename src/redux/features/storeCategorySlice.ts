@@ -75,6 +75,8 @@ export const storeCategorySlice = createSlice({
             text: `Something went wrong. Error: ${action.payload.error.message} `,
             type: 'error',
           };
+          state.notify = true;
+
         }
       });
   },

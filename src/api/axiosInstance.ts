@@ -1,6 +1,6 @@
 import { logout } from '@/redux/features/authStateSlice';
 import { store } from '@/redux/store';
-import { getToken } from '@/utils/constant';
+import { getTenantId, getToken } from '@/utils/constant';
 import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 // Create a new Axios instance
@@ -16,6 +16,10 @@ axiosInstance.interceptors.request.use(
     if(token && token.trim().length > 0) {
         config.headers.Authorization = token;
         // config.headers.Authorization = `Bearer ${token}`;
+    }
+    const tenant = getTenantId();
+    if(tenant && tenant.trim().length > 0) {
+        config.headers.tenant = tenant;
     }
     return config;
   },

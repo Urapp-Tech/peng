@@ -1,21 +1,19 @@
+import { useAppSelector } from "@/redux/redux-hooks";
 import assets from "../../assets";
 // import PaymentModal from "../common/modal/PaymentModal";
 import SubHeading from "../common/typography/SubHeading";
+import { CURRENCY_SYMBOL } from "@/utils/constant";
+import { Booking } from "@/redux/features/bookingSlice";
+import _ from "lodash";
+import { memo } from "react";
 
 interface RightSideBarProps  {
     continueAction: (p:string) => void;
 }
 
 const RightSideBar:React.FC<RightSideBarProps> = ({continueAction}) =>  {
-    // const [modalOpen, setModalOpen] = useState(false);
-
-    // const openModal = () => {
-    //   setModalOpen(true);
-    // };
-  
-    // const closeModal = () => {
-    //   setModalOpen(false);
-    // };
+    const { bookings } = useAppSelector(x => x.bookingState);
+    
     return (
         <>
             <div className="w-full p-5 pb-0  border-2 border-primary rounded-[20px] min-h-[600px]">
@@ -36,41 +34,19 @@ const RightSideBar:React.FC<RightSideBarProps> = ({continueAction}) =>  {
                 <p className="block text-txt-color text-[12px] font-semibold leading-normal">
                     Building 6, Al Raya Street, City Walk Dubai, Dubai
                 </p>
-                <div className="flex my-[10px] justify-between">
-                    <div className="py-[10px]">
-                        <span className="block text-heading-color text-[12px] font-semibold leading-normal">Haircut</span>
-                        <span className="block text-txt-color text-[12px] font-semibold leading-normal">40 min - 50min </span>
+                { bookings.map((b, i) => (
+                    <div className="flex my-[10px] justify-between" key={i}>
+                        <div className="py-[10px]">
+                            <span className="block text-heading-color text-[12px] font-semibold leading-normal">{b.service.name}</span>
+                            <span className="block text-txt-color text-[12px] font-semibold leading-normal">{b.barber ? `${b.barber.service_time} mins with`: ''}   {b.barber ? b.barber.store_employee.name : 'Any Professional'} </span>
+                        </div>
+
+                        <div className="py-[10px]">
+                            <span className="block text-heading-color text-[12px] font-semibold leading-normal">{CURRENCY_SYMBOL} {b.service.price}</span>
+
+                        </div>
                     </div>
-
-                    <div className="py-[10px]">
-                        <span className="block text-heading-color text-[12px] font-semibold leading-normal">from AED 250</span>
-
-                    </div>
-                </div>
-
-                <div className="flex my-[10px] justify-between">
-                    <div className="py-[10px]">
-                        <span className="block text-heading-color text-[12px] font-semibold leading-normal">Haircut</span>
-                        <span className="block text-txt-color text-[12px] font-semibold leading-normal">40 min - 50min </span>
-                    </div>
-
-                    <div className="py-[10px]">
-                        <span className="block text-heading-color text-[12px] font-semibold leading-normal">from AED 250</span>
-
-                    </div>
-                </div>
-
-                <div className="flex my-[10px] justify-between">
-                    <div className="py-[10px]">
-                        <span className="block text-heading-color text-[12px] font-semibold leading-normal">Haircut</span>
-                        <span className="block text-txt-color text-[12px] font-semibold leading-normal">40 min - 50min </span>
-                    </div>
-
-                    <div className="py-[10px]">
-                        <span className="block text-heading-color text-[12px] font-semibold leading-normal">from AED 250</span>
-
-                    </div>
-                </div>
+                ))}
 
                 <div className="flex mt-[30px] py-[15px] justify-between border-t-2 border-primary">
                     <div className="py-[10px]">
@@ -79,7 +55,7 @@ const RightSideBar:React.FC<RightSideBarProps> = ({continueAction}) =>  {
                     </div>
 
                     <div className="py-[10px]">
-                        <span className="block text-heading-color text-[16px] font-bold leading-normal">from AED 250</span>
+                        <span className="block text-heading-color text-[16px] font-bold leading-normal"> {CURRENCY_SYMBOL} {bookings.reduce((total: number, next: Booking) => total + _.toNumber( next.service.price),0)} </span>
 
                     </div>
                 </div>
@@ -98,4 +74,4 @@ const RightSideBar:React.FC<RightSideBarProps> = ({continueAction}) =>  {
     )
 }
 
-export default RightSideBar
+export default memo(RightSideBar)

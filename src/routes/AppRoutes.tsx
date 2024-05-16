@@ -11,6 +11,7 @@ const MainLayout = lazy(() => import('@/components/layouts/MainLayout'))
 const Services = lazy(() => import('@/pages/booking/SingleAppointment/Services'))
 const Professionals = lazy(() => import('@/pages/booking/SingleAppointment/Professionals'))
 const Time = lazy(() => import('@/pages/booking/SingleAppointment/Time'))
+const ProfessionalService = lazy(() => import('@/pages/booking/SingleAppointment/SelectProfessional/ProfessionalService'))
 
 export const routeObjects: RouteObject[] = [
   { 
@@ -42,6 +43,11 @@ export const routeObjects: RouteObject[] = [
               {
                 path: "professionals",
                 element: <Suspense fallback={<Loader />}> <Professionals/> </Suspense>
+    
+              },
+              {
+                path: "professionals-by-service",
+                element: <Suspense fallback={<Loader />}> <ProfessionalService/> </Suspense>
     
               },
               {
