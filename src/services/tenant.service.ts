@@ -46,7 +46,7 @@ const deviceRegistrationWithController = () => {
 };
 
 export default {
-  getTenant: getTenantWithController(),
+  getTenant: getTenantWithController,
   deviceRegistration: deviceRegistrationWithController(),
   getTenantConfig: getTenantConfigWithController(),
 };

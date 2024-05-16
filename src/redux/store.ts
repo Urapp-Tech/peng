@@ -9,6 +9,8 @@ import { ratingAPI } from './features/ratingSliceAPI';
 import { orderAPI } from './features/orderStateSliceAPI';
 import AppointmentSliceReducer from './features/appointmentSlice';
 import employeeRatingSliceReducer from './features/employeeRatingSlice';
+import bookingSliceReducer from './features/bookingSlice';
+import barberSliceReducer from './features/barberSlice';
 
 export const store = configureStore({
   reducer: {
@@ -19,6 +21,8 @@ export const store = configureStore({
     storeCategoryItemState: StoreCategoryItemStateReducer,
     appointmentState: AppointmentSliceReducer,
     employeeRatingState: employeeRatingSliceReducer,
+    bookingState: bookingSliceReducer,
+    barberState: barberSliceReducer,
     [ratingAPI.reducerPath]: ratingAPI.reducer,
     [orderAPI.reducerPath]: orderAPI.reducer,
   },

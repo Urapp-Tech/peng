@@ -1,12 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import assets from '../../../assets';
 
-function AddButton() {
-    const [isAdded, setIsAdded] = useState(false);
+interface AddButtonProps {
+    isChecked: boolean;
+    handleChecked: (s: boolean) => void;
+} 
+
+const AddButton: React.FC<AddButtonProps> = ({handleChecked, isChecked}) => {
+    const [isAdded, setIsAdded] = useState(isChecked);
 
     const handleClick = () => {
-        setIsAdded(true);
+        setIsAdded(!isAdded);
+        handleChecked(!isAdded)
     };
+
+    useEffect(() => {
+        setIsAdded(isAdded)
+    }, [isChecked])
 
     return (
         <button
