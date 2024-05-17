@@ -34,8 +34,8 @@ const RegisterModal: React.FC<LoginModalProps> = ({openModal, closeModal}) => {
         </DialogHeader>
         <div className="w-full">
   <form className="bg-white px-1 pt-6 pb-8 mb-4">
-    <div className="flex justify-between items-center mb-2">
-    <div className="pr-1">
+    <div className="flex justify-between items-center mb-2 max-md:flex-col">
+    <div className="pr-1 max-md:pr-0 max-md:w-full max-md:mb-2">
       <label
         className="block text-txt-color text-[12px] font-semibold mb-1"
         htmlFor="username"
@@ -49,10 +49,10 @@ const RegisterModal: React.FC<LoginModalProps> = ({openModal, closeModal}) => {
         placeholder="Username"
       />
     </div>
-    <div className="pl-1">
+    <div className="pl-1 max-md:pl-0 max-md:w-full">
       <label
         className="block text-txt-color text-[12px] font-semibold mb-1"
-        htmlFor="username"
+        htmlFor="last name"
       >
            Last Name
       </label>

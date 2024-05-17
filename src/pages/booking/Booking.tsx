@@ -80,13 +80,16 @@ const Booking = () => {
   return (
     <>
       <div className="w-full h-full">
+
         <div
           className="w-full 
-                flex h-full justify-between max-w-[1200px] mx-auto px-[20px] py-[40px]"
+                flex h-full justify-between max-w-[1200px] mx-auto px-[20px] py-[40px] max-lg:flex-col"
         >
-          <div className=" w-[65%] main-tabs px-[20px]">
+          <div className=" w-[65%] main-tabs px-[20px] max-lg:w-full max-lg:mb-2 ">
             {/* <MainTabs /> */}
-            <div className="gap-4 ">
+            <div className="max-sm:overflow-x-scroll max-sm:overflow-y-hidden max-sm:pb-4 m--tabs">
+         
+            <div className="gap-4 max-sm:w-[600px] max-sm:mx-auto">
               <Button
                 onClick={() => handleClick("/booking/appointment/services")}
                 variant="link"
@@ -122,16 +125,18 @@ const Booking = () => {
                 Confirm
               </Button>
             </div>
+            </div>
+        
             <Outlet />
           </div>
-          <div className="w-[35%]">
+          <div className="w-[35%] max-lg:w-full max-lg:px-[20px]">
             <RightSideBar continueAction={handleClick} />
           </div>
         </div>
       </div>
       <LoginModal openModal={showLogin} closeModal={setShowLogin} openRegisterModal={setShowRegister} />
        <RegisterModal openModal={showRegister} closeModal={setShowRegister} />  
-
+               
     </>
   );
 };

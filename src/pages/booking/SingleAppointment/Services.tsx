@@ -1,7 +1,6 @@
-import Modal from "@/components/common/modal/Modal";
 import MainHeading from "@/components/common/typography/MainHeading";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
 import { fetchCategoriesItems } from "@/redux/features/storeCategoryItemsSlice";
 import { fetchCategories, setSelectedCategory } from "@/redux/features/storeCategorySlice";
@@ -88,9 +87,11 @@ const Services = () => {
           defaultValue={selectedCategory?.id || ''}
           className="w-full"
         >
-          <TabsList className="main-tabs">
+          <div className="max-sm:overflow-x-scroll max-sm:overflow-y-hidden max-sm:pb-4 m--tabs">
+          <TabsList className="main-tabs max-sm:w-[600px] max-sm:mx-auto">
             {categories.map((c, i) => (
-              <TabsTrigger
+   
+             <TabsTrigger
                 value={c.id}
                 key={i}
                 className="bg-white text-primary mr-[20px] "
@@ -99,6 +100,8 @@ const Services = () => {
               </TabsTrigger>
             ))}
           </TabsList>
+          </div>
+          
         </Tabs>
       )}
 
