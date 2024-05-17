@@ -408,6 +408,17 @@ color: #fff;
   background: black;
   opacity: 1;
 }
+.m--tabs::-webkit-scrollbar{
+  height: 15px;
+  width: 4px;
+  background-color: #d3e2d2;
+  border-radius: 50px;
+}
+.m--tabs::-webkit-scrollbar-thumb:horizontal{
+ @apply bg-primary;
+  border-radius: 50px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
 /* .brk-points{
   margin: 10px 0;
 }

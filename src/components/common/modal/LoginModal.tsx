@@ -19,7 +19,7 @@ const LoginModal: React.FC<LoginModalProps> = ({openModal, closeModal,openRegist
   return (
     <div className="bg-modals rounded-[30px] bg-[#000]">
       <Dialog open={openModal} onOpenChange={toggleModal}>
-        <DialogContent className="sm:max-w-[425px] bg-white rounded-[30px]">
+        <DialogContent className="max-[480px]:w-[300px] max-md:w-[400px] bg-white rounded-[30px] h-[90%]">
           <DialogHeader>
             <DialogTitle className="text-center w-full mt-[15px]">
               <img
@@ -33,7 +33,7 @@ const LoginModal: React.FC<LoginModalProps> = ({openModal, closeModal,openRegist
           </DialogDescription> */}
           </DialogHeader>
           <div className="w-full">
-            <form className="bg-white px-1 pt-6 pb-8 mb-4">
+            <form className="bg-white px-1 pt-6 pb-8 mb-4 h-full max-[480px]:py-1">
               <div className="mb-4">
                 <label
                   className="block text-txt-color text-[12px] font-semibold mb-2"
@@ -85,8 +85,8 @@ const LoginModal: React.FC<LoginModalProps> = ({openModal, closeModal,openRegist
                 </span>
                 <span className="w-[45%] bg-primary h-[1px] block"></span>
               </div>
-              <div className="my-[15px] flex justify-between items-center">
-                <div className="mr-[10px] flex-1">
+              <div className="my-[15px] flex justify-between items-center max-[480px]:flex-col">
+                <div className="mr-[10px] flex-1 max-[480px]:w-full max-[480px]:mb-2">
                   <CustomButton
                     title="Google"
                     iconLeft={assets.images.google}
@@ -99,7 +99,7 @@ const LoginModal: React.FC<LoginModalProps> = ({openModal, closeModal,openRegist
                     textColor="text-txt-color"
                   />
                 </div>
-                <div className="mr-[10px] flex-1">
+                <div className="mr-[10px] flex-1 max-[480px]:w-full">
                   <CustomButton
                     title="Facebook"
                     iconLeft={assets.images.facebook}

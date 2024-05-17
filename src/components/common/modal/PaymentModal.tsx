@@ -1,10 +1,10 @@
 import assets from "@/assets";
 import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import CustomButton from "../buttons/CustomButton";
 import { DateOfBirthInput } from "../buttons/DobBtn";
@@ -15,7 +15,7 @@ const PaymentModal = () => {
     <div className="bg-msg-modals rounded-[30px] bg-[#000]">
       <Dialog>
         <DialogTrigger asChild>
-          <button>Edit Profile</button>
+          {/* <button>Edit Profile</button> */}
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px] bg-white rounded-[30px] h-[90%]">
           <DialogHeader>
@@ -37,8 +37,8 @@ const PaymentModal = () => {
           </DialogHeader>
           <div className="w-full overflow-auto h-auto ">
             <form className="bg-white px-1 pt-2 pb-1 mb-1">
-              <div className="flex justify-between items-center mb-2">
-                <div className="pr-1">
+              <div className="flex justify-between items-center mb-2 max-md:flex-col">
+                <div className="pr-1 md:max-pr-0 md:max:w-full max-md:mb-2">
                   <label
                     className="block text-txt-color text-[12px] font-semibold mb-1"
                     htmlFor="username"
@@ -52,7 +52,7 @@ const PaymentModal = () => {
                     placeholder="Username"
                   />
                 </div>
-                <div className="pl-1">
+                <div className="pl-1 md:max-pl-0 md:max:w-full">
                   <label
                     className="block text-txt-color text-[12px] font-semibold mb-1"
                     htmlFor="1234...."
@@ -67,8 +67,8 @@ const PaymentModal = () => {
                   />
                 </div>
               </div>
-              <div className="flex justify-between items-center mb-2">
-                <div className="mb-2 flex-1 pr-1">
+              <div className="flex justify-between items-center mb-2 max-md:flex-col">
+                <div className="mb-2 flex-1 pr-1 md:max-pr-0 md:max:w-full">
                   <label
                     className="block text-txt-color text-[12px] font-semibold mb-1"
                     htmlFor="email"
@@ -77,7 +77,7 @@ const PaymentModal = () => {
                   </label>
                   <DateOfBirthInput />
                 </div>
-                <div className="pl-1 mb-2 flex-1">
+                <div className="pl-1 mb-2 flex-1 md:max-pl-0 md:max:w-full">
                   <label
                     className="block text-txt-color text-[12px] font-semibold mb-1"
                     htmlFor="username"
@@ -95,8 +95,8 @@ const PaymentModal = () => {
               <p className="my-[10px] text-[10px] text-txt-color leading-normal font-semibold">
               Pay Securely from Visa, Master, Amex
               </p>
-              <div className="flex justify-between items-center mb-2">
-              <div className="pl-1 mb-2 flex-1">
+              <div className="flex justify-between items-center mb-2 max-md:flex-col">
+              <div className="pl-1 mb-2 flex-1 md:max-pl-0 md:max:w-full">
                   <label
                     className="block text-txt-color text-[12px] font-semibold mb-1"
                     htmlFor="username"
@@ -110,7 +110,7 @@ const PaymentModal = () => {
                     placeholder="0000...."
                   />
                 </div>
-                <div className="pl-1 mb-2 flex-1">
+                <div className="pl-1 mb-2 flex-1 md:max-pl-0 md:max:w-full">
                  <CustomButton title="Apply" customWidth="w-full" customclass="hover:bg-primary mt-[23px]" bgColor="bg-primary" textColor="text-white" customHeight="h-[40px]"/>
                 </div>
               </div>

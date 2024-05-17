@@ -11,7 +11,7 @@ const Time = () => {
   // };
 
   return (
-    <>
+    <div className="px-[20px] max-lg:px-0">
       <MainHeading title="Select Date & Time" />
       <UserDropDown />
       <div className="flex justify-between my-[15px]">
@@ -39,7 +39,7 @@ const Time = () => {
         <TimeSlotsBtn time="4:00 PM" />
         <TimeSlotsBtn time="5:00 PM" />
       </div>
-    </>
+    </div>
   );
 };
 
