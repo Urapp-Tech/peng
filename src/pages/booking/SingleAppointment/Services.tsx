@@ -7,8 +7,10 @@ import { fetchCategoriesItems } from "@/redux/features/storeCategoryItemsSlice";
 import { fetchCategories, setSelectedCategory } from "@/redux/features/storeCategorySlice";
 import { useAppDispatch, useAppSelector } from "@/redux/redux-hooks";
 import _ from "lodash";
-import { memo, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
 import ServiceCard from "./ServiceComponents/ServiceCard";
+import ServiceDetailDialog from "@/components/common/dialog/ServiceDetailDialog";
+import { StoreService } from "@/interfaces/serviceCategory.interface";
 
 const Services = () => {
   const {
@@ -22,6 +24,8 @@ const Services = () => {
   const dispatch = useAppDispatch();
   const { systemConfig } = useAppSelector((x) => x.appState);
   const { toast } = useToast();
+  const [ open , setOpen ] = useState<boolean>(false) ;
+  const [ detail , setDetail ] = useState<StoreService | null>() ;
   const { categoryItems, selectedCategoryItems, loading:serviceLoading } = useAppSelector((s) => s.storeCategoryItemState)
 
   const selectCategory = (categoryId: string) => {
@@ -30,6 +34,11 @@ const Services = () => {
       dispatch(setSelectedCategory(cat));
     }
   };
+
+  const showDetails = (s: StoreService) => {
+    setDetail(s);
+    setOpen(true);
+  }
 
   useEffect(() => {
     if (notify) {
@@ -100,10 +109,11 @@ const Services = () => {
         )}
 
         {!serviceLoading  && categoryItems.map((s, i) =>(
-          <ServiceCard service={s} key={i} />
+          <ServiceCard service={s} key={i} showServiceDetail={showDetails} />
         ))}
 
       </div>
+      {detail &&<ServiceDetailDialog service={detail} open={open} handleClose={setOpen}  />}
     </>
   );
 };

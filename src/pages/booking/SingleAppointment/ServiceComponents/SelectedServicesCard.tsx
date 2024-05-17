@@ -19,7 +19,7 @@ const SelectedServiceCard:React.FC<CardProps> = ({booking, showDialog}) => {
                         <span className="block text-[14px] leading-normal font-semibold text-heading-color  mb-[10px]">{booking.service.price}</span>
                     </div>
                     <div className="p-2">
-                        <ProfessionalButton onclick={() => showDialog(booking.service)} />
+                        <ProfessionalButton barber={booking.barber} onclick={() => showDialog(booking.service)} />
                     </div>
                 </div>
             </div>

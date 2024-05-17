@@ -2,11 +2,11 @@ import { Button } from "@/components/ui/button";
 import {
   DialogContent,
   DialogHeader,
+  Dialog
 } from "@/components/ui/dialog";
-import { Dialog } from "@radix-ui/react-dialog";
+import {  } from "@radix-ui/react-dialog";
 import MainHeading from "../typography/MainHeading";
 import { SetStateAction, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/redux-hooks";
 import { fetchCBarber } from "@/redux/features/barberSlice";
 import ProfessionalAnyCard from "@/pages/booking/SingleAppointment/ProfessionalComponents/ProfessionalAnyCard";
@@ -25,7 +25,6 @@ interface SelectProfessionalForServiceDialogProps {
 }
 
 const SelectProfessionalForServiceDialog: React.FC<SelectProfessionalForServiceDialogProps> = ({service, handleClose, open = false}) => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { bookings } = useAppSelector((s) => s.bookingState);
   const { barbers, loading } = useAppSelector((s) => s.barberState);
@@ -47,41 +46,40 @@ const SelectProfessionalForServiceDialog: React.FC<SelectProfessionalForServiceD
   }, []);
 
   return (
-    <Dialog open={open} onOpenChange={() => handleClose(prev => !prev)}>
-      <DialogContent className="max-w[800px] w-[500px] mx-auto bg-white rounded-lg shadow-md min-h-[600px]">
-        <DialogHeader>
-          <MainHeading title={service?.name || ''} />
-        </DialogHeader>
-        <div className="w-full grid grid-cols-12 gap-6 justify-between items-center flex-wrap">
-          {loading &&
-            Array(4)
-              .fill("a")
-              .map((b, i) => (
-                <Skeleton
-                  key={i}
-                  className="col-span-4  h-[174px] rounded-xl border-2 border-primary "
+    <Dialog  open={open} onOpenChange={() => handleClose(prev => !prev)}>
+      <DialogContent className="max-w-[800px] w-[700px] mx-auto bg-white rounded-lg h-auto shadow-md grid-cols-12">
+        <div className="col-span-12">
+            <h1 className={`my-[20px] text-[30px] font-normal text-heading-color h-6`}>{service?.name || ''}</h1>
+            <div className="w-full grid grid-cols-12 gap-6 mt-10 ">
+            {loading &&
+                Array(4)
+                .fill("a")
+                .map((b, i) => (
+                    <Skeleton
+                    key={i}
+                    className="col-span-4  h-[174px] rounded-xl border-2 border-primary "
+                    />
+                ))}
+            {!loading &&
+                barbers.map((b, i) => (
+                <ProfessionalCard
+                    professional={b}
+                    onclick={handleProfessionalSelection}
+                    key={i}
+                    ratingIcon={assets.images.rank}
+                    customClass="col-span-4 mr-[5px] mb-[10px] "
                 />
-              ))}
-          {!loading &&
-            barbers.map((b, i) => (
-              <ProfessionalCard
-                professional={b}
-                onclick={handleProfessionalSelection}
-                key={i}
-                ratingIcon={assets.images.rank}
-                customClass="col-span-4 mr-[5px] mb-[10px] "
-                checked={bookings.find((x) => x.barber?.id === b.id) != null}
-              />
-            ))}
+                ))}
 
-       
-          <ProfessionalAnyCard
-            title="Any Professional"
-            onclick={handleAnyProfessionalSelection}
-            avatarIcon={assets.images.groups}
-            subTitle="for maximum availability"
-            customClass="col-span-4 mr-[5px] mb-[10px]"
-          />
+        
+            <ProfessionalAnyCard
+                title="Any Professional"
+                onclick={handleAnyProfessionalSelection}
+                avatarIcon={assets.images.groups}
+                subTitle="for maximum availability"
+                customClass="col-span-4 mr-[5px] mb-[10px]"
+            />
+            </div>
         </div>
       </DialogContent>
     </Dialog>

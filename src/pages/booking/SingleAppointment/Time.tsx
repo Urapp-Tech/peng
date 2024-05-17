@@ -1,3 +1,4 @@
+import DateCarousel from "@/components/common/DateCarousel";
 import TimeSlotsBtn from "@/components/common/buttons/TimeSlotsBtn";
 import UserDropDown from "@/components/common/dropdown/UserDropDown";
 import DateSldier from "@/components/common/sliders/DateSldier";
@@ -14,16 +15,9 @@ const Time = () => {
     <>
       <MainHeading title="Select Date & Time" />
       <UserDropDown />
-      <div className="flex justify-between my-[15px]">
-        <span className="block text-heading-color text-[16px] font-bold leading-normal capitalize">
-          April 2024
-        </span>
-        <span className="block text-heading-color text-[16px] font-bold leading-normal capitalize">
-          May 2024
-        </span>
-      </div>
-      <DateSldier />
-      <div className="shadow-md my-[15px] max-h-[400px] overflow-x-hidden overflow-y-scroll p-[15px]">
+      <DateCarousel />
+      {/* <DateSldier /> */}
+      {/* <div className="shadow-md my-[15px] max-h-[400px] overflow-x-hidden overflow-y-scroll p-[15px]">
         <TimeSlotsBtn time="1:00 PM" />
         <TimeSlotsBtn time="2:00 PM" />
         <TimeSlotsBtn time="3:00 PM" />
@@ -38,7 +32,7 @@ const Time = () => {
         <TimeSlotsBtn time="3:00 PM" />
         <TimeSlotsBtn time="4:00 PM" />
         <TimeSlotsBtn time="5:00 PM" />
-      </div>
+      </div> */}
     </>
   );
 };
