@@ -11,6 +11,7 @@ import AppointmentSliceReducer from './features/appointmentSlice';
 import employeeRatingSliceReducer from './features/employeeRatingSlice';
 import bookingSliceReducer from './features/bookingSlice';
 import barberSliceReducer from './features/barberSlice';
+import groupBookingSliceReducer from './features/groupBookingSlice';
 
 export const store = configureStore({
   reducer: {
@@ -23,6 +24,7 @@ export const store = configureStore({
     employeeRatingState: employeeRatingSliceReducer,
     bookingState: bookingSliceReducer,
     barberState: barberSliceReducer,
+    groupBookingState: groupBookingSliceReducer,
     [ratingAPI.reducerPath]: ratingAPI.reducer,
     [orderAPI.reducerPath]: orderAPI.reducer,
   },

@@ -1,6 +1,6 @@
 import AddButton from "@/components/common/buttons/AddBtn";
 import { StoreService } from "@/interfaces/serviceCategory.interface";
-import { addService, removeService } from "@/redux/features/bookingSlice";
+import { addService, removeService } from "@/redux/features/groupBookingSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/redux-hooks";
 import { CURRENCY_SYMBOL } from "@/utils/constant";
 import { memo, useEffect, useState } from "react";
@@ -12,7 +12,7 @@ interface ServiceCardProps {
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ service, showServiceDetail = (_s: StoreService) => {} }) => {
 
-    const { bookings } = useAppSelector(s => s.bookingState); 
+    const { bookings, selectedCustomer } = useAppSelector(s => s.groupBookingState); 
     const dispatch = useAppDispatch();
     const [checked , setChecked] = useState<boolean>(false);
 
@@ -26,12 +26,12 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, showServiceDetail = 
     }
 
   useEffect(() => {
-    const index = bookings.findIndex(x => x.service.id == service.id);
+    const index = bookings.findIndex(x => x.service.id == service.id && x.customer == selectedCustomer);
     setChecked(index > -1 ? true : false)
   }, [bookings]);
 
   useEffect(() => {
-    const index = bookings.findIndex(x => x.service.id == service.id);
+    const index = bookings.findIndex(x => x.service.id == service.id && x.customer == selectedCustomer);
     setChecked(index > -1 ? true : false)
   }, []);
 

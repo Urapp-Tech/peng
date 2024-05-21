@@ -1,16 +1,19 @@
-import React, { useState, useEffect, MouseEvent } from 'react';
-import dayjs, { Dayjs } from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import DateBtn from './buttons/DateBtn';
-import { Button } from '../ui/button';
-// import '@shadecn/core/dist/shade.css'; // Assuming ShadeCN styles are imported like this
+import React, { useState, useEffect } from "react";
+import dayjs, { Dayjs } from "dayjs";
+import isoWeek from "dayjs/plugin/isoWeek";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import { Navigation } from "swiper/modules";
+import DateBtn from "./buttons/DateBtn";
+import { Button } from "../ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 dayjs.extend(isoWeek);
 dayjs.extend(customParseFormat);
 
-const FORMAT_YEAR_MONTH_DAY = 'YYYY-MM-DD';
+const FORMAT_YEAR_MONTH_DAY = "YYYY-MM-DD";
 
 interface Day {
   dayOfWeek: string;
@@ -20,178 +23,160 @@ interface Day {
   year: string;
   unix: number;
   class: string;
+  date: Dayjs;
+  disabled: boolean;
 }
 
 interface DateCarouselProps {
-  useEthiopianCalendar?: boolean;
+  _useEthiopianCalendar?: boolean;
+  onDateSelect?: (date: string) => void;
+  disabledDates?: (string | Dayjs | Date)[];
+  disabledDays?: string[];
 }
 
-const DateCarousel: React.FC<DateCarouselProps> = ({ useEthiopianCalendar = false }) => {
+const DateCarousel: React.FC<DateCarouselProps> = ({
+  onDateSelect,
+  disabledDates = [],
+  disabledDays = [],
+}) => {
   const [days, setDays] = useState<Day[]>([]);
-  const [weekInView, setWeekInView] = useState<Dayjs>(dayjs().startOf('isoWeek'));
-  const [datePicked, setDatePicked] = useState<string>(dayjs().format(FORMAT_YEAR_MONTH_DAY));
-  const [headerText, setHeaderText] = useState<string>('');
+  const [monthInView, setMonthInView] = useState<Dayjs>(dayjs().startOf("month"));
+  const [datePicked, setDatePicked] = useState<string>("");
+  const [headerText, setHeaderText] = useState<string>("");
 
   useEffect(() => {
-    let now = dayjs();
-    if (useEthiopianCalendar) {
-      // Handle Ethiopian calendar reconfiguration if needed
-    }
-    setWeekInView(now.startOf('isoWeek'));
-    setDatePicked(now.format(FORMAT_YEAR_MONTH_DAY));
-    calculateDays(now.startOf('isoWeek'));
-  }, [useEthiopianCalendar]);
+    const now = dayjs();
+    setMonthInView(now.startOf("month"));
+    calculateDays(now.startOf("month"), (availableDate) => {
+      setDatePicked(availableDate);
+      onDateSelect && onDateSelect(availableDate);
+    });
+  }, [disabledDays, disabledDates]);
 
-  const calculateHeaderText = (weekInView: Dayjs) => {
-    let firstDayOfWeek = weekInView;
-    let lastDayOfWeek = weekInView.add(6, 'day');
-
-    const firstDayOfWeekYear = firstDayOfWeek.year();
-    const lastDayOfWeekYear = lastDayOfWeek.year();
-
-    if (firstDayOfWeekYear !== lastDayOfWeekYear) {
-      return `${firstDayOfWeek.format('DD MMM YYYY')} - ${lastDayOfWeek.format('DD MMM YYYY')}`;
-    } else {
-      return `${firstDayOfWeek.format('DD MMM')} - ${lastDayOfWeek.format('DD MMM YYYY')}`;
-    }
+  const parseDisabledDates = (dates: (string | Dayjs | Date)[]) => {
+    return dates.map((date) => dayjs(date).format(FORMAT_YEAR_MONTH_DAY));
   };
 
-  const calculateDays = (weekInView: Dayjs) => {
+  const disabledDatesParsed = parseDisabledDates(disabledDates);
+
+  const calculateHeaderText = (monthInView: Dayjs) => {
+    return `${monthInView.format("MMMM YYYY")}`;
+  };
+
+  const calculateDays = (monthInView: Dayjs, setFirstAvailableDate?: (date: string) => void) => {
     let days: Day[] = [];
-    let currentDay = weekInView;
+    let currentDay = monthInView.startOf("month");
+    const today = dayjs().startOf('day');
+    let firstAvailableDate: string | null = null;
 
-    setHeaderText(calculateHeaderText(weekInView));
+    setHeaderText(calculateHeaderText(monthInView));
 
-    for (let i = 0; i < 7; i++) {
+    while (currentDay.month() === monthInView.month()) {
+      const formattedDate = currentDay.format(FORMAT_YEAR_MONTH_DAY);
+      const dayOfWeek = currentDay.format("dddd");
+      const isPastDate = currentDay.isBefore(today);
+
+      const disabled = isPastDate || disabledDatesParsed.includes(formattedDate) || disabledDays.includes(dayOfWeek);
+      if (!disabled && !firstAvailableDate) {
+        firstAvailableDate = formattedDate;
+      }
+
       days.push({
-        dayOfWeek: currentDay.format('ddd'),
-        dayOfMonth: currentDay.format('D'),
-        day: currentDay.format('DD'),
-        month: currentDay.format('MM'),
-        year: currentDay.format('YYYY'),
+        dayOfWeek: currentDay.format("ddd"),
+        dayOfMonth: currentDay.format("D"),
+        day: currentDay.format("DD"),
+        month: currentDay.format("MM"),
+        year: currentDay.format("YYYY"),
         unix: currentDay.unix(),
-        class: datePicked === currentDay.format(FORMAT_YEAR_MONTH_DAY) ? 'selected' : ''
+        class: datePicked === formattedDate ? "selected" : "",
+        date: currentDay,
+        disabled: disabled,
       });
-      currentDay = currentDay.add(1, 'day');
+
+      currentDay = currentDay.add(1, "day");
     }
+
     setDays(days);
-  };
 
-  const handleNext = () => {
-    const newWeekInView = weekInView.add(1, 'week');
-    setWeekInView(newWeekInView);
-    setDatePicked(newWeekInView.format(FORMAT_YEAR_MONTH_DAY));
-    calculateDays(newWeekInView);
-  };
-
-  const handleBack = () => {
-    const newWeekInView = weekInView.subtract(1, 'week');
-    setWeekInView(newWeekInView);
-    setDatePicked(newWeekInView.format(FORMAT_YEAR_MONTH_DAY));
-    calculateDays(newWeekInView);
-  };
-
-  const handleDayPick = (day: string, month: string, year: string, unix: number) => {
-    setDatePicked(`${year}-${month}-${day}`);
-    calculateDays(dayjs(`${year}-${month}-${day}`, FORMAT_YEAR_MONTH_DAY).startOf('isoWeek'));
-  };
-
-  const handleToday = () => {
-    let now = dayjs();
-    if (useEthiopianCalendar) {
-      // Handle Ethiopian calendar reconfiguration if needed
+    if (setFirstAvailableDate && firstAvailableDate) {
+      setFirstAvailableDate(firstAvailableDate);
     }
-    setWeekInView(now.startOf('isoWeek'));
-    setDatePicked(now.format(FORMAT_YEAR_MONTH_DAY));
-    calculateDays(now.startOf('isoWeek'));
+  };
+
+  const handlePrevMonth = () => {
+    const newMonthInView = monthInView.subtract(1, "month");
+    setMonthInView(newMonthInView);
+    calculateDays(newMonthInView);
+  };
+
+  const handleNextMonth = () => {
+    const newMonthInView = monthInView.add(1, "month");
+    setMonthInView(newMonthInView);
+    calculateDays(newMonthInView);
+  };
+
+  const handleDayPick = (day: string, month: string, year: string) => {
+    const selectedDate = `${year}-${month}-${day}`;
+    const dayOfWeek = dayjs(selectedDate).format("dddd");
+
+    if (!disabledDatesParsed.includes(selectedDate) && !disabledDays.includes(dayOfWeek)) {
+      setDatePicked(selectedDate);
+      calculateDays(monthInView);
+      if (onDateSelect) {
+        onDateSelect(selectedDate);
+      }
+    }
   };
 
   return (
-    <div className="shadecn">
-      <style>
-        {`
-          .header, .days {
-            width: 100%;
-            font-size: 1em;
-            color: #000;
-            text-align: center;
-          }
-          .month {
-            font-size: 1em;
-            color: #000;
-          }
-          .day-of-week, .day-of-month {
-            text-align: center;
-          }
-          .selected .day-of-month {
-            background: #CCC;
-            color: #000;
-            border-radius: 15px;
-          }
-          .button {
-            white-space: nowrap;
-            width: 1px;
-          }
-          .clickable {
-            cursor: pointer;
-          }
-          .icon-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8px;
-            border-radius: 50%;
-            transition: background 0.3s;
-          }
-          .icon-button:hover {
-            background: rgba(0, 0, 0, 0.1);
-          }
-        `}
-      </style>
-      <table className="header">
-        <thead>
-          <tr>
-            <td>
-                <span className="block text-left text-heading-color text-[16px] font-bold leading-normal capitalize">
-                    {headerText}
-                </span>
-            </td>
-            <td className="clickable button" onClick={handleToday}>
-              <Button className="today">Today</Button>
-            </td>
-          </tr>
-        </thead>
-      </table>
-      <table className="days">
-        <tbody>
-          <tr>
-            <td className="clickable button" onClick={handleBack}>
-              <div className="icon-button">
-              <ChevronLeft />
-
-              </div>
-            </td>
-            {days.map((day) => (
-              <td
-                key={day.unix}
-                className={`clickable day ${day.class}`}
-                onClick={() => handleDayPick(day.day, day.month, day.year, day.unix)}
-                data-day={day.day}
-                data-month={day.month}
-                data-year={day.year}
-                data-unix={day.unix}
-              >
-                <DateBtn dateTitle={day.dayOfMonth} dayTitle={day.dayOfWeek} active={day.class == 'selected'  } />
-              </td>
-            ))}
-            <td className="clickable button" onClick={handleNext}>
-              <div className="icon-button">
-                <ChevronRight />
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div className="shadecn mt-5">
+      <div>
+        <span className="flex items-center text-left text-heading-color text-[16px] font-bold leading-normal capitalize">
+          <Button
+            variant={"link"}
+            onClick={handlePrevMonth}
+            className="prev-month"
+          >
+            {" "}
+            <ChevronLeft />{" "}
+          </Button>
+          {headerText}
+          <Button
+            variant={"link"}
+            onClick={handleNextMonth}
+            className="next-month"
+          >
+            {" "}
+            <ChevronRight />{" "}
+          </Button>
+        </span>
+      </div>
+      <Swiper
+        modules={[Navigation]}
+        slidesPerView={6}
+        initialSlide={dayjs().date() - 1}
+        navigation={true}
+        className="mySwiper"
+      >
+        {days.map((day) => (
+          <SwiperSlide
+            key={day.unix}
+            className={`cursor-pointer day ${day.class} ${
+              day.disabled ? "disabled" : ""
+            }`}
+          >
+            <DateBtn
+              dateTitle={day.dayOfMonth}
+              dayTitle={day.dayOfWeek}
+              onclick={() =>
+                !day.disabled && handleDayPick(day.day, day.month, day.year)
+              }
+              active={day?.date?.isSame(datePicked)}
+              disabled={day.disabled}
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 };

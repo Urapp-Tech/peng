@@ -3,14 +3,17 @@ import { StoreService } from "@/interfaces/serviceCategory.interface";
 import LocalStorageUtil from "@/utils/LocalStorageUtil";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-export type Booking = {
+export type GroupBooking = {
   service: StoreService;
   barber?: Barber;
+  customer: string;
 };
 
 type InitialState = {
-  bookings: Booking[];
+  bookings: GroupBooking[];
   appointmentTime?: string;
+  selectedCustomer?: string;
+  mainCustomer?: string;
   loading: boolean;
   notify: boolean;
   total_count: number;
@@ -18,7 +21,7 @@ type InitialState = {
 };
 
 const initialState: InitialState = LocalStorageUtil.getItem<InitialState>(
-  "BOOKINGS"
+  "GROUP_BOOKINGS"
 ) || {
   bookings: [],
   total_count: 0,
@@ -27,67 +30,81 @@ const initialState: InitialState = LocalStorageUtil.getItem<InitialState>(
   notifyMessage: {},
 };
 
-export const bookingSlice = createSlice({
-  name: "bookingState",
+export const groupBookingSlice = createSlice({
+  name: "groupBookingState",
   initialState,
   reducers: {
+    setSelectedCustomer: (state, action: PayloadAction<string>) => {
+      state.selectedCustomer = action.payload; 
+    },
+    setMainCustomer: (state, action: PayloadAction<string>) => {
+      state.mainCustomer = action.payload; 
+    },
     clearBookings: (state) => {
-      LocalStorageUtil.removeItem("BOOKINGS");
+      LocalStorageUtil.removeItem("GROUP_BOOKINGS");
       state.appointmentTime = undefined;
       state.bookings = [];
+      state.mainCustomer = undefined;
+      state.selectedCustomer= undefined;
     },
     addService: (state, action: PayloadAction<StoreService>) => {
-      const s = state.bookings.find((x) => x.service.id === action.payload.id);
+      const s = state.bookings.find((x) => x.service.id === action.payload.id && x.customer === (state.selectedCustomer || 'Me'));
       if (!s) {
-        state.bookings.push({ service: action.payload });
+        state.bookings.push({ service: action.payload, customer: state.selectedCustomer || 'Me'});
       }
-      LocalStorageUtil.setItem("BOOKINGS", state);
+      LocalStorageUtil.setItem("GROUP_BOOKINGS", state);
     },
     removeService: (state, action: PayloadAction<StoreService>) => {
       state.bookings = state.bookings.filter(
-        (x) => x.service.id !== action.payload.id
+        (x) => x.service.id !== action.payload.id && x.customer == state.selectedCustomer
       );
-      LocalStorageUtil.setItem("BOOKINGS", state);
+      LocalStorageUtil.setItem("GROUP_BOOKINGS", state);
+    },
+    removeAllServiceOfCustomer: (state, action: PayloadAction<string>) => {
+      state.bookings = state.bookings.filter(
+        (x) => x.customer !==  action.payload
+      );
+      LocalStorageUtil.setItem("GROUP_BOOKINGS", state);
     },
     addBarberOnSpecificService: (
       state,
       action: PayloadAction<{ service: StoreService; barber: Barber }>
     ) => {
       state.bookings = state.bookings.map((x) => {
-        if (action.payload.service.id == x.service.id) {
+        if (action.payload.service.id == x.service.id && x.customer == state.selectedCustomer) {
           x.barber = action.payload.barber;
         }
         return x;
       });
 
-      LocalStorageUtil.setItem("BOOKINGS", state);
+      LocalStorageUtil.setItem("GROUP_BOOKINGS", state);
     },
     addAnyBarberOnSpecificService: (
       state,
       action: PayloadAction<{ service: StoreService }>
     ) => {
       state.bookings = state.bookings.map((x) => {
-        if (action.payload.service.id == x.service.id) {
+        if (action.payload.service.id == x.service.id  && x.customer == state.selectedCustomer) {
           x.barber = undefined;
         }
         return x;
       });
 
-      LocalStorageUtil.setItem("BOOKINGS", state);
+      LocalStorageUtil.setItem("GROUP_BOOKINGS", state);
     },
     addBarberToAll: (state, action: PayloadAction<Barber>) => {
       state.bookings = state.bookings.map((x) => {
         x.barber = action.payload;
         return x;
       });
-      LocalStorageUtil.setItem("BOOKINGS", state);
+      LocalStorageUtil.setItem("GROUP_BOOKINGS", state);
     },
     removeBarberFromAll: (state) => {
       state.bookings = state.bookings.map((x) => {
         x.barber = undefined;
         return x;
       });
-      LocalStorageUtil.setItem("BOOKINGS", state);
+      LocalStorageUtil.setItem("GROUP_BOOKINGS", state);
     },
     setAppointmentTime: (state, action: PayloadAction<string>) => {
       state.appointmentTime = action.payload;
@@ -104,6 +121,9 @@ export const {
   addBarberOnSpecificService,
   setAppointmentTime,
   clearBookings,
-} = bookingSlice.actions;
+  setSelectedCustomer,
+  setMainCustomer,
+  removeAllServiceOfCustomer,
+} = groupBookingSlice.actions;
 
-export default bookingSlice.reducer;
+export default groupBookingSlice.reducer;

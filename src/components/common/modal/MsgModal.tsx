@@ -9,10 +9,11 @@ import MainHeading from "../typography/MainHeading";
 
 interface LoginModalProps {
   openModal: boolean;
+  handleClick: (v :string) => void,
   closeModal: React.Dispatch<React.SetStateAction<boolean>>;
   
 } 
-const MsgModal: React.FC<LoginModalProps> = ({openModal, closeModal}) => {
+const MsgModal: React.FC<LoginModalProps> = ({openModal, closeModal, handleClick= (_v = 'yes') => {} }) => {
   const toggleModal = (val:boolean) => {
     closeModal(val);
   }
@@ -27,12 +28,14 @@ const MsgModal: React.FC<LoginModalProps> = ({openModal, closeModal}) => {
           </DialogHeader>
           <div className="w-full">
             <button
+              onClick={() => handleClick('Yes')}
               className="w-full bg-primary text-white font-bold py-2 px-4 text-[12px] leading-noramal rounded focus:outline-none focus:shadow-outline mb-2"
               type="button"
             >
               Yes
             </button>
             <button
+              onClick={() => handleClick('No')}
               className="capitalize text-primary border-1 border-primary w-full bg-white font-bold py-2 px-4 text-[12px] leading-noramal rounded focus:outline-none focus:shadow-outline"
               type="button"
              

@@ -8,7 +8,7 @@ type Props = {
     pricing ?: string;
     onclick?: (item?: any) => void;
 }
-const CardsBtn = ({ mainTitle, time, features, pricing, onclick }: Props) => {
+const CardsBtn = ({ mainTitle, time, features, pricing }: Props) => {
     return (
         <>
 

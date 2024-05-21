@@ -1,21 +1,21 @@
 import assets from "@/assets";
 import MainHeading from "@/components/common/typography/MainHeading";
-import { fetchCBarber } from "@/redux/features/barberSlice";
-import { Booking, addBarberToAll, removeBarberFromAll } from "@/redux/features/bookingSlice";
+import { fetchCBarber, setBarbersEmpty } from "@/redux/features/barberSlice";
+import { GroupBooking, addBarberToAll, removeBarberFromAll } from "@/redux/features/groupBookingSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/redux-hooks";
 import { memo, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ProfessionalCard from "./ProfessionalComponents/ProfessionalCard";
-import ProfessionalAnyCard from "./ProfessionalComponents/ProfessionalAnyCard";
+import ProfessionalCard from "./GroupProfessionalComponents/ProfessionalCard";
+import ProfessionalAnyCard from "./GroupProfessionalComponents/ProfessionalAnyCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Barber } from "@/interfaces/barber";
 import _ from "lodash";
 
-const Professionals = () => {
+const GroupBookingProfessionals = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { bookings } = useAppSelector(s => s.groupBookingState)
   const [ selected , setSelected ] = useState<string>('PerService');
-  const { bookings } = useAppSelector(s => s.bookingState)
   const { barbers , loading } = useAppSelector(s => s.barberState)
   const handleAnyBarberClick = () => {
     dispatch(removeBarberFromAll());
@@ -26,13 +26,23 @@ const Professionals = () => {
   }
 
   const SelectProfessionalPerService = () => {
-    navigate("/booking/appointment/professionals-by-service")
+    navigate("/booking/group-appointment/professionals-by-service")
   }
 
 
   useEffect(() => {
-    if(bookings.length > 0 ){
-      dispatch(fetchCBarber( bookings.map((b: Booking) => (b.service.id))));
+    const c = bookings.reduce((customers: string[], booking: GroupBooking) => {
+      if (!customers.includes(booking.customer)) {
+        customers.push(booking.customer);
+      }
+      return customers;
+    }, []);
+
+    if(bookings.length > 0 && c.length == 1 ){
+      dispatch(fetchCBarber( bookings.map((b: GroupBooking) => (b.service.id))));
+    }
+    else { 
+      dispatch(setBarbersEmpty());
     }
   }, []);
 
@@ -44,7 +54,6 @@ const Professionals = () => {
       setSelected('PerService')
     }
   }, [bookings])
-
 
   return (
     <>
@@ -85,4 +94,4 @@ const Professionals = () => {
   );
 };
 
-export default memo(Professionals);
+export default memo(GroupBookingProfessionals);

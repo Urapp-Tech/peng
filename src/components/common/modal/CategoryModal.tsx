@@ -3,7 +3,6 @@ import {
     DialogContent,
     DialogTrigger
 } from "@/components/ui/dialog";
-import AddButton from "../buttons/AddBtn";
 import CustomButton from "../buttons/CustomButton";
 type Props = {
     mainTitle: string;
@@ -26,7 +25,7 @@ const CategoryModal = ({ mainTitle, time, features, pricing, priceTitle }: Props
                             <span className="block text-[14px] leading-normal font-semibold text-heading-color  mb-[10px]">{pricing}</span>
                         </div>
                         <div className="flex-2 p-2">
-                            <AddButton />
+                            {/* <AddButton /> */}
                         </div>
                     </div>
 

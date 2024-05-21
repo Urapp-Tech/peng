@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from "@/redux/redux-hooks";
+import { useAppSelector } from "@/redux/redux-hooks";
 import SelectedServiceCard from "./SelectedServicesCard";
 import { useState } from "react";
 import SelectProfessionalForServiceDialog from "@/components/common/dialog/SelectProfessionalForServiceDialog";
@@ -6,7 +6,6 @@ import { StoreService } from "@/interfaces/serviceCategory.interface";
 import MainHeading from "@/components/common/typography/MainHeading";
 
 const SelectedServices = () => {
-  const dispatch = useAppDispatch();
   const { bookings } = useAppSelector((x) => x.bookingState);
   const [open, setOpen] = useState<boolean>(false);
   const [selectedService, setSelectedService] = useState<StoreService>();

@@ -1,4 +1,4 @@
-import { setAppointmentTime } from "@/redux/features/bookingSlice";
+import { setAppointmentTime } from "@/redux/features/groupBookingSlice";
 import { useAppDispatch } from "@/redux/redux-hooks";
 import { Dayjs } from "dayjs";
 
@@ -7,7 +7,7 @@ type Props={
     active?: boolean;
 }
 
-const TimeSlotsBtn = ({time,active = false}:Props) => {
+const GroupTimeSlotsBtn = ({time,active = false}:Props) => {
 
   const dispatch = useAppDispatch();
 
@@ -25,4 +25,4 @@ const TimeSlotsBtn = ({time,active = false}:Props) => {
   )
 }
 
-export default TimeSlotsBtn
+export default GroupTimeSlotsBtn

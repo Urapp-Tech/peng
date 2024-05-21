@@ -1,4 +1,4 @@
-import SelectedServices from "../ServiceComponents/SelectedServices";
+import SelectedServices from "../GroupBookingServiceComponents/SelectedServices";
 
 const ProfessionalService = () => {
   return (

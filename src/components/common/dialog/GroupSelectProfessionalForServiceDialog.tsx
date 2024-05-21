@@ -3,28 +3,29 @@ import {
   Dialog
 } from "@/components/ui/dialog";
 import {  } from "@radix-ui/react-dialog";
-import { SetStateAction, useEffect } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/redux-hooks";
 import { fetchCBarber } from "@/redux/features/barberSlice";
 import ProfessionalAnyCard from "@/pages/booking/SingleAppointment/ProfessionalComponents/ProfessionalAnyCard";
 import ProfessionalCard from "@/pages/booking/SingleAppointment/ProfessionalComponents/ProfessionalCard";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Booking, addAnyBarberOnSpecificService, addBarberOnSpecificService } from "@/redux/features/bookingSlice";
+import { GroupBooking, addAnyBarberOnSpecificService, addBarberOnSpecificService } from "@/redux/features/groupBookingSlice";
 import { Barber } from "@/interfaces/barber";
 import assets from "@/assets";
 import { StoreService } from "@/interfaces/serviceCategory.interface";
 
 
-interface SelectProfessionalForServiceDialogProps {
+interface GroupSelectProfessionalForServiceDialogProps {
     service?: StoreService;
     open: boolean;
     handleClose: React.Dispatch<SetStateAction<boolean>>;
 }
 
-const SelectProfessionalForServiceDialog: React.FC<SelectProfessionalForServiceDialogProps> = ({service, handleClose, open = false}) => {
+const GroupSelectProfessionalForServiceDialog: React.FC<GroupSelectProfessionalForServiceDialogProps> = ({service, handleClose, open = false}) => {
   const dispatch = useAppDispatch();
-  const { bookings } = useAppSelector((s) => s.bookingState);
+  const { bookings, selectedCustomer } = useAppSelector((s) => s.groupBookingState);
   const { barbers, loading } = useAppSelector((s) => s.barberState);
+  const [filterBarbers, setFilterBarbers] = useState<Barber[]>([])
 
   const handleProfessionalSelection = (barber: Barber) => {
     service && dispatch(addBarberOnSpecificService({service, barber}))
@@ -37,10 +38,20 @@ const SelectProfessionalForServiceDialog: React.FC<SelectProfessionalForServiceD
   }
 
   useEffect(() => {
+    const b = barbers.filter(barber => bookings.filter(x=> x.customer !== selectedCustomer && x.barber?.id == barber.id).length == 0  );
+    setFilterBarbers(b);
+  }, [barbers])
+
+  useEffect(() => {
     if (bookings.length > 0) {
-      dispatch(fetchCBarber(bookings.map((b: Booking) => b.service.id)));
+      dispatch(fetchCBarber(bookings.reduce((uniqueIds: string[],b: GroupBooking) =>{ 
+        if(!uniqueIds.includes(b.service.id)){
+          uniqueIds.push(b.service.id);
+        }
+        return uniqueIds
+      }, [])));
     }
-  }, []);
+  }, [selectedCustomer]);
 
   return (
     <Dialog  open={open} onOpenChange={() => handleClose(prev => !prev)}>
@@ -58,7 +69,7 @@ const SelectProfessionalForServiceDialog: React.FC<SelectProfessionalForServiceD
                     />
                 ))}
             {!loading &&
-                barbers.map((b, i) => (
+                filterBarbers.map((b, i) => (
                 <ProfessionalCard
                     professional={b}
                     onclick={handleProfessionalSelection}
@@ -82,4 +93,4 @@ const SelectProfessionalForServiceDialog: React.FC<SelectProfessionalForServiceD
     </Dialog>
   );
 };
-export default SelectProfessionalForServiceDialog;
+export default GroupSelectProfessionalForServiceDialog;

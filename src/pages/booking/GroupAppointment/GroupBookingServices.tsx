@@ -7,11 +7,13 @@ import { fetchCategories, setSelectedCategory } from "@/redux/features/storeCate
 import { useAppDispatch, useAppSelector } from "@/redux/redux-hooks";
 import _ from "lodash";
 import { memo, useEffect, useState } from "react";
-import ServiceCard from "./ServiceComponents/ServiceCard";
+import ServiceCard from "./GroupBookingServiceComponents/ServiceCard";
 import ServiceDetailDialog from "@/components/common/dialog/ServiceDetailDialog";
 import { StoreService } from "@/interfaces/serviceCategory.interface";
+import assets from "@/assets";
+import { setMainCustomer, setSelectedCustomer } from "@/redux/features/groupBookingSlice";
 
-const Services = () => {
+const GroupBookingServices = () => {
   const {
     categories,
     loading: CatLoading,
@@ -22,6 +24,8 @@ const Services = () => {
   const dispatch = useAppDispatch();
   const { systemConfig } = useAppSelector((x) => x.appState);
   const { toast } = useToast();
+  const { user } = useAppSelector((x) => x.authState);
+  const { selectedCustomer } = useAppSelector(x => x.groupBookingState);
   const [ open , setOpen ] = useState<boolean>(false) ;
   const [ detail , setDetail ] = useState<StoreService | null>() ;
   const { categoryItems, loading:serviceLoading } = useAppSelector((s) => s.storeCategoryItemState)
@@ -74,10 +78,35 @@ const Services = () => {
     }
   }, [systemConfig]);
 
+  useEffect(() => {
+    if(_.isEmpty(selectedCustomer)){
+      if(!user) {
+        dispatch(setSelectedCustomer('Me'));
+        dispatch(setMainCustomer('Me'));
+      }
+      else {
+        dispatch(setSelectedCustomer(user.firstName + " " + user.lastName));
+        dispatch(setMainCustomer(user.firstName + " " + user.lastName));
+
+      }
+    }
+
+  }, []);
+
   return (
     <>
-      <MainHeading title="Select Services" />
+      <MainHeading title="Select Services" customClass="mb-1" />
+
+  <div className="p-3 my-2 flex content-center items-center gap-5">
+    <img src={assets.images.avatar} alt="" className="h-[35px]" />
+
+      {selectedCustomer}
+  </div>
+
+
+
       {CatLoading && <Skeleton className="w-full h-[50px] rounded-3xl" />}
+
 
       {!CatLoading && (
         <Tabs
@@ -120,4 +149,4 @@ const Services = () => {
   );
 };
 
-export default memo(Services);
+export default memo(GroupBookingServices);

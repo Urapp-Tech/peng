@@ -4,17 +4,9 @@ import {
     DialogContent,
     DialogTrigger
 } from "@/components/ui/dialog";
-import AddButton from "../buttons/AddBtn";
 import CardsBtn from "../cards/CardsBtnDrop";
 import MainHeading from "../typography/MainHeading";
-type Props = {
-    mainTitle: string;
-    time: string;
-    features: string;
-    pricing: string;
-    priceTitle: string;
 
-}
 const Modal = () => {
     return (
         <div className="bg-modals">
@@ -22,7 +14,7 @@ const Modal = () => {
                 <DialogTrigger className="w-full bg-transparent border-2 border-primary rounded-[20px] p-[20px] my-[20px] min-h-[160px]">
                  
                         <div className="flex-2 p-2 bg-[#ccc]">
-                            <AddButton />
+                            {/* <AddButton /> */}
                         </div>
                     
 

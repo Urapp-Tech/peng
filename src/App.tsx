@@ -7,7 +7,6 @@ import { useEffect } from 'react';
 import { setDeviceData, setTenant, setTenantConfig } from './redux/features/deviceState';
 import { setSystemConfig } from './redux/features/appStateSlice';
 import { ClientJS } from 'clientjs';
-import axiosInstance from './api/axiosInstance';
 import appService from './services/app.service';
 import tenantService from './services/tenant.service';
 import { useToast } from "@/components/ui/use-toast"

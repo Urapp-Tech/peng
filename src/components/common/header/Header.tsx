@@ -13,7 +13,7 @@ function Header() {
                     <div className='mx-[20px]'>
                         <img src={assets.images.logo} alt='logo' />
                     </div>
-                    <button className='bg-transparent disabled:pointer-events-none'>
+                    <button onClick={() => navigate('/')} className='bg-transparent disabled:pointer-events-none'>
                         <img src={assets.images.cross} alt='image-btn' />
                     </button>
                 </div>

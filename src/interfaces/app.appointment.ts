@@ -97,5 +97,5 @@ export interface Appointment {
   storeServiceCategory: string;
   paymentStatus: string;
   code: string;
-  service: string;
+  service?: string;
 }

@@ -1,18 +1,18 @@
 import axiosInstance from "@/api/axiosInstance";
 import DateCarousel from "@/components/common/DateCarousel";
 import Loader from "@/components/common/Loader";
+import GroupTimeSlotsBtn from "@/components/common/buttons/GroupTimeSlotsBtn";
 import ProfessionalButton from "@/components/common/buttons/ProfessionalButton";
-import TimeSlotsBtn from "@/components/common/buttons/TimeSlotsBtn";
 import MainHeading from "@/components/common/typography/MainHeading";
 import { Appointment } from "@/interfaces/app.appointment";
 import { StoreEmployeeSchedule } from "@/interfaces/barber";
 import { fetchAppointments } from "@/redux/features/appointmentSlice";
-import { Booking } from "@/redux/features/bookingSlice";
+import { GroupBooking } from "@/redux/features/groupBookingSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/redux-hooks";
 import dayjs, { Dayjs } from "dayjs";
 import MinMax from 'dayjs/plugin/minMax';
 import _ from "lodash";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 dayjs.extend(MinMax);
@@ -28,19 +28,20 @@ type QueryParams = {
   app_user?: string | null;
 };
 
-const Time = () => {
+const GroupBookingTime = () => {
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [disabledDates, _setDisabledDates] = useState<(string | Dayjs | Date)[]>([]);
-  const { bookings, appointmentTime } = useAppSelector((s) => s.bookingState);
+  const { bookings, appointmentTime } = useAppSelector((s) => s.groupBookingState);
   const [loading, setLoading] = useState<boolean>(false);
   const [disabledDays, setDisabledDays] = useState<string[]>([]);
-  const [timeSlots, setTimeSlots] = useState<Dayjs[]>([]);
   const dispatch = useAppDispatch();
+  const [timeSlots, setTimeSlots] = useState<Dayjs[]>([]);
   const allDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const navigate = useNavigate();
   const { user } = useAppSelector(x => x.authState);
   const { appointments } = useAppSelector(x => x.appointmentState);
   const { systemConfig } = useAppSelector(x => x.appState);
+
 
   const fetchAppointmentsData = () => {
     const startDate = selectedDate;
@@ -56,10 +57,11 @@ const Time = () => {
 
     dispatch(fetchAppointments(queryParams));
   };
+
   
   const shopEvents = async () => {
     try {
-      const storeEmployees = bookings.reduce((barbersIds: string[], next: Booking) => {
+      const storeEmployees = bookings.reduce((barbersIds: string[], next: GroupBooking) => {
         if (next.barber) {
           barbersIds.push(next.barber.store_employee.id);
         }
@@ -89,7 +91,7 @@ const Time = () => {
   };
 
   const fetchBarbersAppointment = async (): Promise<Appointment[]> => {
-    const storeEmployees = bookings.reduce((barbersIds: string[], next: Booking) => {
+    const storeEmployees = bookings.reduce((barbersIds: string[], next: GroupBooking) => {
       if (next.barber) {
         barbersIds.push(next.barber.store_employee.id);
       }
@@ -118,7 +120,7 @@ const Time = () => {
   useEffect(() => {
     const unavailableDays = new Set<string>();
 
-    bookings.forEach((booking: Booking) => {
+    bookings.forEach((booking: GroupBooking) => {
       if (booking.barber) {
         const schedule = booking.barber.store_employee_schedule;
         if (schedule) {
@@ -173,15 +175,13 @@ const Time = () => {
     }
 
     const bookedAppointments = (barberBookedAppointment || []).concat((userBookedAppointment || []).concat(appointments));
-    console.log("🚀 ~ generateAvailableTimeSlots ~ appointments:", appointments)
 
     setLoading(false);
-
 
     const dayName = dayjs(selectedDate).format("dddd");
     const workingSchedules: StoreEmployeeSchedule[] = [];
 
-    bookings.forEach((booking: Booking) => {
+    bookings.forEach((booking: GroupBooking) => {
       if (booking.barber) {
         const schedule = booking.barber.store_employee_schedule;
         if (schedule) {
@@ -209,7 +209,7 @@ const Time = () => {
     const maxStartTime = anyProfessionIncluded ? dayjs(`${selectedDate} ${dayjs(systemConfig?.tenantConfig.officeTimeIn).format("HH:mm:ss")}`) : dayjs.max(startTimes);
     const minEndTime = anyProfessionIncluded ?  dayjs(`${selectedDate} ${dayjs(systemConfig?.tenantConfig.officeTimeOut).format("HH:mm:ss")}`)  : dayjs.min(endTimes);
 
-    let barberServiceTime :number[] = bookings.reduce((st: number[], next: Booking) => {
+    let barberServiceTime :number[] = bookings.reduce((st: number[], next: GroupBooking) => {
       next.barber && st.push(next.barber?.service_time ?? 0);
       return st;
     }, [0]);
@@ -267,7 +267,7 @@ const Time = () => {
     <div className="px-[20px] max-lg:px-0">
       {loading && <Loader />}
       <MainHeading title="Select Date & Time" />
-      <ProfessionalButton barber={bookings[0]?.barber} onclick={() => navigate('/booking/appointment/professionals-by-service')}/>
+      <ProfessionalButton barber={bookings[0]?.barber} onclick={() => navigate('/booking/group-appointment/professionals-by-service')}/>
       <DateCarousel
         onDateSelect={handleDateSelect}
         disabledDates={disabledDates}
@@ -275,11 +275,11 @@ const Time = () => {
       />
       <div className="shadow-md my-[15px] max-h-[400px] overflow-x-hidden overflow-y-scroll p-[15px]">
         {timeSlots.map((slot, index) => (
-          <TimeSlotsBtn key={index} time={slot} active={slot.isSame(appointmentTime) } />
+          <GroupTimeSlotsBtn key={index} time={slot} active={slot.isSame(appointmentTime) } />
         ))}
       </div>
     </div>
   );
 };
 
-export default Time;
+export default memo(GroupBookingTime);

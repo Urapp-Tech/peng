@@ -17,6 +17,14 @@ export type SystemConfigData = {
   banner: any[];
 };
 
+export type ShopSchedule = {
+  day: string;
+  openTime: string;
+  closeTime: string;
+  breakTime: string;
+  breakOffTime: string;
+};
+
 export type SystemTenantConfig = {
   id: string;
   name: string;
@@ -44,6 +52,9 @@ export type SystemTenantConfig = {
   minimumDeliveryTime: number;
   deliveryUrgentFees: number;
   theme: string;
+  officeTimeIn:string;
+  officeTimeOut:string;
+  shopSchedule: ShopSchedule[];
 };
 
 export type SystemTheme = {

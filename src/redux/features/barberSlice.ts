@@ -34,7 +34,11 @@ export const fetchCBarber = createAsyncThunk(
 const barberSlice = createSlice({
   name: "barberState",
   initialState,
-  reducers: {},
+  reducers: {
+    setBarbersEmpty: (state ) => {
+      state.barbers = [];
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchCBarber.pending, (state) => {
       state.loading = true;
@@ -57,5 +61,7 @@ const barberSlice = createSlice({
     });
   },
 });
+
+export const { setBarbersEmpty } = barberSlice.actions;
 
 export default barberSlice.reducer;
