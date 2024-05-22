@@ -3,9 +3,11 @@ import AppLayout from "@/components/layouts/AppLayout";
 // import MainLayout from "@/components/layouts/MainLayout";
 import Booking from "@/pages/booking/Booking";
 import GroupBooking from "@/pages/booking/GroupAppointment/GroupBooking";
-import MainScreen from "@/pages/screens/MainScreen";
 import { Suspense, lazy } from "react";
 import { Navigate, RouteObject } from "react-router-dom";
+
+
+const MainScreen = lazy(() => import('@/pages/screens/MainScreen'))
 
 const MainLayout = lazy(() => import('@/components/layouts/MainLayout'))
 // SINGLE SERVICE SELECTION COMPONENT

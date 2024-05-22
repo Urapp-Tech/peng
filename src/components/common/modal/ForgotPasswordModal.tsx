@@ -11,76 +11,79 @@ import axiosInstance from "@/api/axiosInstance";
 import promiseHandler from "@/utils/promise-handler";
 import { useToast } from "@/components/ui/use-toast";
 import { useAppDispatch, useAppSelector } from "@/redux/redux-hooks";
-import { login } from "@/redux/features/authStateSlice";
-import { handleShowForgotModal } from "@/redux/features/forgotPasswordSlice";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { setOtpEmail, showForgotOtpModal } from "@/redux/features/forgotPasswordSlice";
 
-interface LoginFormValues {
-  username: string;
-  password: string;
-}
+const forgotPasswordSchema = z.object({
+  email: z
+    .string()
+    .min(1, { message: 'email is required' })
+    .email('email is invalid'),
+});
 
-interface LoginModalProps {
+
+type ForgotPasswordType = z.infer<typeof forgotPasswordSchema>;
+
+const formOptions = { resolver: zodResolver(forgotPasswordSchema) };
+
+
+interface ForgotPasswordModalProps {
   openModal: boolean;
-  closeModal: React.Dispatch<React.SetStateAction<boolean>>;
-  openRegisterModal: any;
+  closeModal: (val: boolean) => void;
 }
 
-const LoginModal: React.FC<LoginModalProps> = ({
+const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
   openModal,
   closeModal,
-  openRegisterModal,
 }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormValues>();
+  } = useForm<ForgotPasswordType>(formOptions);
   const { toast } = useToast();
-  const [_isLoader, setIsLoader] = useState(false);
   const dispatch = useAppDispatch();
+  const [_isLoader, setIsLoader] = useState(false);
   const { systemConfig } = useAppSelector((x) => x.appState);
 
   const toggleModal = (val: boolean) => {
     closeModal(val);
   };
 
-  const handleShowPasswordModalState = (val:boolean) => {
-    dispatch(handleShowForgotModal(val));
-  }
-
-  const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
+  const onSubmit: SubmitHandler<ForgotPasswordType> = async (data) => {
     if (!systemConfig?.tenant) {
       return;
     }
     // Handle form submission
     setIsLoader(true);
 
-    const [loginResponse, loginError] = await promiseHandler(
-      axiosInstance.post("/app/app-user/sign-in/app", {
-        email: data.username,
-        password: data.password,
+    const [forgotPasswordResult, forgotPasswordError] = await promiseHandler(
+      axiosInstance.post("/app/app-user/forgotPassword/app", {
+        email: data.email,
         tenant: systemConfig?.tenant,
       })
     );
     setIsLoader(false);
 
-    if (!loginResponse) {
+    if (!forgotPasswordResult) {
       toast({
         title: "Error while signing in",
         variant: "destructive",
-        description: loginError.message,
+        description: forgotPasswordError.message,
       });
       return;
     }
-    if (!loginResponse.data.success) {
+    if (!forgotPasswordResult.data.success) {
       toast({
         title: "Error while signing in",
         variant: "destructive",
-        description: loginResponse.data.message,
+        description: forgotPasswordResult.data.message,
       });
       return;
     }
-    dispatch(login(loginResponse.data.data));
+    dispatch(setOtpEmail(data.email));
+    dispatch(showForgotOtpModal());
     toggleModal(false);
   };
 
@@ -107,11 +110,11 @@ const LoginModal: React.FC<LoginModalProps> = ({
                   className="block text-txt-color text-[12px] font-semibold mb-2"
                   htmlFor="username"
                 >
-                  Username or email
+                  Email
                 </label>
                 <input
-                  {...register("username", {
-                    required: "Username is required",
+                  {...register("email", {
+                    required: "Email is required",
                     pattern: {
                       value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                       message: "Invalid email address",
@@ -120,61 +123,31 @@ const LoginModal: React.FC<LoginModalProps> = ({
                   className="appearance-none border border-primary rounded w-full py-2 px-3 text-txt-color leading-tight focus:outline-none"
                   id="username"
                   type="text"
-                  placeholder="Username"
+                  placeholder="Email address"
                 />
-                {errors.username && (
+                {errors.email && (
                   <p className="text-red-500 text-xs italic">
-                    {errors.username.message}
+                    {errors.email.message}
                   </p>
                 )}
               </div>
-              <div className="mb-1">
-                <label
-                  className="block text-txt-color text-[12px] font-semibold mb-2"
-                  htmlFor="password"
-                >
-                  Password
-                </label>
-                <input
-                  {...register("password", {
-                    required: "Password is required",
-                  })}
-                  className="appearance-none border border-primary rounded w-full py-2 px-3 text-txt-color mb-3 leading-tight focus:outline-none "
-                  id="password"
-                  type="password"
-                  placeholder="******************"
-                />
-                {errors.password && (
-                  <p className="text-red-500 text-xs italic">
-                    {errors.password.message}
-                  </p>
-                )}
-              </div>
-              <div className="flex items-center justify-end mb-2">
-                <button
-                  type="button"
-                  className="inline-block align-baseline font-bold text-[12px] text-primary bg-transparent"
-                  onClick={() => handleShowPasswordModalState(true)}
-                >
-                  Forgot Password?
-                </button>
-              </div>
+            
               <div className="flex items-center justify-center">
                 <button
                   className="w-full bg-primary text-white font-bold py-2 px-4 text-[12px] leading-noramal rounded focus:outline-none focus:shadow-outline"
                   type="submit"
                 >
-                  Sign In
+                  Get Code
                 </button>
               </div>
-              <div className="relative brk-points flex justify-between items-center my-[20px] opacity-[0.5]">
+              {/* <div className="relative brk-points flex justify-between items-center my-[20px] opacity-[0.5]">
                 <span className="w-[45%] bg-primary h-[1px] block"></span>
                 <span className="block text-txt-color w-[10%] text-center">
                   or
                 </span>
                 <span className="w-[45%] bg-primary h-[1px] block"></span>
-              </div>
-              <div className="my-[15px] text-center flex justify-center">
+              </div> */}
+              {/* <div className="my-[15px] text-center flex justify-center">
                 <span className="text-heading-color text-[12px] font-bold leading-normal block mr-1">
                   Are you new?{" "}
                 </span>
@@ -187,7 +160,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
                 >
                   Create an Account
                 </div>
-              </div>
+              </div> */}
             </form>
           </div>
         </DialogContent>
@@ -196,4 +169,4 @@ const LoginModal: React.FC<LoginModalProps> = ({
   );
 };
 
-export default LoginModal;
+export default ForgotPasswordModal;

@@ -7,13 +7,18 @@ import utcPlugin from "dayjs/plugin/utc";
 import { useAppDispatch, useAppSelector } from "@/redux/redux-hooks";
 import dayjs from "dayjs";
 import _ from "lodash";
-import { memo, useState } from "react";
+import { memo, useRef, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "@/api/axiosInstance";
 import { useToast } from "@/components/ui/use-toast";
 import { GroupBooking as GroupBookingType, clearBookings } from "@/redux/features/groupBookingSlice";
 import GroupBookingRightSideBar from "./GroupBookingRightSideBar";
 import LocalStorageUtil from "@/utils/LocalStorageUtil";
+import promiseHandler from "@/utils/promise-handler";
+import PayFastForm from "../PayFastForm";
+import { handleShowForgotModal, handleShowForgotOtpModal } from "@/redux/features/forgotPasswordSlice";
+import ForgotPasswordModal from "@/components/common/modal/ForgotPasswordModal";
+import ForgotPasswordOtpVerificationModal from "@/components/common/modal/ForgotPasswordOtpVerificationModal";
 
 dayjs.extend(utcPlugin);
 
@@ -30,11 +35,64 @@ const GroupBooking = () => {
     useAppSelector((x) => x.groupBookingState);
   const { systemConfig } = useAppSelector((x) => x.appState);
   const { toast } = useToast();
+  const [payFastFormData, setPayFastFormData] = useState<any>(null);
+  const formSubmitButtonRef = useRef<HTMLButtonElement>(null);
   const dispatch = useAppDispatch();
+  const { forgotModal, forgotOtpModal, forgotOtpEmail } = useAppSelector(x => x.forgotPasswordState);
 
   const showMsgModal = () => {
     setShowMsg(true);
   };
+
+  const handleShowPasswordModalState = (val:boolean) => {
+    dispatch(handleShowForgotModal(val));
+  }
+  const handleShowPasswordModalOtpState = (val:boolean) => {
+    dispatch(handleShowForgotOtpModal(val));
+  }
+
+
+  
+  const paymentByPayFast  = async ( code: string, grandTotal: string ) => {
+    const payFastTokenPromise = axiosInstance.post(`app/appointment/pay-fast/access-token`)
+    const [payFastTokenResult, payFastTokenError] =
+    await promiseHandler(payFastTokenPromise);
+    if (!payFastTokenResult) {
+      toast({
+        title: 'Error',
+        variant: 'destructive',
+        description: payFastTokenError.message,
+      });
+      return;
+    }
+    if (!payFastTokenResult.data.success) {
+      toast({
+        title: 'Error',
+        variant: 'destructive',
+        description: payFastTokenResult?.data?.message,
+      });
+      return;
+    }
+    setPayFastFormData({
+      merchantId: payFastTokenResult.data.data.merchantId,
+      token: payFastTokenResult.data.data.accessToken,
+      merchantName: payFastTokenResult.data.data.name,
+      generatedDateTime: payFastTokenResult.data.data.generatedDateTime,
+      // successURL: payFastTokenResult.data.data.successUrl,
+      successURL: window.location.origin,
+      failureURL: window.location.origin,
+      webHookURL: payFastTokenResult.data.data.payFastHookUrl,
+      userName: user?.firstName,
+      totalPrice: grandTotal,
+      phoneNumber: user?.phone,
+      emailAddress: user?.email,
+      orderId: code,
+      currencyType: import.meta.env.VITE_CURRENCY_SYMBOL,
+    });
+    setTimeout(() => {
+      formSubmitButtonRef?.current?.click();
+    }, 0);
+  }
 
   const addToGuest = () => {
     if (selectedCustomer == mainCustomer) {
@@ -133,12 +191,17 @@ const GroupBooking = () => {
             description: res.data.message,
           });
 
-          LocalStorageUtil.removeItem("GROUP_BOOKINGS");
+        LocalStorageUtil.removeItem("GROUP_BOOKINGS");
+          
+        if(!_.isEmpty(res.data.data[0][0]) && _.isObject(res.data.data[0][0])) {
+          paymentByPayFast((res.data.data[0][0] as any).code, (res.data.data[0][0] as any).grandTotalAmount );
+        }
+
 
           dispatch(clearBookings());
-          setTimeout(() => {
-            navigate("/booking/group-appointment/services");
-          }, 500);
+          // setTimeout(() => {
+          //   navigate("/booking/group-appointment/services");
+          // }, 500);
         } else {
           toast({
             title: "Error!",
@@ -327,6 +390,27 @@ const GroupBooking = () => {
         closeModal={setShowMsg}
         handleClick={visitConfirmation}
       />
+      <ForgotPasswordModal openModal={forgotModal} closeModal={handleShowPasswordModalState} />
+      <ForgotPasswordOtpVerificationModal openModal={forgotOtpModal} email={forgotOtpEmail} closeModal={handleShowPasswordModalOtpState}  />
+      {payFastFormData ? (
+        <PayFastForm
+          token={payFastFormData.token}
+          totalPrice={payFastFormData.totalPrice}
+          phoneNumber={payFastFormData.phoneNumber}
+          emailAddress={payFastFormData.emailAddress}
+          items={payFastFormData.items}
+          successURL={payFastFormData.successURL}
+          failureURL={payFastFormData.failureURL}
+          webHookURL={payFastFormData.webHookURL}
+          orderId={payFastFormData.orderId}
+          currencyType={payFastFormData.currencyType}
+          userName={payFastFormData.userName}
+          merchantId={payFastFormData.merchantId}
+          merchantName={payFastFormData.merchantName}
+          generatedDateTime={payFastFormData.generatedDateTime}
+          formSubmitButtonRef={formSubmitButtonRef}
+        />
+      ) : null}
     </>
   );
 };

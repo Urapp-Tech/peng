@@ -1,7 +1,35 @@
 import assets from "@/assets";
-import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 const MainScreen = () => {
+    const {search} = useLocation();
     const navigate = useNavigate();
+    const { toast } = useToast();
+    
+    useEffect(() => {
+        const params = new URLSearchParams(search);
+        const code = params.get('err_code');
+        const msg = params.get('err_msg');
+        if(search && params && code ) {
+            if(code == '00') {
+                toast({
+                    title: "Payment Success!",
+                    variant: "default",
+                    description: "Booking & payment successfully completed",
+                })
+            }
+            else {
+
+                toast({
+                    title: "Error!",
+                    variant: "destructive",
+                    description: msg,
+                }) 
+            }
+            
+        }
+    }, [])
 
     return (
         <>

@@ -50,6 +50,9 @@ const GroupBookingProfessionals = () => {
     if(bookings.filter(x => _.isUndefined(x.barber) ). length == bookings.length) {
       setSelected('Any')
     }
+    else if( bookings.filter(x => x.barber?.id == bookings[0].barber?.id ). length == bookings.length) {
+      setSelected('')
+    }
     else {
       setSelected('PerService')
     }

@@ -173,7 +173,6 @@ const Time = () => {
     }
 
     const bookedAppointments = (barberBookedAppointment || []).concat((userBookedAppointment || []).concat(appointments));
-    console.log("🚀 ~ generateAvailableTimeSlots ~ appointments:", appointments)
 
     setLoading(false);
 

@@ -4,13 +4,15 @@ import { CURRENCY_SYMBOL } from "@/utils/constant";
 import { Booking } from "@/redux/features/bookingSlice";
 import _ from "lodash";
 import { memo } from "react";
+import { CalendarIcon, Clock5Icon } from "lucide-react";
+import dayjs from "dayjs";
 
 interface RightSideBarProps  {
     continueAction: (p:string) => void;
 }
 
 const RightSideBar:React.FC<RightSideBarProps> = ({continueAction}) =>  {
-    const { bookings } = useAppSelector(x => x.bookingState);
+    const { bookings, appointmentTime } = useAppSelector(x => x.bookingState);
     const { systemConfig } = useAppSelector(x => x.appState);
     
     return (
@@ -26,7 +28,28 @@ const RightSideBar:React.FC<RightSideBarProps> = ({continueAction}) =>  {
                 <p className="block text-txt-color text-[12px] font-semibold leading-normal">
                 {systemConfig?.tenantConfig.shopAddress ?? ''}
                 </p>
-                { bookings.map((b, i) => (
+
+                <div>
+                {!_.isEmpty( appointmentTime) && dayjs(appointmentTime) && (
+                    <div className="my-5">
+                    <div className="flex items-center">
+                        <CalendarIcon />
+                        <span className="block text-txt-color text-[12px] mx-4 font-semibold leading-normal">
+                        {dayjs(appointmentTime).format("dddd, DD MMM")}
+                        </span>
+                    </div>
+                    <div className="flex items-center mt-3">
+                        <Clock5Icon />
+                        <span className="block text-txt-color text-[12px] mx-4 font-semibold leading-normal">
+                        {dayjs(appointmentTime).format("hh:mm A")}
+                        </span>
+                    </div>
+                    </div>
+                ) }
+                </div>
+
+
+                { bookings.map((b:Booking, i) => (
                     <div className="flex my-[10px] justify-between" key={i}>
                         <div className="py-[10px]">
                             <span className="block text-heading-color text-[12px] font-semibold leading-normal">{b.service.name}</span>
