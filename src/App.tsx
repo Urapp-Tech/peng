@@ -1,15 +1,9 @@
 import { useToast } from '@/components/ui/use-toast';
-import axios from 'axios';
-import { ClientJS } from 'clientjs';
 import { useEffect } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 import { useRoutes } from 'react-router-dom';
 import { setSystemConfig } from './redux/features/appStateSlice';
-import {
-  setDeviceData,
-  setTenant,
-  setTenantConfig,
-} from './redux/features/deviceState';
+import { setTenant, setTenantConfig } from './redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from './redux/redux-hooks';
 import routeObjects from './routes/AppRoutes';
 import appService from './services/app.service';
@@ -31,36 +25,13 @@ function App() {
   const { toast } = useToast();
 
   const dispatch = useAppDispatch();
-  const client = new ClientJS();
-  const agent = client.getUserAgent();
   const { systemConfig } = useAppSelector((s) => s.appState);
-  const fingerprint = client.getFingerprint();
   const { showBoundary } = useErrorBoundary();
-  async function fetchIp() {
-    const url = new URL('https://api.ipify.org');
-    url.searchParams.append('format', 'json');
-    const ipPromise = axios.get(url.toString());
-    const [ipResult] = await promiseHandler(ipPromise);
-    if (!ipResult) {
-      toast({
-        title: 'System Configuration Error',
-        variant: 'destructive',
-        description: 'Error Occurred',
-      });
-      return null;
-    }
-    return ipResult.data.ip;
-  }
 
   async function initializeDeviceData() {
     if (persistedDeviceData) {
       return;
     }
-    const ip = await fetchIp();
-    if (!ip) {
-      return;
-    }
-    const nameValue = `${agent.slice(0, 11)}-${ip}-${fingerprint}`;
     const getTenantPromise = tenantService.getTenant();
     const [getTenantResult, getTenantError] =
       await promiseHandler(getTenantPromise());
@@ -83,35 +54,6 @@ function App() {
     }
     dispatch(setTenantConfig(getTenantResult.data.data.tenantConfig));
     dispatch(setTenant(getTenantResult.data.data));
-    const deviceRegistrationPromise = tenantService.deviceRegistration({
-      deviceId: fingerprint.toString(),
-      deviceType: 'Web',
-      isNotificationAllowed: true,
-      name: nameValue,
-      tenant: getTenantResult.data.data.id,
-      token: 'Push notifications are not available on the web platform.',
-    });
-    const [deviceRegistrationResult, deviceRegistrationError] =
-      await promiseHandler(deviceRegistrationPromise);
-    if (!deviceRegistrationResult) {
-      toast({
-        title: 'Error',
-        variant: 'destructive',
-        description: deviceRegistrationError.message,
-      });
-
-      return;
-    }
-    if (!deviceRegistrationResult.data.success) {
-      toast({
-        title: 'Error',
-        variant: 'destructive',
-        description: deviceRegistrationResult.data.message,
-      });
-
-      return;
-    }
-    dispatch(setDeviceData(deviceRegistrationResult.data.data));
   }
 
   useEffect(() => {
