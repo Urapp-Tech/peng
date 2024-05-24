@@ -1,8 +1,6 @@
-/* eslint-disable import/no-cycle */
-
+import axiosInstance from '@/api/axiosInstance';
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Category } from '../../interfaces/serviceCategory.interface';
-import axiosInstance from '@/api/axiosInstance';
 
 type InitialState = {
   categories: Category[];
@@ -25,7 +23,9 @@ export const fetchCategories = createAsyncThunk(
   'store/fetchCategories',
   async (tenant: string | undefined, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/app/categories/list/${tenant}`);
+      const response = await axiosInstance.get(
+        `/app/categories/list/${tenant}`
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(JSON.stringify(error));
@@ -76,7 +76,6 @@ export const storeCategorySlice = createSlice({
             type: 'error',
           };
           state.notify = true;
-
         }
       });
   },

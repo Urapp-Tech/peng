@@ -1,24 +1,30 @@
-import Loader from "@/components/common/Loader";
-import LoginModal from "@/components/common/modal/LoginModal";
-import MsgModal from "@/components/common/modal/MsgModal";
-import RegisterModal from "@/components/common/modal/RegisterModal";
-import { Button } from "@/components/ui/button";
-import utcPlugin from "dayjs/plugin/utc";
-import { useAppDispatch, useAppSelector } from "@/redux/redux-hooks";
-import dayjs from "dayjs";
-import _ from "lodash";
-import { memo, useRef, useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import axiosInstance from "@/api/axiosInstance";
-import { useToast } from "@/components/ui/use-toast";
-import { GroupBooking as GroupBookingType, clearBookings } from "@/redux/features/groupBookingSlice";
-import GroupBookingRightSideBar from "./GroupBookingRightSideBar";
-import LocalStorageUtil from "@/utils/LocalStorageUtil";
-import promiseHandler from "@/utils/promise-handler";
-import PayFastForm from "../PayFastForm";
-import { handleShowForgotModal, handleShowForgotOtpModal } from "@/redux/features/forgotPasswordSlice";
-import ForgotPasswordModal from "@/components/common/modal/ForgotPasswordModal";
-import ForgotPasswordOtpVerificationModal from "@/components/common/modal/ForgotPasswordOtpVerificationModal";
+import axiosInstance from '@/api/axiosInstance';
+import Loader from '@/components/common/Loader';
+import ForgotPasswordModal from '@/components/common/modal/ForgotPasswordModal';
+import ForgotPasswordOtpVerificationModal from '@/components/common/modal/ForgotPasswordOtpVerificationModal';
+import LoginModal from '@/components/common/modal/LoginModal';
+import MsgModal from '@/components/common/modal/MsgModal';
+import RegisterModal from '@/components/common/modal/RegisterModal';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
+import {
+  handleShowForgotModal,
+  handleShowForgotOtpModal,
+} from '@/redux/features/forgotPasswordSlice';
+import {
+  GroupBooking as GroupBookingType,
+  clearBookings,
+} from '@/redux/features/groupBookingSlice';
+import { useAppDispatch, useAppSelector } from '@/redux/redux-hooks';
+import LocalStorageUtil from '@/utils/LocalStorageUtil';
+import promiseHandler from '@/utils/promise-handler';
+import dayjs from 'dayjs';
+import utcPlugin from 'dayjs/plugin/utc';
+import _ from 'lodash';
+import { memo, useRef, useState } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import PayFastForm from '../PayFastForm';
+import GroupBookingRightSideBar from './GroupBookingRightSideBar';
 
 dayjs.extend(utcPlugin);
 
@@ -29,7 +35,7 @@ const GroupBooking = () => {
   const [showRegister, setShowRegister] = useState<boolean>(false);
   const [showMsg, setShowMsg] = useState<boolean>(false);
   const { user } = useAppSelector((x) => x.authState);
-  const [_firstVisit, setFirstVisit] = useState<string>("No");
+  const [, setFirstVisit] = useState<string>('No');
   const [loading, setLoading] = useState<boolean>(false);
   const { bookings, appointmentTime, selectedCustomer, mainCustomer } =
     useAppSelector((x) => x.groupBookingState);
@@ -38,25 +44,27 @@ const GroupBooking = () => {
   const [payFastFormData, setPayFastFormData] = useState<any>(null);
   const formSubmitButtonRef = useRef<HTMLButtonElement>(null);
   const dispatch = useAppDispatch();
-  const { forgotModal, forgotOtpModal, forgotOtpEmail } = useAppSelector(x => x.forgotPasswordState);
+  const { forgotModal, forgotOtpModal, forgotOtpEmail } = useAppSelector(
+    (x) => x.forgotPasswordState
+  );
 
   const showMsgModal = () => {
     setShowMsg(true);
   };
 
-  const handleShowPasswordModalState = (val:boolean) => {
+  const handleShowPasswordModalState = (val: boolean) => {
     dispatch(handleShowForgotModal(val));
-  }
-  const handleShowPasswordModalOtpState = (val:boolean) => {
+  };
+  const handleShowPasswordModalOtpState = (val: boolean) => {
     dispatch(handleShowForgotOtpModal(val));
-  }
+  };
 
-
-  
-  const paymentByPayFast  = async ( code: string, grandTotal: string ) => {
-    const payFastTokenPromise = axiosInstance.post(`app/appointment/pay-fast/access-token`)
+  const paymentByPayFast = async (code: string, grandTotal: string) => {
+    const payFastTokenPromise = axiosInstance.post(
+      `app/appointment/pay-fast/access-token`
+    );
     const [payFastTokenResult, payFastTokenError] =
-    await promiseHandler(payFastTokenPromise);
+      await promiseHandler(payFastTokenPromise);
     if (!payFastTokenResult) {
       toast({
         title: 'Error',
@@ -92,88 +100,101 @@ const GroupBooking = () => {
     setTimeout(() => {
       formSubmitButtonRef?.current?.click();
     }, 0);
-  }
+  };
 
   const addToGuest = () => {
-    if (selectedCustomer == mainCustomer) {
+    if (selectedCustomer === mainCustomer) {
       if (
-        bookings.filter((booking) => booking.customer == mainCustomer).length ==
-        0
+        bookings.filter((booking) => booking.customer === mainCustomer)
+          .length === 0
       ) {
         toast({
-          title: "Error!",
-          variant: "destructive",
-          description: "Please select service before adding guest.",
+          title: 'Error!',
+          variant: 'destructive',
+          description: 'Please select service before adding guest.',
         });
         return;
       }
     }
-    navigate("/booking/group-appointment/add-guest");
+    navigate('/booking/group-appointment/add-guest');
   };
 
   const submitBooking = async () => {
-    if (bookings.length == 0) {
+    if (bookings.length === 0) {
       toast({
-        title: "Error!",
-        variant: "destructive",
-        description: "No services is selected.",
+        title: 'Error!',
+        variant: 'destructive',
+        description: 'No services is selected.',
       });
       return;
     }
 
     if (_.isUndefined(appointmentTime) || !dayjs(appointmentTime).isValid()) {
       toast({
-        title: "Error!",
-        variant: "destructive",
-        description: "Please select time slot before continuing.",
+        title: 'Error!',
+        variant: 'destructive',
+        description: 'Please select time slot before continuing.',
       });
       return;
     }
 
-    const appointments = bookings.filter(x=> x.customer == mainCustomer || x.customer == "Me" ).map((booking) => {
-      return {
-        appointmentTime: dayjs(appointmentTime)
-          .utc()
-          .format("YYYY-MM-DD HH:mm:ss"),
-        storeEmployee: booking.barber?.store_employee.id || "",
-        storeServiceCategory: booking.service.storeServiceCategory,
-        storeServiceCategoryItem: booking.service.id,
-        appointmentType: booking.barber ? "Professional" : "AnyProfessional",
-      };
-    });
+    const appointments = bookings
+      .filter((x) => x.customer === mainCustomer || x.customer === 'Me')
+      .map((booking) => {
+        return {
+          appointmentTime: dayjs(appointmentTime)
+            .utc()
+            .format('YYYY-MM-DD HH:mm:ss'),
+          storeEmployee: booking.barber?.store_employee.id || '',
+          storeServiceCategory: booking.service.storeServiceCategory,
+          storeServiceCategoryItem: booking.service.id,
+          appointmentType: booking.barber ? 'Professional' : 'AnyProfessional',
+        };
+      });
 
-    const c = bookings.reduce((customers: string[], booking: GroupBookingType) => {
-      if(!customers.includes(booking.customer) &&( booking.customer != 'Me' && booking.customer != mainCustomer )){
-        customers.push(booking.customer)
-      }
-      return customers;
-    },[])
+    const c = bookings.reduce(
+      (customers: string[], booking: GroupBookingType) => {
+        if (
+          !customers.includes(booking.customer) &&
+          booking.customer !== 'Me' &&
+          booking.customer !== mainCustomer
+        ) {
+          customers.push(booking.customer);
+        }
+        return customers;
+      },
+      []
+    );
 
     const guest = c.map((customer, _i) => {
       return {
         name: customer,
-        appointments: bookings.filter(x=> x.customer == customer).map((booking) => {
-          return {
+        appointments: bookings
+          .filter((x) => x.customer === customer)
+          .map((booking) => {
+            return {
               appointmentTime: dayjs(appointmentTime)
                 .utc()
-                .format("YYYY-MM-DD HH:mm:ss"),
-              storeEmployee: booking.barber?.store_employee.id || "",
+                .format('YYYY-MM-DD HH:mm:ss'),
+              storeEmployee: booking.barber?.store_employee.id || '',
               storeServiceCategory: booking.service.storeServiceCategory,
               storeServiceCategoryItem: booking.service.id,
-              appointmentType: booking.barber ? "Professional" : "AnyProfessional",
-          };
-        }),
+              appointmentType: booking.barber
+                ? 'Professional'
+                : 'AnyProfessional',
+            };
+          }),
       };
-    })
+    });
 
     const data = {
-      name: user?.firstName + " " + user?.lastName,
+      name: `${user?.firstName} ${user?.lastName}`,
       phone: user?.phone,
       email: user?.email,
-      status: "New",
-      note: "",
+      status: 'New',
+      note: '',
       appointments,
-      guest
+      guest,
     };
     setShowMsg(false);
 
@@ -186,17 +207,22 @@ const GroupBooking = () => {
           setLoading(false);
 
           toast({
-            title: "Success!",
-            variant: "default",
+            title: 'Success!',
+            variant: 'default',
             description: res.data.message,
           });
 
-        LocalStorageUtil.removeItem("GROUP_BOOKINGS");
-          
-        if(!_.isEmpty(res.data.data[0][0]) && _.isObject(res.data.data[0][0])) {
-          paymentByPayFast((res.data.data[0][0] as any).code, (res.data.data[0][0] as any).grandTotalAmount );
-        }
+          LocalStorageUtil.removeItem('GROUP_BOOKINGS');
 
+          if (
+            !_.isEmpty(res.data.data[0][0]) &&
+            _.isObject(res.data.data[0][0])
+          ) {
+            paymentByPayFast(
+              (res.data.data[0][0] as any).code,
+              (res.data.data[0][0] as any).grandTotalAmount
+            );
+          }
 
           dispatch(clearBookings());
           // setTimeout(() => {
@@ -204,8 +230,8 @@ const GroupBooking = () => {
           // }, 500);
         } else {
           toast({
-            title: "Error!",
-            variant: "destructive",
+            title: 'Error!',
+            variant: 'destructive',
             description: res.data.message,
           });
           setLoading(false);
@@ -215,8 +241,8 @@ const GroupBooking = () => {
         setLoading(false);
 
         toast({
-          title: "Error!",
-          variant: "destructive",
+          title: 'Error!',
+          variant: 'destructive',
           description: err.message,
         });
       });
@@ -225,57 +251,57 @@ const GroupBooking = () => {
   const steps = [
     {
       step: 1,
-      title: "Services",
+      title: 'Services',
       isFunction: false,
-      path: "/booking/group-appointment/services",
+      path: '/booking/group-appointment/services',
       auth: false,
       callback: () => {},
     },
     {
       step: 2,
-      title: "Add Guest",
+      title: 'Add Guest',
       isFunction: true,
-      path: "/booking/group-appointment/add-guest",
+      path: '/booking/group-appointment/add-guest',
       auth: false,
       callback: addToGuest,
     },
     {
       step: 3,
-      title: "Professionals",
+      title: 'Professionals',
       isFunction: false,
-      path: "/booking/group-appointment/professionals",
+      path: '/booking/group-appointment/professionals',
       auth: false,
       callback: () => {},
     },
     {
       step: 3,
-      title: "Professionals",
+      title: 'Professionals',
       isFunction: false,
-      path: "/booking/group-appointment/professionals-by-service",
+      path: '/booking/group-appointment/professionals-by-service',
       auth: false,
       callback: () => {},
     },
     {
       step: 4,
-      title: "Time",
+      title: 'Time',
       isFunction: false,
-      path: "/booking/group-appointment/time",
+      path: '/booking/group-appointment/time',
       auth: false,
       callback: () => {},
     },
     {
       step: 5,
-      title: "Confirmation",
+      title: 'Confirmation',
       isFunction: true,
-      path: "ConfirmationFunction",
+      path: 'ConfirmationFunction',
       auth: true,
       callback: showMsgModal,
     },
     {
       step: 6,
-      title: "Submit",
+      title: 'Submit',
       isFunction: true,
-      path: "SubmitFunction",
+      path: 'SubmitFunction',
       auth: true,
       callback: submitBooking,
     },
@@ -307,66 +333,66 @@ const GroupBooking = () => {
           setShowLogin(true);
         }
       } else {
-        navigate("/booking/group-appointment/services");
+        navigate('/booking/group-appointment/services');
       }
     }
   };
 
   const isActive = (path: string) => {
     if (pathname.includes(path)) {
-      return "active";
+      return 'active';
     }
-    return "inactive";
+    return 'inactive';
   };
 
   const visitConfirmation = (val: string) => {
     setFirstVisit(val);
-    handleClick("SubmitFunction");
+    handleClick('SubmitFunction');
   };
 
   return (
     <>
-      <div className="w-full h-full">
+      <div className="h-full w-full">
         {loading && <Loader />}
         <div
-          className="w-full 
-                flex h-full justify-between max-w-[1200px] mx-auto px-[20px] py-[40px] max-lg:flex-col"
+          className="mx-auto 
+                flex h-full w-full max-w-[1200px] justify-between px-[20px] py-[40px] max-lg:flex-col"
         >
-          <div className=" w-[65%] main-tabs px-[20px] max-lg:w-full max-lg:mb-2 ">
-            <div className="max-sm:overflow-x-scroll max-sm:overflow-y-hidden max-sm:pb-4 m--tabs">
-              <div className="gap-4 max-sm:w-[600px] max-sm:mx-auto">
+          <div className=" main-tabs w-[65%] px-[20px] max-lg:mb-2 max-lg:w-full ">
+            <div className="m--tabs max-sm:overflow-y-hidden max-sm:overflow-x-scroll max-sm:pb-4">
+              <div className="gap-4 max-sm:mx-auto max-sm:w-[600px]">
                 <Button
                   variant="link"
                   className={`mr-3 ${isActive(
-                    "booking/group-appointment/services"
-                  )} ${isActive("booking/group-appointment/add-guest")}`}
+                    'booking/group-appointment/services'
+                  )} ${isActive('booking/group-appointment/add-guest')}`}
                 >
-                  {" "}
+                  {' '}
                   Guest & Services
                 </Button>
                 <Button
                   variant="link"
                   className={`mx-3 ${isActive(
-                    "booking/group-appointment/professionals"
+                    'booking/group-appointment/professionals'
                   )}`}
                 >
-                  {" "}
+                  {' '}
                   Professional
                 </Button>
                 <Button
                   variant="link"
                   className={`mx-3 ${isActive(
-                    "booking/group-appointment/time"
+                    'booking/group-appointment/time'
                   )}`}
                 >
-                  {" "}
+                  {' '}
                   Time
                 </Button>
                 <Button
                   variant="link"
-                  className={`mx-3 ${isActive("booking/appointment/confirm")}`}
+                  className={`mx-3 ${isActive('booking/appointment/confirm')}`}
                 >
-                  {" "}
+                  {' '}
                   Confirm
                 </Button>
               </div>
@@ -390,8 +416,15 @@ const GroupBooking = () => {
         closeModal={setShowMsg}
         handleClick={visitConfirmation}
       />
-      <ForgotPasswordModal openModal={forgotModal} closeModal={handleShowPasswordModalState} />
-      <ForgotPasswordOtpVerificationModal openModal={forgotOtpModal} email={forgotOtpEmail} closeModal={handleShowPasswordModalOtpState}  />
+      <ForgotPasswordModal
+        openModal={forgotModal}
+        closeModal={handleShowPasswordModalState}
+      />
+      <ForgotPasswordOtpVerificationModal
+        openModal={forgotOtpModal}
+        email={forgotOtpEmail}
+        closeModal={handleShowPasswordModalOtpState}
+      />
       {payFastFormData ? (
         <PayFastForm
           token={payFastFormData.token}

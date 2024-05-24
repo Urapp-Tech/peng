@@ -52,8 +52,8 @@ export type SystemTenantConfig = {
   minimumDeliveryTime: number;
   deliveryUrgentFees: number;
   theme: string;
-  officeTimeIn:string;
-  officeTimeOut:string;
+  officeTimeIn: string;
+  officeTimeOut: string;
   shopSchedule: ShopSchedule[];
 };
 

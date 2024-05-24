@@ -1,6 +1,6 @@
+import axiosInstance from '@/api/axiosInstance';
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { EmployeeRatingData } from '../../interfaces/employee-ratings';
-import axiosInstance from '@/api/axiosInstance';
 
 type InitialState = {
   employeeRatings: EmployeeRatingData[];
@@ -22,7 +22,9 @@ export const fetchEmployeeRatingSlice = createAsyncThunk(
   'EmployeeRating/fetch',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/app/store/appointment-ratings/list`);
+      const response = await axiosInstance.get(
+        `/app/store/appointment-ratings/list`
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error);
@@ -36,7 +38,10 @@ export const updateEmployeeRatingSlice = createAsyncThunk(
     { rejectWithValue, fulfillWithValue }
   ) => {
     try {
-      const response = await axiosInstance.patch(`/app/store/appointment-ratings/update/${data.id}`,data);
+      const response = await axiosInstance.patch(
+        `/app/store/appointment-ratings/update/${data.id}`,
+        data
+      );
       return fulfillWithValue({ id: data.id, ...response.data });
     } catch (error: any) {
       return rejectWithValue(error);

@@ -1,9 +1,9 @@
-import { useAppSelector } from "@/redux/redux-hooks";
-import SelectedServiceCard from "./SelectedServicesCard";
-import { useState } from "react";
-import SelectProfessionalForServiceDialog from "@/components/common/dialog/SelectProfessionalForServiceDialog";
-import { StoreService } from "@/interfaces/serviceCategory.interface";
-import MainHeading from "@/components/common/typography/MainHeading";
+import SelectProfessionalForServiceDialog from '@/components/common/dialog/SelectProfessionalForServiceDialog';
+import MainHeading from '@/components/common/typography/MainHeading';
+import { StoreService } from '@/interfaces/serviceCategory.interface';
+import { useAppSelector } from '@/redux/redux-hooks';
+import { useState } from 'react';
+import SelectedServiceCard from './SelectedServicesCard';
 
 const SelectedServices = () => {
   const { bookings } = useAppSelector((x) => x.bookingState);
@@ -17,10 +17,10 @@ const SelectedServices = () => {
 
   return (
     <>
-      <div className="w-full h-full">
+      <div className="h-full w-full">
         <MainHeading title="Select Professional" />
-        <div className="w-full flex h-full justify-between max-w-[1200px] mx-auto 20px] py-[40px]">
-          <div className=" w-full main-tabs ">
+        <div className="20px] mx-auto flex h-full w-full max-w-[1200px] justify-between py-[40px]">
+          <div className=" main-tabs w-full ">
             {bookings.map((booking, i) => (
               <SelectedServiceCard
                 key={i}

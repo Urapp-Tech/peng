@@ -2,92 +2,95 @@
 @tailwind components;
 @tailwind utilities;
 
-  @layer base {
-    :root {
-      --background: 0 0% 100%;
-      --foreground: 222.2 84% 4.9%;
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
-      --card: 0 0% 100%;
-      --card-foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
 
-      --popover: 0 0% 100%;
-      --popover-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
 
-      --primary: 222.2 47.4% 11.2%;
-      --primary-foreground: 210 40% 98%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
 
-      --secondary: 210 40% 96.1%;
-      --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
 
-      --muted: 210 40% 96.1%;
-      --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-      --accent: 210 40% 96.1%;
-      --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
 
-      --destructive: 0 84.2% 60.2%;
-      --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
 
-      --border: 214.3 31.8% 91.4%;
-      --input: 214.3 31.8% 91.4%;
-      --ring: 222.2 84% 4.9%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
 
-      --radius: 0.5rem;
-    }
-
-    .dark {
-      --background: 222.2 84% 4.9%;
-      --foreground: 210 40% 98%;
-
-      --card: 222.2 84% 4.9%;
-      --card-foreground: 210 40% 98%;
-
-      --popover: 222.2 84% 4.9%;
-      --popover-foreground: 210 40% 98%;
-
-      --primary: 210 40% 98%;
-      --primary-foreground: 222.2 47.4% 11.2%;
-
-      --secondary: 217.2 32.6% 17.5%;
-      --secondary-foreground: 210 40% 98%;
-
-      --muted: 217.2 32.6% 17.5%;
-      --muted-foreground: 215 20.2% 65.1%;
-
-      --accent: 217.2 32.6% 17.5%;
-      --accent-foreground: 210 40% 98%;
-
-      --destructive: 0 62.8% 30.6%;
-      --destructive-foreground: 210 40% 98%;
-
-      --border: 217.2 32.6% 17.5%;
-      --input: 217.2 32.6% 17.5%;
-      --ring: 212.7 26.8% 83.9%;
-    }
+    --radius: 0.5rem;
   }
 
-  @layer base {
-    * {
-      @apply border-border;
-    }
-    body {
-      @apply bg-background text-foreground;
-    }
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
   }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
 
 #root {
   width: 100%;
 }
 
-/* @import url('/src/assets/fonts/fonts.css'); */
+/* @import   url('/src/assets/fonts/fonts.css'); */
 @font-face {
   font-family: 'Britania Ligatura';
   src: url('/src/assets/fonts/britania/Britania_Ligatura.eot');
-  src: url('/src/assets/fonts/britania/Britania_Ligatura.eot?#iefix') format('embedded-opentype'),
+  src:
+    url('/src/assets/fonts/britania/Britania_Ligatura.eot?#iefix')
+      format('embedded-opentype'),
     url('/src/assets/fonts/britania/Britania_Ligatura.woff2') format('woff2'),
     url('/src/assets/fonts/britania/Britania_Ligatura.woff') format('woff'),
     url('/src/assets/fonts/britania/Britania_Ligatura.ttf') format('truetype'),
-    url('/src/assets/fonts/britania/Britania_Ligatura.svg#Britania_Ligatura') format('svg');
+    url('/src/assets/fonts/britania/Britania_Ligatura.svg#Britania_Ligatura')
+      format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -96,7 +99,9 @@
 @font-face {
   font-family: 'Mont';
   src: url('/src/assets/fonts/mont/Mont-Bold.eot');
-  src: url('/src/assets/fonts/mont/Mont-Bold.eot?#iefix') format('embedded-opentype'),
+  src:
+    url('/src/assets/fonts/mont/Mont-Bold.eot?#iefix')
+      format('embedded-opentype'),
     url('/src/assets/fonts/mont/Mont-Bold.woff2') format('woff2'),
     url('/src/assets/fonts/mont/Mont-Bold.woff') format('woff'),
     url('/src/assets/fonts/mont/Mont-Bold.ttf') format('truetype'),
@@ -109,21 +114,25 @@
 @font-face {
   font-family: 'Mont';
   src: url('/src/assets/fonts/mont/Mont-ExtraLight.eot');
-  src: url('/src/assets/fonts/mont/Mont-ExtraLight.eot?#iefix') format('embedded-opentype'),
+  src:
+    url('/src/assets/fonts/mont/Mont-ExtraLight.eot?#iefix')
+      format('embedded-opentype'),
     url('/src/assets/fonts/mont/Mont-ExtraLight.woff2') format('woff2'),
     url('/src/assets/fonts/mont/Mont-ExtraLight.woff') format('woff'),
     url('/src/assets/fonts/mont/Mont-ExtraLight.ttf') format('truetype'),
-    url('/src/assets/fonts/mont/Mont-ExtraLight.svg#Mont-ExtraLight') format('svg');
+    url('/src/assets/fonts/mont/Mont-ExtraLight.svg#Mont-ExtraLight')
+      format('svg');
   font-weight: 200;
   font-style: normal;
   font-display: swap;
 }
 
-
 @font-face {
   font-family: 'Mont';
   src: url('/src/assets/fonts/mont/Mont-Black.eot');
-  src: url('/src/assets/fonts/mont/Mont-Black.eot?#iefix') format('embedded-opentype'),
+  src:
+    url('/src/assets/fonts/mont/Mont-Black.eot?#iefix')
+      format('embedded-opentype'),
     url('/src/assets/fonts/mont/Mont-Black.woff2') format('woff2'),
     url('/src/assets/fonts/mont/Mont-Black.woff') format('woff'),
     url('/src/assets/fonts/mont/Mont-Black.ttf') format('truetype'),
@@ -133,12 +142,12 @@
   font-display: swap;
 }
 
-
-
 @font-face {
   font-family: 'Mont Book';
   src: url('/src/assets/fonts/mont/Mont-Book.eot');
-  src: url('/src/assets/fonts/mont/Mont-Book.eot?#iefix') format('embedded-opentype'),
+  src:
+    url('/src/assets/fonts/mont/Mont-Book.eot?#iefix')
+      format('embedded-opentype'),
     url('/src/assets/fonts/mont/Mont-Book.woff2') format('woff2'),
     url('/src/assets/fonts/mont/Mont-Book.woff') format('woff'),
     url('/src/assets/fonts/mont/Mont-Book.ttf') format('truetype'),
@@ -148,12 +157,12 @@
   font-display: swap;
 }
 
-
-
 @font-face {
   font-family: 'Mont';
   src: url('/src/assets/fonts/mont/Mont-Thin.eot');
-  src: url('/src/assets/fonts/mont/Mont-Thin.eot?#iefix') format('embedded-opentype'),
+  src:
+    url('/src/assets/fonts/mont/Mont-Thin.eot?#iefix')
+      format('embedded-opentype'),
     url('/src/assets/fonts/mont/Mont-Thin.woff2') format('woff2'),
     url('/src/assets/fonts/mont/Mont-Thin.woff') format('woff'),
     url('/src/assets/fonts/mont/Mont-Thin.ttf') format('truetype'),
@@ -163,12 +172,12 @@
   font-display: swap;
 }
 
-
-
 @font-face {
   font-family: 'Mont';
   src: url('/src/assets/fonts/mont/Mont-SemiBold.eot');
-  src: url('/src/assets/fonts/mont/Mont-SemiBold.eot?#iefix') format('embedded-opentype'),
+  src:
+    url('/src/assets/fonts/mont/Mont-SemiBold.eot?#iefix')
+      format('embedded-opentype'),
     url('/src/assets/fonts/mont/Mont-SemiBold.woff2') format('woff2'),
     url('/src/assets/fonts/mont/Mont-SemiBold.woff') format('woff'),
     url('/src/assets/fonts/mont/Mont-SemiBold.ttf') format('truetype'),
@@ -178,13 +187,12 @@
   font-display: swap;
 }
 
-
-
-
 @font-face {
   font-family: 'Mont';
   src: url('/src/assets/fonts/mont/mont-Light.eot');
-  src: url('/src/assets/fonts/mont/mont-Light.eot?#iefix') format('embedded-opentype'),
+  src:
+    url('/src/assets/fonts/mont/mont-Light.eot?#iefix')
+      format('embedded-opentype'),
     url('/src/assets/fonts/mont/mont-Light.woff2') format('woff2'),
     url('/src/assets/fonts/mont/mont-Light.woff') format('woff'),
     url('/src/assets/fonts/mont/mont-Light.ttf') format('truetype'),
@@ -197,7 +205,9 @@
 @font-face {
   font-family: 'Mont';
   src: url('/src/assets/fonts/mont/mont-Heavy.eot');
-  src: url('/src/assets/fonts/mont/mont-Heavy.eot?#iefix') format('embedded-opentype'),
+  src:
+    url('/src/assets/fonts/mont/mont-Heavy.eot?#iefix')
+      format('embedded-opentype'),
     url('/src/assets/fonts/mont/mont-Heavy.woff2') format('woff2'),
     url('/src/assets/fonts/mont/mont-Heavy.woff') format('woff'),
     url('/src/assets/fonts/mont/mont-Heavy.ttf') format('truetype'),
@@ -210,7 +220,9 @@
 @font-face {
   font-family: 'Mont';
   src: url('/src/assets/fonts/mont/Mont-Regular.eot');
-  src: url('/src/assets/fonts/mont/mont-Regular.eot?#iefix') format('embedded-opentype'),
+  src:
+    url('/src/assets/fonts/mont/mont-Regular.eot?#iefix')
+      format('embedded-opentype'),
     url('/src/assets/fonts/mont/mont-Regular.woff2') format('woff2'),
     url('/src/assets/fonts/mont/mont-Regular.woff') format('woff'),
     url('/src/assets/fonts/mont/mont-Regular.ttf') format('truetype'),
@@ -239,10 +251,7 @@ body {
   display: flex;
   place-items: center;
   font-family: 'Mont' !important;
-
 }
-
-
 
 h1,
 h2,
@@ -280,7 +289,9 @@ button:focus-visible {
   /* @apply bg-primary; */
 }
 
-.tabs-lsit .MuiTabs-flexContainer.css-heg063-MuiTabs-flexContainer .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
+.tabs-lsit
+  .MuiTabs-flexContainer.css-heg063-MuiTabs-flexContainer
+  .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
   /* @apply text-primary; */
 }
 
@@ -288,7 +299,6 @@ button:focus-visible {
   /* @apply bg-primary; */
   /* left: 33px !important; */
   /* width: 25px !important; */
-
 }
 
 /* sub-tabs */
@@ -333,7 +343,7 @@ button:focus-visible {
 }
 
 .fixed.inset-0.z-50.bg-black\/80.data-\[state\=open\]\:animate-in.data-\[state\=closed\]\:animate-out.data-\[state\=closed\]\:fade-out-0.data-\[state\=open\]\:fade-in-0 {
-  background: #8CAC89;
+  background: #8cac89;
   opacity: 0.8;
 }
 
@@ -360,7 +370,6 @@ button:focus-visible {
   box-shadow: unset;
 }
 
-
 .custom-modal .mdl-btn svg {
   color: #fff;
   text-align: center;
@@ -368,32 +377,29 @@ button:focus-visible {
 
 .swiper-button-prev.swiper-button-disabled,
 .swiper-button-next.swiper-button-disabled {
-    color: white; /* Deactive color */
+  color: white; /* Deactive color */
 }
-
 
 .swiper-button-next {
-    color: black; /* Active color */
-    margin-top: 19px !important;
-    margin-right: -15px !important;
+  color: black; /* Active color */
+  margin-top: 19px !important;
+  margin-right: -15px !important;
 }
-.swiper-button-prev
- {
-    color: black; /* Active color */
-    margin-top: 19px !important;
-    margin-left: -15px !important;
+.swiper-button-prev {
+  color: black; /* Active color */
+  margin-top: 19px !important;
+  margin-left: -15px !important;
 }
-button.active{
+button.active {
   @apply bg-primary;
-
 }
-button.active span{
-color: #fff;
+button.active span {
+  color: #fff;
 }
-.swiper-button-prev:after, .swiper-button-next:after{
+.swiper-button-prev:after,
+.swiper-button-next:after {
   font-size: 20px;
-  color: #8CAC89;
-
+  color: #8cac89;
 }
 .mdl-btn {
   display: flex;
@@ -408,14 +414,14 @@ color: #fff;
   background: black;
   opacity: 1;
 }
-.m--tabs::-webkit-scrollbar{
+.m--tabs::-webkit-scrollbar {
   height: 15px;
   width: 4px;
   background-color: #d3e2d2;
   border-radius: 50px;
 }
-.m--tabs::-webkit-scrollbar-thumb:horizontal{
- @apply bg-primary;
+.m--tabs::-webkit-scrollbar-thumb:horizontal {
+  @apply bg-primary;
   border-radius: 50px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }

@@ -1,6 +1,8 @@
 import { SignUpPayload } from '../types/auth.types';
-import  LocalStorageUtil  from './LocalStorageUtil';
+import LocalStorageUtil from './LocalStorageUtil';
 
+const HOST = 'https://dev.urapptech.com';
+export const MAIN_BASE_URL = `${HOST}/api/v1/app/`;
 
 export const APP_USER_PREFIXES = 'app-user';
 

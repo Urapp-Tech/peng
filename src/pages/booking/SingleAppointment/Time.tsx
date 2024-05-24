@@ -1,19 +1,20 @@
-import axiosInstance from "@/api/axiosInstance";
-import DateCarousel from "@/components/common/DateCarousel";
-import Loader from "@/components/common/Loader";
-import ProfessionalButton from "@/components/common/buttons/ProfessionalButton";
-import TimeSlotsBtn from "@/components/common/buttons/TimeSlotsBtn";
-import MainHeading from "@/components/common/typography/MainHeading";
-import { Appointment } from "@/interfaces/app.appointment";
-import { StoreEmployeeSchedule } from "@/interfaces/barber";
-import { fetchAppointments } from "@/redux/features/appointmentSlice";
-import { Booking } from "@/redux/features/bookingSlice";
-import { useAppDispatch, useAppSelector } from "@/redux/redux-hooks";
-import dayjs, { Dayjs } from "dayjs";
+/* eslint-disable @typescript-eslint/no-loop-func */
+import axiosInstance from '@/api/axiosInstance';
+import DateCarousel from '@/components/common/DateCarousel';
+import Loader from '@/components/common/Loader';
+import ProfessionalButton from '@/components/common/buttons/ProfessionalButton';
+import TimeSlotsBtn from '@/components/common/buttons/TimeSlotsBtn';
+import MainHeading from '@/components/common/typography/MainHeading';
+import { Appointment } from '@/interfaces/app.appointment';
+import { StoreEmployeeSchedule } from '@/interfaces/barber';
+import { fetchAppointments } from '@/redux/features/appointmentSlice';
+import { Booking } from '@/redux/features/bookingSlice';
+import { useAppDispatch, useAppSelector } from '@/redux/redux-hooks';
+import dayjs, { Dayjs } from 'dayjs';
 import MinMax from 'dayjs/plugin/minMax';
-import _ from "lodash";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import _ from 'lodash';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 dayjs.extend(MinMax);
 
@@ -29,18 +30,26 @@ type QueryParams = {
 };
 
 const Time = () => {
-  const [selectedDate, setSelectedDate] = useState<string>("");
-  const [disabledDates, _setDisabledDates] = useState<(string | Dayjs | Date)[]>([]);
+  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [disabledDates] = useState<(string | Dayjs | Date)[]>([]);
   const { bookings, appointmentTime } = useAppSelector((s) => s.bookingState);
   const [loading, setLoading] = useState<boolean>(false);
   const [disabledDays, setDisabledDays] = useState<string[]>([]);
   const [timeSlots, setTimeSlots] = useState<Dayjs[]>([]);
   const dispatch = useAppDispatch();
-  const allDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const allDays = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
   const navigate = useNavigate();
-  const { user } = useAppSelector(x => x.authState);
-  const { appointments } = useAppSelector(x => x.appointmentState);
-  const { systemConfig } = useAppSelector(x => x.appState);
+  const { user } = useAppSelector((x) => x.authState);
+  const { appointments } = useAppSelector((x) => x.appointmentState);
+  const { systemConfig } = useAppSelector((x) => x.appState);
 
   const fetchAppointmentsData = () => {
     const startDate = selectedDate;
@@ -56,16 +65,22 @@ const Time = () => {
 
     dispatch(fetchAppointments(queryParams));
   };
-  
+
   const shopEvents = async () => {
     try {
-      const storeEmployees = bookings.reduce((barbersIds: string[], next: Booking) => {
-        if (next.barber) {
-          barbersIds.push(next.barber.store_employee.id);
-        }
-        return barbersIds;
-      }, []);
-      const resp = await axiosInstance.post(`/app/appointment/leave/multi-employees/management/${selectedDate}`, {employeeId:storeEmployees } );
+      const storeEmployees = bookings.reduce(
+        (barbersIds: string[], next: Booking) => {
+          if (next.barber) {
+            barbersIds.push(next.barber.store_employee.id);
+          }
+          return barbersIds;
+        },
+        []
+      );
+      const resp = await axiosInstance.post(
+        `/app/appointment/leave/multi-employees/management/${selectedDate}`,
+        { employeeId: storeEmployees }
+      );
       return resp.data && resp.data?.data;
     } catch (error) {
       console.error('Error:', error);
@@ -74,14 +89,15 @@ const Time = () => {
     }
   };
 
-
-  
   const getUserBookedSlotsByDate = async () => {
     try {
-      const response = await axiosInstance.get(`app/appointment/users/${selectedDate}`);
+      const response = await axiosInstance.get(
+        `app/appointment/users/${selectedDate}`
+      );
       if (response.data && response.data.success) {
         return response.data.data;
       }
+      return [];
     } catch (error) {
       console.log('getUserBookedSlotsByDate ~ error:', error);
       return [];
@@ -89,12 +105,15 @@ const Time = () => {
   };
 
   const fetchBarbersAppointment = async (): Promise<Appointment[]> => {
-    const storeEmployees = bookings.reduce((barbersIds: string[], next: Booking) => {
-      if (next.barber) {
-        barbersIds.push(next.barber.store_employee.id);
-      }
-      return barbersIds;
-    }, []);
+    const storeEmployees = bookings.reduce(
+      (barbersIds: string[], next: Booking) => {
+        if (next.barber) {
+          barbersIds.push(next.barber.store_employee.id);
+        }
+        return barbersIds;
+      },
+      []
+    );
 
     const response = await axiosInstance.post(
       `/app/store/appointment/barbers/appointments`,
@@ -107,12 +126,12 @@ const Time = () => {
         return data.data;
       }
     }
-    return []
+    return [];
   };
 
   const handleDateSelect = (date: string) => {
     setSelectedDate(date);
-    console.log("Selected Date:", date);
+    console.log('Selected Date:', date);
   };
 
   useEffect(() => {
@@ -136,8 +155,15 @@ const Time = () => {
       }
     });
 
-    if( systemConfig?.tenantConfig.shopSchedule &&  systemConfig?.tenantConfig.shopSchedule.length > 0) {
-      const offDays = allDays.filter((day) => systemConfig?.tenantConfig.shopSchedule.filter(x => x.day == day).length == 0 );
+    if (
+      systemConfig?.tenantConfig.shopSchedule &&
+      systemConfig?.tenantConfig.shopSchedule.length > 0
+    ) {
+      const offDays = allDays.filter(
+        (day) =>
+          systemConfig?.tenantConfig.shopSchedule.filter((x) => x.day === day)
+            .length === 0
+      );
       offDays.forEach((day) => unavailableDays.add(day));
     }
 
@@ -145,16 +171,16 @@ const Time = () => {
   }, [bookings]);
 
   const generateAvailableTimeSlots = async () => {
-    if (!selectedDate) return;
+    if (!selectedDate) return false;
     let anyProfessionIncluded = false;
 
-    if(bookings.filter(x => _.isUndefined(x.barber) ). length > 0) {
+    if (bookings.filter((x) => _.isUndefined(x.barber)).length > 0) {
       anyProfessionIncluded = true;
     }
 
     setLoading(true);
 
-     const promises = [];
+    const promises = [];
     promises.push(shopEvents());
 
     if (!_.isEmpty(user)) {
@@ -163,21 +189,22 @@ const Time = () => {
 
     promises.push(fetchBarbersAppointment());
 
-    const [dayAvailable ,userBookedAppointment, barberBookedAppointment] = await Promise.all(promises);
+    const [dayAvailable, userBookedAppointment, barberBookedAppointment] =
+      await Promise.all(promises);
 
     if (dayAvailable) {
-
       setTimeSlots([]);
       setLoading(false);
       return false;
     }
 
-    const bookedAppointments = (barberBookedAppointment || []).concat((userBookedAppointment || []).concat(appointments));
+    const bookedAppointments = (barberBookedAppointment || []).concat(
+      (userBookedAppointment || []).concat(appointments)
+    );
 
     setLoading(false);
 
-
-    const dayName = dayjs(selectedDate).format("dddd");
+    const dayName = dayjs(selectedDate).format('dddd');
     const workingSchedules: StoreEmployeeSchedule[] = [];
 
     bookings.forEach((booking: Booking) => {
@@ -195,44 +222,65 @@ const Time = () => {
 
     if (workingSchedules.length === 0 && !anyProfessionIncluded) {
       setTimeSlots([]);
-      return;
+      return false;
     }
 
     const startTimes = workingSchedules.map((schedule) =>
-      dayjs(`${selectedDate} ${dayjs(schedule.start_time).format("HH:mm:ss")}`)
+      dayjs(`${selectedDate} ${dayjs(schedule.start_time).format('HH:mm:ss')}`)
     );
     const endTimes = workingSchedules.map((schedule) =>
-      dayjs(`${selectedDate} ${dayjs(schedule.end_time).format("HH:mm:ss")}`)
+      dayjs(`${selectedDate} ${dayjs(schedule.end_time).format('HH:mm:ss')}`)
     );
 
-    const maxStartTime = anyProfessionIncluded ? dayjs(`${selectedDate} ${dayjs(systemConfig?.tenantConfig.officeTimeIn).format("HH:mm:ss")}`) : dayjs.max(startTimes);
-    const minEndTime = anyProfessionIncluded ?  dayjs(`${selectedDate} ${dayjs(systemConfig?.tenantConfig.officeTimeOut).format("HH:mm:ss")}`)  : dayjs.min(endTimes);
+    const maxStartTime = anyProfessionIncluded
+      ? dayjs(
+          `${selectedDate} ${dayjs(systemConfig?.tenantConfig.officeTimeIn).format('HH:mm:ss')}`
+        )
+      : dayjs.max(startTimes);
+    const minEndTime = anyProfessionIncluded
+      ? dayjs(
+          `${selectedDate} ${dayjs(systemConfig?.tenantConfig.officeTimeOut).format('HH:mm:ss')}`
+        )
+      : dayjs.min(endTimes);
 
-    let barberServiceTime :number[] = bookings.reduce((st: number[], next: Booking) => {
-      next.barber && st.push(next.barber?.service_time ?? 0);
-      return st;
-    }, [0]);
-    
-    let barberMaxServiceTime: number = Math.max(...barberServiceTime);
+    const barberServiceTime: number[] = bookings.reduce(
+      (st: number[], next: Booking) => {
+        next.barber && st.push(next.barber?.service_time ?? 0);
+        return st;
+      },
+      [0]
+    );
 
-    const bookedSlotsEndTimes = bookedAppointments.map((appointment:Appointment) => {
-      return {
-        start: dayjs(appointment.appointmentTime).subtract(barberMaxServiceTime, "minutes"),
-        end: dayjs(appointment.appointmentTime).add( _.toNumber( appointment.serviceTime) ?? 0, "minutes")
+    const barberMaxServiceTime: number = Math.max(...barberServiceTime);
+
+    const bookedSlotsEndTimes = bookedAppointments.map(
+      (appointment: Appointment) => {
+        return {
+          start: dayjs(appointment.appointmentTime).subtract(
+            barberMaxServiceTime,
+            'minutes'
+          ),
+          end: dayjs(appointment.appointmentTime).add(
+            _.toNumber(appointment.serviceTime) ?? 0,
+            'minutes'
+          ),
+        };
       }
-    });
-
-  
+    );
 
     const availableSlots: Dayjs[] = [];
     let currentSlot = maxStartTime;
 
     while (currentSlot && currentSlot.isBefore(minEndTime)) {
-      let slotEnd = currentSlot.add(15, "minute");
+      const slotEnd = currentSlot.add(15, 'minute');
       let slotAvailable = true;
 
-      bookedSlotsEndTimes.forEach((b: {start: Dayjs, end:Dayjs}) => {
-        if (currentSlot && currentSlot.isBefore(b.end) && slotEnd.isAfter(b.start)) {
+      bookedSlotsEndTimes.forEach((b: { start: Dayjs; end: Dayjs }) => {
+        if (
+          currentSlot &&
+          currentSlot.isBefore(b.end) &&
+          slotEnd.isAfter(b.start)
+        ) {
           slotAvailable = false;
         }
       });
@@ -245,17 +293,16 @@ const Time = () => {
     }
 
     setTimeSlots(availableSlots);
+
+    return true;
   };
 
   useEffect(() => {
-
-    if(bookings.filter(x => _.isUndefined(x.barber) ). length > 0) {
-      fetchAppointmentsData()
-    }
-    else {
+    if (bookings.filter((x) => _.isUndefined(x.barber)).length > 0) {
+      fetchAppointmentsData();
+    } else {
       generateAvailableTimeSlots();
     }
-
   }, [selectedDate, bookings]);
 
   useEffect(() => {
@@ -266,15 +313,24 @@ const Time = () => {
     <div className="px-[20px] max-lg:px-0">
       {loading && <Loader />}
       <MainHeading title="Select Date & Time" />
-      <ProfessionalButton barber={bookings[0]?.barber} onclick={() => navigate('/booking/appointment/professionals-by-service')}/>
+      <ProfessionalButton
+        barber={bookings[0]?.barber}
+        onclick={() =>
+          navigate('/booking/appointment/professionals-by-service')
+        }
+      />
       <DateCarousel
         onDateSelect={handleDateSelect}
         disabledDates={disabledDates}
         disabledDays={disabledDays}
       />
-      <div className="shadow-md my-[15px] max-h-[400px] overflow-x-hidden overflow-y-scroll p-[15px]">
+      <div className="my-[15px] max-h-[400px] overflow-x-hidden overflow-y-scroll p-[15px] shadow-md">
         {timeSlots.map((slot, index) => (
-          <TimeSlotsBtn key={index} time={slot} active={slot.isSame(appointmentTime) } />
+          <TimeSlotsBtn
+            key={index}
+            time={slot}
+            active={slot.isSame(appointmentTime)}
+          />
         ))}
       </div>
     </div>

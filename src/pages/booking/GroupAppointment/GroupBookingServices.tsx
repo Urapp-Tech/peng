@@ -1,17 +1,23 @@
-import MainHeading from "@/components/common/typography/MainHeading";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/components/ui/use-toast";
-import { fetchCategoriesItems } from "@/redux/features/storeCategoryItemsSlice";
-import { fetchCategories, setSelectedCategory } from "@/redux/features/storeCategorySlice";
-import { useAppDispatch, useAppSelector } from "@/redux/redux-hooks";
-import _ from "lodash";
-import { memo, useEffect, useState } from "react";
-import ServiceCard from "./GroupBookingServiceComponents/ServiceCard";
-import ServiceDetailDialog from "@/components/common/dialog/ServiceDetailDialog";
-import { StoreService } from "@/interfaces/serviceCategory.interface";
-import assets from "@/assets";
-import { setMainCustomer, setSelectedCustomer } from "@/redux/features/groupBookingSlice";
+import assets from '@/assets';
+import ServiceDetailDialog from '@/components/common/dialog/ServiceDetailDialog';
+import MainHeading from '@/components/common/typography/MainHeading';
+import Skeleton from '@/components/ui/skeleton';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useToast } from '@/components/ui/use-toast';
+import { StoreService } from '@/interfaces/serviceCategory.interface';
+import {
+  setMainCustomer,
+  setSelectedCustomer,
+} from '@/redux/features/groupBookingSlice';
+import { fetchCategoriesItems } from '@/redux/features/storeCategoryItemsSlice';
+import {
+  fetchCategories,
+  setSelectedCategory,
+} from '@/redux/features/storeCategorySlice';
+import { useAppDispatch, useAppSelector } from '@/redux/redux-hooks';
+import _ from 'lodash';
+import { memo, useEffect, useState } from 'react';
+import ServiceCard from './GroupBookingServiceComponents/ServiceCard';
 
 const GroupBookingServices = () => {
   const {
@@ -25,10 +31,12 @@ const GroupBookingServices = () => {
   const { systemConfig } = useAppSelector((x) => x.appState);
   const { toast } = useToast();
   const { user } = useAppSelector((x) => x.authState);
-  const { selectedCustomer } = useAppSelector(x => x.groupBookingState);
-  const [ open , setOpen ] = useState<boolean>(false) ;
-  const [ detail , setDetail ] = useState<StoreService | null>() ;
-  const { categoryItems, loading:serviceLoading } = useAppSelector((s) => s.storeCategoryItemState)
+  const { selectedCustomer } = useAppSelector((x) => x.groupBookingState);
+  const [open, setOpen] = useState<boolean>(false);
+  const [detail, setDetail] = useState<StoreService | null>();
+  const { categoryItems, loading: serviceLoading } = useAppSelector(
+    (s) => s.storeCategoryItemState
+  );
 
   const selectCategory = (categoryId: string) => {
     const cat = categories.find((x) => x.id === categoryId);
@@ -40,14 +48,19 @@ const GroupBookingServices = () => {
   const showDetails = (s: StoreService) => {
     setDetail(s);
     setOpen(true);
-  }
+  };
 
   useEffect(() => {
     if (notify) {
       toast({
         title: notifyMessage.text,
-        variant: (notifyMessage?.type as "default" | "destructive" | null | undefined) ?? 'default',
-      })
+        variant:
+          (notifyMessage?.type as
+            | 'default'
+            | 'destructive'
+            | null
+            | undefined) ?? 'default',
+      });
     }
   }, [notify]);
 
@@ -79,34 +92,28 @@ const GroupBookingServices = () => {
   }, [systemConfig]);
 
   useEffect(() => {
-    if(_.isEmpty(selectedCustomer)){
-      if(!user) {
+    if (_.isEmpty(selectedCustomer)) {
+      if (!user) {
         dispatch(setSelectedCustomer('Me'));
         dispatch(setMainCustomer('Me'));
-      }
-      else {
-        dispatch(setSelectedCustomer(user.firstName + " " + user.lastName));
-        dispatch(setMainCustomer(user.firstName + " " + user.lastName));
-
+      } else {
+        dispatch(setSelectedCustomer(`${user.firstName} ${user.lastName}`));
+        dispatch(setMainCustomer(`${user.firstName} ${user.lastName}`));
       }
     }
-
   }, []);
 
   return (
     <>
       <MainHeading title="Select Services" customClass="mb-1" />
 
-  <div className="p-3 my-2 flex content-center items-center gap-5">
-    <img src={assets.images.avatar} alt="" className="h-[35px]" />
+      <div className="my-2 flex content-center items-center gap-5 p-3">
+        <img src={assets.images.avatar} alt="" className="h-[35px]" />
 
-      {selectedCustomer}
-  </div>
+        {selectedCustomer}
+      </div>
 
-
-
-      {CatLoading && <Skeleton className="w-full h-[50px] rounded-3xl" />}
-
+      {CatLoading && <Skeleton className="h-[50px] w-full rounded-3xl" />}
 
       {!CatLoading && (
         <Tabs
@@ -115,36 +122,39 @@ const GroupBookingServices = () => {
           defaultValue={selectedCategory?.id || ''}
           className="w-full"
         >
-          <div className="max-sm:overflow-x-scroll max-sm:overflow-y-hidden max-sm:pb-4 m--tabs">
-          <TabsList className="main-tabs max-sm:w-[600px] max-sm:mx-auto">
-            {categories.map((c, i) => (
-   
-             <TabsTrigger
-                value={c.id}
-                key={i}
-                className="bg-white text-primary mr-[20px] "
-              >
-                {c.name}
-              </TabsTrigger>
-            ))}
-          </TabsList>
+          <div className="m--tabs max-sm:overflow-y-hidden max-sm:overflow-x-scroll max-sm:pb-4">
+            <TabsList className="main-tabs max-sm:mx-auto max-sm:w-[600px]">
+              {categories.map((c, i) => (
+                <TabsTrigger
+                  value={c.id}
+                  key={i}
+                  className="mr-[20px] bg-white text-primary "
+                >
+                  {c.name}
+                </TabsTrigger>
+              ))}
+            </TabsList>
           </div>
-          
         </Tabs>
       )}
 
       <div className="peng-services-area mt-10">
-
         {serviceLoading && (
-          <Skeleton className="w-full h-[170px] rounded-3xl mt-10" />
+          <Skeleton className="mt-10 h-[170px] w-full rounded-3xl" />
         )}
 
-        {!serviceLoading  && categoryItems.map((s, i) =>(
-          <ServiceCard service={s} key={i} showServiceDetail={showDetails} />
-        ))}
-
+        {!serviceLoading &&
+          categoryItems.map((s, i) => (
+            <ServiceCard service={s} key={i} showServiceDetail={showDetails} />
+          ))}
       </div>
-      {detail &&<ServiceDetailDialog service={detail} open={open} handleClose={setOpen}  />}
+      {detail && (
+        <ServiceDetailDialog
+          service={detail}
+          open={open}
+          handleClose={setOpen}
+        />
+      )}
     </>
   );
 };

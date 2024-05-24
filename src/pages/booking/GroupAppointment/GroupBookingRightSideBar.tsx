@@ -1,11 +1,11 @@
-import { useAppSelector } from "@/redux/redux-hooks";
-import { CURRENCY_SYMBOL } from "@/utils/constant";
-import _ from "lodash";
-import { memo, useEffect, useState } from "react";
-import SubHeading from "@/components/common/typography/SubHeading";
-import { GroupBooking } from "@/redux/features/groupBookingSlice";
-import dayjs from "dayjs";
-import { CalendarIcon, Clock5Icon } from "lucide-react";
+import SubHeading from '@/components/common/typography/SubHeading';
+import { GroupBooking } from '@/redux/features/groupBookingSlice';
+import { useAppSelector } from '@/redux/redux-hooks';
+import { CURRENCY_SYMBOL } from '@/utils/constant';
+import dayjs from 'dayjs';
+import _ from 'lodash';
+import { CalendarIcon, Clock5Icon } from 'lucide-react';
+import { memo, useEffect, useState } from 'react';
 
 interface RightSideBarProps {
   continueAction: (p: string) => void;
@@ -14,120 +14,122 @@ interface RightSideBarProps {
 const GroupBookingRightSideBar: React.FC<RightSideBarProps> = ({
   continueAction,
 }) => {
-  const { bookings , appointmentTime } = useAppSelector((x) => x.groupBookingState);
+  const { bookings, appointmentTime } = useAppSelector(
+    (x) => x.groupBookingState
+  );
   const { systemConfig } = useAppSelector((x) => x.appState);
   const [customers, setCustomers] = useState<string[]>([]);
 
   useEffect(() => {
-    const c = bookings.reduce((customers: string[], booking: GroupBooking) => {
-      if (!customers.includes(booking.customer)) {
-        customers.push(booking.customer);
-      }
-      return customers;
-    }, []);
+    const c = bookings.reduce(
+      (bookingsCustomers: string[], booking: GroupBooking) => {
+        if (!bookingsCustomers.includes(booking.customer)) {
+          bookingsCustomers.push(booking.customer);
+        }
+        return bookingsCustomers;
+      },
+      []
+    );
 
     setCustomers(c);
   }, [bookings]);
 
   return (
-    <>
-      <div className="w-full p-5 pb-0  border-2 border-primary rounded-[20px] min-h-[600px]">
-        <div className="max-[355px] mx-auto">
-          <img
-            src={systemConfig?.tenantConfig.banner}
-            alt="interior"
-            className="w-full object-contain block rounded-xl"
-          />
-        </div>
-        <div className="flex justify-between items-center mt-5">
-          <SubHeading title={systemConfig?.tenantConfig.name ?? ""} />
-        </div>
+    <div className="min-h-[600px] w-full rounded-[20px]  border-2 border-primary p-5 pb-0">
+      <div className="max-[355px] mx-auto">
+        <img
+          src={systemConfig?.tenantConfig.banner}
+          alt="interior"
+          className="block w-full rounded-xl object-contain"
+        />
+      </div>
+      <div className="mt-5 flex items-center justify-between">
+        <SubHeading title={systemConfig?.tenantConfig.name ?? ''} />
+      </div>
 
-        <p className="block text-txt-color text-[12px] font-semibold leading-normal">
-          {systemConfig?.tenantConfig.shopAddress ?? ""}
-        </p>
+      <p className="block text-[12px] font-semibold leading-normal text-txt-color">
+        {systemConfig?.tenantConfig.shopAddress ?? ''}
+      </p>
 
-        <div>
-          {!_.isEmpty( appointmentTime) && dayjs(appointmentTime) && (
-            <div className="my-5">
-              <div className="flex items-center">
-                <CalendarIcon />
-                <span className="block text-txt-color text-[12px] mx-4 font-semibold leading-normal">
-                  {dayjs(appointmentTime).format("dddd, DD MMM")}
-                </span>
-              </div>
-              <div className="flex items-center mt-3">
-                <Clock5Icon />
-                <span className="block text-txt-color text-[12px] mx-4 font-semibold leading-normal">
-                  {dayjs(appointmentTime).format("hh:mm A")}
-                </span>
-              </div>
+      <div>
+        {!_.isEmpty(appointmentTime) && dayjs(appointmentTime) && (
+          <div className="my-5">
+            <div className="flex items-center">
+              <CalendarIcon />
+              <span className="mx-4 block text-[12px] font-semibold leading-normal text-txt-color">
+                {dayjs(appointmentTime).format('dddd, DD MMM')}
+              </span>
             </div>
-          ) }
-        </div>
+            <div className="mt-3 flex items-center">
+              <Clock5Icon />
+              <span className="mx-4 block text-[12px] font-semibold leading-normal text-txt-color">
+                {dayjs(appointmentTime).format('hh:mm A')}
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
 
-
-        {customers?.map((customer, j) => (
-          <div key={j} className="mt-3">
-            {j > 0 && <hr />}
-            <h1 className="mt-4"> {customer}</h1>
-            {bookings
-              .filter((x) => x.customer == customer)
-              .map((b:GroupBooking, i) => (
-                <div className="flex my-[10px] justify-between" key={i}>
-                  <div className="py-[10px]">
-                    <span className="block text-heading-color text-[12px] font-semibold leading-normal">
-                      {b.service.name}
-                    </span>
-                    <span className="block text-txt-color text-[12px] font-semibold leading-normal">
-                      {b.barber ? `${b.barber.service_time} mins with` : ""}{" "}
-                      {b.barber
-                        ? b.barber.store_employee.name
-                        : "Any Professional"}{" "}
-                    </span>
-                  </div>
-
-                  <div className="py-[10px]">
-                    <span className="block text-heading-color text-[12px] font-semibold leading-normal">
-                      {CURRENCY_SYMBOL} {b.service.price}
-                    </span>
-                  </div>
+      {customers?.map((customer, j) => (
+        <div key={j} className="mt-3">
+          {j > 0 && <hr />}
+          <h1 className="mt-4"> {customer}</h1>
+          {bookings
+            .filter((x) => x.customer === customer)
+            .map((b: GroupBooking, i) => (
+              <div className="my-[10px] flex justify-between" key={i}>
+                <div className="py-[10px]">
+                  <span className="block text-[12px] font-semibold leading-normal text-heading-color">
+                    {b.service.name}
+                  </span>
+                  <span className="block text-[12px] font-semibold leading-normal text-txt-color">
+                    {b.barber ? `${b.barber.service_time} mins with` : ''}{' '}
+                    {b.barber
+                      ? b.barber.store_employee.name
+                      : 'Any Professional'}{' '}
+                  </span>
                 </div>
-              ))}
-          </div>
-        ))}
 
-        <div className="flex mt-[30px] py-[15px] justify-between border-t-2 border-primary">
-          <div className="py-[10px]">
-            <span className="block text-heading-color text-[16px] font-bold leading-normal">
-              Total
-            </span>
-          </div>
+                <div className="py-[10px]">
+                  <span className="block text-[12px] font-semibold leading-normal text-heading-color">
+                    {CURRENCY_SYMBOL} {b.service.price}
+                  </span>
+                </div>
+              </div>
+            ))}
+        </div>
+      ))}
 
-          <div className="py-[10px]">
-            <span className="block text-heading-color text-[16px] font-bold leading-normal">
-              {" "}
-              {CURRENCY_SYMBOL}{" "}
-              {bookings.reduce(
-                (total: number, next: GroupBooking) =>
-                  total + _.toNumber(next.service.price),
-                0
-              )}{" "}
-            </span>
-          </div>
+      <div className="mt-[30px] flex justify-between border-t-2 border-primary py-[15px]">
+        <div className="py-[10px]">
+          <span className="block text-[16px] font-bold leading-normal text-heading-color">
+            Total
+          </span>
         </div>
 
-        <div className="flex mt-[30px] py-[15px] justify-between">
-          <button
-            onClick={() => continueAction("")}
-            className="w-full rounded-[10px] bg-primary text-white text-[16px] font-semibold leading-normal"
-          >
-            Continue
-            {/* {modalOpen && <PaymentModal />} */}
-          </button>
+        <div className="py-[10px]">
+          <span className="block text-[16px] font-bold leading-normal text-heading-color">
+            {' '}
+            {CURRENCY_SYMBOL}{' '}
+            {bookings.reduce(
+              (total: number, next: GroupBooking) =>
+                total + _.toNumber(next.service.price),
+              0
+            )}{' '}
+          </span>
         </div>
       </div>
-    </>
+
+      <div className="mt-[30px] flex justify-between py-[15px]">
+        <button
+          onClick={() => continueAction('')}
+          className="w-full rounded-[10px] bg-primary text-[16px] font-semibold leading-normal text-white"
+        >
+          Continue
+          {/* {modalOpen && <PaymentModal />} */}
+        </button>
+      </div>
+    </div>
   );
 };
 

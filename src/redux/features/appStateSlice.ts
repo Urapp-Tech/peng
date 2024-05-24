@@ -9,7 +9,8 @@ type AppState = {
 };
 
 function initializeSystemConfig() {
-  const systemConfig = LocalStorageUtil.getItem<SystemConfigData>('SYSTEM_CONFIG');
+  const systemConfig =
+    LocalStorageUtil.getItem<SystemConfigData>('SYSTEM_CONFIG');
   if (systemConfig) {
     setTenantId(systemConfig.tenant);
     return systemConfig;

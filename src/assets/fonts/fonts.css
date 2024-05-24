@@ -1,139 +1,143 @@
 @font-face {
-    font-family: 'Britania Ligatura';
-    src: url('./assets/fonts/britania/Britania_Ligatura.eot');
-    src: url('./assets/fonts/britania/Britania_Ligatura.eot?#iefix') format('embedded-opentype'),
-        url('./assets/fonts/britania/Britania_Ligatura.woff2') format('woff2'),
-        url('./assets/fonts/britania/Britania_Ligatura.woff') format('woff'),
-        url('./assets/fonts/britania/Britania_Ligatura.ttf') format('truetype'),
-        url('./assets/fonts/britania/Britania_Ligatura.svg#Britania_Ligatura') format('svg');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'Britania Ligatura';
+  src: url('./assets/fonts/britania/Britania_Ligatura.eot');
+  src:
+    url('./assets/fonts/britania/Britania_Ligatura.eot?#iefix')
+      format('embedded-opentype'),
+    url('./assets/fonts/britania/Britania_Ligatura.woff2') format('woff2'),
+    url('./assets/fonts/britania/Britania_Ligatura.woff') format('woff'),
+    url('./assets/fonts/britania/Britania_Ligatura.ttf') format('truetype'),
+    url('./assets/fonts/britania/Britania_Ligatura.svg#Britania_Ligatura')
+      format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Mont';
-    src: url('./assets/fonts/mont/Mont-Bold.eot');
-    src: url('./assets/fonts/mont/Mont-Bold.eot?#iefix') format('embedded-opentype'),
-        url('./assets/fonts/mont/Mont-Bold.woff2') format('woff2'),
-        url('./assets/fonts/mont/Mont-Bold.woff') format('woff'),
-        url('./assets/fonts/mont/Mont-Bold.ttf') format('truetype'),
-        url('./assets/fonts/mont/Mont-Bold.svg#Mont-Bold') format('svg');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'Mont';
+  src: url('./assets/fonts/mont/Mont-Bold.eot');
+  src:
+    url('./assets/fonts/mont/Mont-Bold.eot?#iefix') format('embedded-opentype'),
+    url('./assets/fonts/mont/Mont-Bold.woff2') format('woff2'),
+    url('./assets/fonts/mont/Mont-Bold.woff') format('woff'),
+    url('./assets/fonts/mont/Mont-Bold.ttf') format('truetype'),
+    url('./assets/fonts/mont/Mont-Bold.svg#Mont-Bold') format('svg');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Mont';
-    src: url('./assets/fonts/mont/Mont-ExtraLight.eot');
-    src: url('./assets/fonts/mont/Mont-ExtraLight.eot?#iefix') format('embedded-opentype'),
-        url('./assets/fonts/mont/Mont-ExtraLight.woff2') format('woff2'),
-        url('./assets/fonts/mont/Mont-ExtraLight.woff') format('woff'),
-        url('./assets/fonts/mont/Mont-ExtraLight.ttf') format('truetype'),
-        url('./assets/fonts/mont/Mont-ExtraLight.svg#Mont-ExtraLight') format('svg');
-    font-weight: 200;
-    font-style: normal;
-    font-display: swap;
-}
-
-
-@font-face {
-    font-family: 'Mont';
-    src: url('./assets/fonts/mont/Mont-Black.eot');
-    src: url('./assets/fonts/mont/Mont-Black.eot?#iefix') format('embedded-opentype'),
-        url('./assets/fonts/mont/Mont-Black.woff2') format('woff2'),
-        url('./assets/fonts/mont/Mont-Black.woff') format('woff'),
-        url('./assets/fonts/mont/Mont-Black.ttf') format('truetype'),
-        url('./assets/fonts/mont/Mont-Black.svg#Mont-Black') format('svg');
-    font-weight: 900;
-    font-style: normal;
-    font-display: swap;
-}
-
-
-
-@font-face {
-    font-family: 'Mont Book';
-    src: url('./assets/fonts/mont/Mont-Book.eot');
-    src: url('./assets/fonts/mont/Mont-Book.eot?#iefix') format('embedded-opentype'),
-        url('./assets/fonts/mont/Mont-Book.woff2') format('woff2'),
-        url('./assets/fonts/mont/Mont-Book.woff') format('woff'),
-        url('./assets/fonts/mont/Mont-Book.ttf') format('truetype'),
-        url('./assets/fonts/mont/Mont-Book.svg#Mont-Book') format('svg');
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-}
-
-
-
-@font-face {
-    font-family: 'Mont';
-    src: url('./assets/fonts/mont/Mont-Thin.eot');
-    src: url('./assets/fonts/mont/Mont-Thin.eot?#iefix') format('embedded-opentype'),
-        url('./assets/fonts/mont/Mont-Thin.woff2') format('woff2'),
-        url('./assets/fonts/mont/Mont-Thin.woff') format('woff'),
-        url('./assets/fonts/mont/Mont-Thin.ttf') format('truetype'),
-        url('./assets/fonts/mont/Mont-Thin.svg#Mont-Thin') format('svg');
-    font-weight: 100;
-    font-style: normal;
-    font-display: swap;
-}
-
-
-
-@font-face {
-    font-family: 'Mont';
-    src: url('./assets/fonts/mont/Mont-SemiBold.eot');
-    src: url('./assets/fonts/mont/Mont-SemiBold.eot?#iefix') format('embedded-opentype'),
-        url('./assets/fonts/mont/Mont-SemiBold.woff2') format('woff2'),
-        url('./assets/fonts/mont/Mont-SemiBold.woff') format('woff'),
-        url('./assets/fonts/mont/Mont-SemiBold.ttf') format('truetype'),
-        url('./assets/fonts/mont/Mont-SemiBold.svg#Mont-SemiBold') format('svg');
-    font-weight: 600;
-    font-style: normal;
-    font-display: swap;
-}
-
-
-
-
-@font-face {
-    font-family: 'Mont';
-    src: url('./assets/fonts/mont-Light.eot');
-    src: url('./assets/fonts/mont-Light.eot?#iefix') format('embedded-opentype'),
-        url('./assets/fonts/mont-Light.woff2') format('woff2'),
-        url('./assets/fonts/mont-Light.woff') format('woff'),
-        url('./assets/fonts/mont-Light.ttf') format('truetype'),
-        url('./assets/fonts/mont-Light.svg#Mont-Light') format('svg');
-    font-weight: 300;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'Mont';
+  src: url('./assets/fonts/mont/Mont-ExtraLight.eot');
+  src:
+    url('./assets/fonts/mont/Mont-ExtraLight.eot?#iefix')
+      format('embedded-opentype'),
+    url('./assets/fonts/mont/Mont-ExtraLight.woff2') format('woff2'),
+    url('./assets/fonts/mont/Mont-ExtraLight.woff') format('woff'),
+    url('./assets/fonts/mont/Mont-ExtraLight.ttf') format('truetype'),
+    url('./assets/fonts/mont/Mont-ExtraLight.svg#Mont-ExtraLight') format('svg');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Mont';
-    src: url('./assets/fonts/mont-Heavy.eot');
-    src: url('./assets/fonts/mont-Heavy.eot?#iefix') format('embedded-opentype'),
-        url('./assets/fonts/mont-Heavy.woff2') format('woff2'),
-        url('./assets/fonts/mont-Heavy.woff') format('woff'),
-        url('./assets/fonts/mont-Heavy.ttf') format('truetype'),
-        url('./assets/fonts/mont-Heavy.svg#Mont-Heavy') format('svg');
-    font-weight: 900;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'Mont';
+  src: url('./assets/fonts/mont/Mont-Black.eot');
+  src:
+    url('./assets/fonts/mont/Mont-Black.eot?#iefix') format('embedded-opentype'),
+    url('./assets/fonts/mont/Mont-Black.woff2') format('woff2'),
+    url('./assets/fonts/mont/Mont-Black.woff') format('woff'),
+    url('./assets/fonts/mont/Mont-Black.ttf') format('truetype'),
+    url('./assets/fonts/mont/Mont-Black.svg#Mont-Black') format('svg');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Mont';
-    src: url('./assets/fonts/mont-Regular.eot');
-    src: url('./assets/fonts/mont-Regular.eot?#iefix') format('embedded-opentype'),
-        url('./assets/fonts/mont-Regular.woff2') format('woff2'),
-        url('./assets/fonts/mont-Regular.woff') format('woff'),
-        url('./assets/fonts/mont-Regular.ttf') format('truetype'),
-        url('./assets/fonts/mont-Regular.svg#Mont-Regular') format('svg');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'Mont Book';
+  src: url('./assets/fonts/mont/Mont-Book.eot');
+  src:
+    url('./assets/fonts/mont/Mont-Book.eot?#iefix') format('embedded-opentype'),
+    url('./assets/fonts/mont/Mont-Book.woff2') format('woff2'),
+    url('./assets/fonts/mont/Mont-Book.woff') format('woff'),
+    url('./assets/fonts/mont/Mont-Book.ttf') format('truetype'),
+    url('./assets/fonts/mont/Mont-Book.svg#Mont-Book') format('svg');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mont';
+  src: url('./assets/fonts/mont/Mont-Thin.eot');
+  src:
+    url('./assets/fonts/mont/Mont-Thin.eot?#iefix') format('embedded-opentype'),
+    url('./assets/fonts/mont/Mont-Thin.woff2') format('woff2'),
+    url('./assets/fonts/mont/Mont-Thin.woff') format('woff'),
+    url('./assets/fonts/mont/Mont-Thin.ttf') format('truetype'),
+    url('./assets/fonts/mont/Mont-Thin.svg#Mont-Thin') format('svg');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mont';
+  src: url('./assets/fonts/mont/Mont-SemiBold.eot');
+  src:
+    url('./assets/fonts/mont/Mont-SemiBold.eot?#iefix')
+      format('embedded-opentype'),
+    url('./assets/fonts/mont/Mont-SemiBold.woff2') format('woff2'),
+    url('./assets/fonts/mont/Mont-SemiBold.woff') format('woff'),
+    url('./assets/fonts/mont/Mont-SemiBold.ttf') format('truetype'),
+    url('./assets/fonts/mont/Mont-SemiBold.svg#Mont-SemiBold') format('svg');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mont';
+  src: url('./assets/fonts/mont-Light.eot');
+  src:
+    url('./assets/fonts/mont-Light.eot?#iefix') format('embedded-opentype'),
+    url('./assets/fonts/mont-Light.woff2') format('woff2'),
+    url('./assets/fonts/mont-Light.woff') format('woff'),
+    url('./assets/fonts/mont-Light.ttf') format('truetype'),
+    url('./assets/fonts/mont-Light.svg#Mont-Light') format('svg');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mont';
+  src: url('./assets/fonts/mont-Heavy.eot');
+  src:
+    url('./assets/fonts/mont-Heavy.eot?#iefix') format('embedded-opentype'),
+    url('./assets/fonts/mont-Heavy.woff2') format('woff2'),
+    url('./assets/fonts/mont-Heavy.woff') format('woff'),
+    url('./assets/fonts/mont-Heavy.ttf') format('truetype'),
+    url('./assets/fonts/mont-Heavy.svg#Mont-Heavy') format('svg');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mont';
+  src: url('./assets/fonts/mont-Regular.eot');
+  src:
+    url('./assets/fonts/mont-Regular.eot?#iefix') format('embedded-opentype'),
+    url('./assets/fonts/mont-Regular.woff2') format('woff2'),
+    url('./assets/fonts/mont-Regular.woff') format('woff'),
+    url('./assets/fonts/mont-Regular.ttf') format('truetype'),
+    url('./assets/fonts/mont-Regular.svg#Mont-Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }

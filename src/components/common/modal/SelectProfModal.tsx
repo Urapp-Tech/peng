@@ -1,27 +1,17 @@
-import assets from "@/assets";
-import {
-    Dialog,
-    DialogContent,
-    DialogTrigger
-} from "@/components/ui/dialog";
-import CardsBtn from "../cards/CardsBtnDrop";
-import MainHeading from "../typography/MainHeading";
+import assets from '@/assets';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import CardsBtn from '../cards/CardsBtnDrop';
+import MainHeading from '../typography/MainHeading';
 
 const Modal = () => {
-    return (
-        <div className="bg-modals">
-            <Dialog>
-                <DialogTrigger className="w-full bg-transparent border-2 border-primary rounded-[20px] p-[20px] my-[20px] min-h-[160px]">
-                 
-                        <div className="flex-2 p-2 bg-[#ccc]">
-                            {/* <AddButton /> */}
-                        </div>
-                    
-
-                </DialogTrigger>
-                <DialogContent className="bg-white custom-modal">
-
-                    {/* <div className="flex justify-between items-center">
+  return (
+    <div className="bg-modals">
+      <Dialog>
+        <DialogTrigger className="my-[20px] min-h-[160px] w-full rounded-[20px] border-2 border-primary bg-transparent p-[20px]">
+          <div className="flex-2 bg-[#ccc] p-2">{/* <AddButton /> */}</div>
+        </DialogTrigger>
+        <DialogContent className="custom-modal bg-white">
+          {/* <div className="flex justify-between items-center">
                         <div className="">
                             <span className="block text-[16px] leading-normal font-bold text-heading-color mb-[20px]">{mainTitle}</span>
                             <span className="block text-[14px] leading-normal font-semibold text-txt-color  mb-[10px]">{features}</span>
@@ -42,31 +32,37 @@ const Modal = () => {
                         <CustomButton title="Remove" customWidth="w-full" customclass={'rounded-[10px] bg-primary text-white'} />
                     </div> */}
 
-                    <MainHeading title="Select Professional"/>
-                    <div className="flex items-center justify-start">
-                        <span className="block w-[29px] h-[29px]">
-                            <img src={assets.images.avatar} alt="image icon" className="w-full object-contain h-full"/>
-                        </span>
-                        <span className="block text-txt-color text-[14px] ml-[10px]">
-                            John Smith
-                        </span>
-                    </div>
-                   
-                    <CardsBtn mainTitle="Beard" time="20 mins"/>
-                    <div className="flex items-center justify-start">
-                        <span className="block w-[29px] h-[29px]">
-                            <img src={assets.images.avatar} alt="image icon" className="w-full object-contain h-full"/>
-                        </span>
-                        <span className="block text-txt-color text-[14px] ml-[10px]">
-                            Guest 2
-                        </span>
-                    </div>
-                    <CardsBtn mainTitle="Hair Styling" time="40 mins - 50 mins"/>
-                </DialogContent>
-            </Dialog>
-        </div>
+          <MainHeading title="Select Professional" />
+          <div className="flex items-center justify-start">
+            <span className="block h-[29px] w-[29px]">
+              <img
+                src={assets.images.avatar}
+                alt="avatar"
+                className="h-full w-full object-contain"
+              />
+            </span>
+            <span className="ml-[10px] block text-[14px] text-txt-color">
+              John Smith
+            </span>
+          </div>
 
-
-    )
-}
+          <CardsBtn mainTitle="Beard" time="20 mins" />
+          <div className="flex items-center justify-start">
+            <span className="block h-[29px] w-[29px]">
+              <img
+                src={assets.images.avatar}
+                alt="avatar"
+                className="h-full w-full object-contain"
+              />
+            </span>
+            <span className="ml-[10px] block text-[14px] text-txt-color">
+              Guest 2
+            </span>
+          </div>
+          <CardsBtn mainTitle="Hair Styling" time="40 mins - 50 mins" />
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
 export default Modal;

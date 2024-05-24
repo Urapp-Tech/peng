@@ -1,6 +1,6 @@
+import axiosInstance from '@/api/axiosInstance';
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { StoreService } from '../../interfaces/serviceCategory.interface';
-import axiosInstance from '@/api/axiosInstance';
 
 type InitialState = {
   categoryItems: StoreService[];
@@ -26,7 +26,10 @@ export const fetchCategoriesItems = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await axiosInstance.get(`/app/categories/items/list/${data.tenant}`, { params: data} );
+      const response = await axiosInstance.get(
+        `/app/categories/items/list/${data.tenant}`,
+        { params: data }
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error);

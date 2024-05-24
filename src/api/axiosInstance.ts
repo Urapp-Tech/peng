@@ -1,25 +1,29 @@
 import { logout } from '@/redux/features/authStateSlice';
 import { store } from '@/redux/store';
-import { getTenantId, getToken } from '@/utils/constant';
-import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
+import { MAIN_BASE_URL, getTenantId, getToken } from '@/utils/constant';
+import axios, {
+  AxiosInstance,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from 'axios';
 
 // Create a new Axios instance
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/',
+  baseURL: MAIN_BASE_URL,
 });
 
 // Request interceptor
 axiosInstance.interceptors.request.use(
-  (config:  InternalAxiosRequestConfig<any>)  => {
+  (config: InternalAxiosRequestConfig<any>) => {
     // You can modify headers or do other request preprocessing here
     const token = getToken();
-    if(token && token.trim().length > 0) {
-        config.headers.Authorization = token;
-        // config.headers.Authorization = `Bearer ${token}`;
+    if (token && token.trim().length > 0) {
+      config.headers.Authorization = token;
+      // config.headers.Authorization = `Bearer ${token}`;
     }
     const tenant = getTenantId();
-    if(tenant && tenant.trim().length > 0) {
-        config.headers.tenant = tenant;
+    if (tenant && tenant.trim().length > 0) {
+      config.headers.tenant = tenant;
     }
     return config;
   },
@@ -45,18 +49,16 @@ axiosInstance.interceptors.response.use(
 );
 
 // Function to send multipart form data
-export const sendMultipartFormData = async (url: string, formData: FormData) => {
-  try {
-    const response = await axiosInstance.post(url, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    return response.data;
-  } catch (error) {
-    // Handle error
-    throw error;
-  }
+export const sendMultipartFormData = async (
+  url: string,
+  formData: FormData
+) => {
+  const response = await axiosInstance.post(url, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
 };
 
 export default axiosInstance;

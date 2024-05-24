@@ -1,5 +1,5 @@
-import { memo } from "react";
-import assets from "../../../assets";
+import { memo } from 'react';
+import assets from '../../../assets';
 
 interface AddButtonProps {
   isChecked: boolean;
@@ -14,14 +14,14 @@ const AddButton: React.FC<AddButtonProps> = ({ handleChecked, isChecked }) => {
   return (
     <button
       onClick={handleClick}
-      className={`inline-block px-4 py-2 rounded-lg ${
-        isChecked ? "bg-transparent text-white" : "bg-transparent text-white"
+      className={`inline-block rounded-lg px-4 py-2 ${
+        isChecked ? 'bg-transparent text-white' : 'bg-transparent text-white'
       }`}
     >
       {isChecked ? (
-        <img src={assets.images.done} />
+        <img alt="done" src={assets.images.done} />
       ) : (
-        <img src={assets.images.addd} />
+        <img alt="add" src={assets.images.addd} />
       )}
     </button>
   );

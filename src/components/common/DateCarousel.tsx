@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
-import dayjs, { Dayjs } from "dayjs";
-import isoWeek from "dayjs/plugin/isoWeek";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation";
-import { Navigation } from "swiper/modules";
-import DateBtn from "./buttons/DateBtn";
-import { Button } from "../ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import dayjs, { Dayjs } from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import isoWeek from 'dayjs/plugin/isoWeek';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import { Navigation } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Button } from '../ui/button';
+import DateBtn from './buttons/DateBtn';
 
 dayjs.extend(isoWeek);
 dayjs.extend(customParseFormat);
 
-const FORMAT_YEAR_MONTH_DAY = "YYYY-MM-DD";
+const FORMAT_YEAR_MONTH_DAY = 'YYYY-MM-DD';
 
 interface Day {
   dayOfWeek: string;
@@ -40,14 +40,16 @@ const DateCarousel: React.FC<DateCarouselProps> = ({
   disabledDays = [],
 }) => {
   const [days, setDays] = useState<Day[]>([]);
-  const [monthInView, setMonthInView] = useState<Dayjs>(dayjs().startOf("month"));
-  const [datePicked, setDatePicked] = useState<string>("");
-  const [headerText, setHeaderText] = useState<string>("");
+  const [monthInView, setMonthInView] = useState<Dayjs>(
+    dayjs().startOf('month')
+  );
+  const [datePicked, setDatePicked] = useState<string>('');
+  const [headerText, setHeaderText] = useState<string>('');
 
   useEffect(() => {
     const now = dayjs();
-    setMonthInView(now.startOf("month"));
-    calculateDays(now.startOf("month"), (availableDate) => {
+    setMonthInView(now.startOf('month'));
+    calculateDays(now.startOf('month'), (availableDate) => {
       setDatePicked(availableDate);
       onDateSelect && onDateSelect(availableDate);
     });
@@ -59,44 +61,50 @@ const DateCarousel: React.FC<DateCarouselProps> = ({
 
   const disabledDatesParsed = parseDisabledDates(disabledDates);
 
-  const calculateHeaderText = (monthInView: Dayjs) => {
-    return `${monthInView.format("MMMM YYYY")}`;
+  const calculateHeaderText = (paramMonthInView: Dayjs) => {
+    return `${paramMonthInView.format('MMMM YYYY')}`;
   };
 
-  const calculateDays = (monthInView: Dayjs, setFirstAvailableDate?: (date: string) => void) => {
-    let days: Day[] = [];
-    let currentDay = monthInView.startOf("month");
+  const calculateDays = (
+    paramMonthInView: Dayjs,
+    setFirstAvailableDate?: (date: string) => void
+  ) => {
+    const tempDays: Day[] = [];
+    let currentDay = paramMonthInView.startOf('month');
     const today = dayjs().startOf('day');
     let firstAvailableDate: string | null = null;
 
-    setHeaderText(calculateHeaderText(monthInView));
+    setHeaderText(calculateHeaderText(paramMonthInView));
 
-    while (currentDay.month() === monthInView.month()) {
+    while (currentDay.month() === paramMonthInView.month()) {
       const formattedDate = currentDay.format(FORMAT_YEAR_MONTH_DAY);
-      const dayOfWeek = currentDay.format("dddd");
+      const dayOfWeek = currentDay.format('dddd');
       const isPastDate = currentDay.isBefore(today);
 
-      const disabled = isPastDate || disabledDatesParsed.includes(formattedDate) || disabledDays.includes(dayOfWeek);
+      const disabled =
+        isPastDate ||
+        disabledDatesParsed.includes(formattedDate) ||
+        disabledDays.includes(dayOfWeek);
       if (!disabled && !firstAvailableDate) {
         firstAvailableDate = formattedDate;
       }
 
-      days.push({
-        dayOfWeek: currentDay.format("ddd"),
-        dayOfMonth: currentDay.format("D"),
-        day: currentDay.format("DD"),
-        month: currentDay.format("MM"),
-        year: currentDay.format("YYYY"),
+      tempDays.push({
+        dayOfWeek: currentDay.format('ddd'),
+        dayOfMonth: currentDay.format('D'),
+        day: currentDay.format('DD'),
+        month: currentDay.format('MM'),
+        year: currentDay.format('YYYY'),
         unix: currentDay.unix(),
-        class: datePicked === formattedDate ? "selected" : "",
+        class: datePicked === formattedDate ? 'selected' : '',
         date: currentDay,
-        disabled: disabled,
+        disabled,
       });
 
-      currentDay = currentDay.add(1, "day");
+      currentDay = currentDay.add(1, 'day');
     }
 
-    setDays(days);
+    setDays(tempDays);
 
     if (setFirstAvailableDate && firstAvailableDate) {
       setFirstAvailableDate(firstAvailableDate);
@@ -104,22 +112,25 @@ const DateCarousel: React.FC<DateCarouselProps> = ({
   };
 
   const handlePrevMonth = () => {
-    const newMonthInView = monthInView.subtract(1, "month");
+    const newMonthInView = monthInView.subtract(1, 'month');
     setMonthInView(newMonthInView);
     calculateDays(newMonthInView);
   };
 
   const handleNextMonth = () => {
-    const newMonthInView = monthInView.add(1, "month");
+    const newMonthInView = monthInView.add(1, 'month');
     setMonthInView(newMonthInView);
     calculateDays(newMonthInView);
   };
 
   const handleDayPick = (day: string, month: string, year: string) => {
     const selectedDate = `${year}-${month}-${day}`;
-    const dayOfWeek = dayjs(selectedDate).format("dddd");
+    const dayOfWeek = dayjs(selectedDate).format('dddd');
 
-    if (!disabledDatesParsed.includes(selectedDate) && !disabledDays.includes(dayOfWeek)) {
+    if (
+      !disabledDatesParsed.includes(selectedDate) &&
+      !disabledDays.includes(dayOfWeek)
+    ) {
       setDatePicked(selectedDate);
       calculateDays(monthInView);
       if (onDateSelect) {
@@ -131,23 +142,23 @@ const DateCarousel: React.FC<DateCarouselProps> = ({
   return (
     <div className="shadecn mt-5">
       <div>
-        <span className="flex items-center text-left text-heading-color text-[16px] font-bold leading-normal capitalize">
+        <span className="flex items-center text-left text-[16px] font-bold capitalize leading-normal text-heading-color">
           <Button
-            variant={"link"}
+            variant="link"
             onClick={handlePrevMonth}
             className="prev-month"
           >
-            {" "}
-            <ChevronLeft />{" "}
+            {' '}
+            <ChevronLeft />{' '}
           </Button>
           {headerText}
           <Button
-            variant={"link"}
+            variant="link"
             onClick={handleNextMonth}
             className="next-month"
           >
-            {" "}
-            <ChevronRight />{" "}
+            {' '}
+            <ChevronRight />{' '}
           </Button>
         </span>
       </div>
@@ -155,14 +166,14 @@ const DateCarousel: React.FC<DateCarouselProps> = ({
         modules={[Navigation]}
         slidesPerView={6}
         initialSlide={dayjs().date() - 1}
-        navigation={true}
+        navigation
         className="mySwiper"
       >
         {days.map((day) => (
           <SwiperSlide
             key={day.unix}
-            className={`cursor-pointer day ${day.class} ${
-              day.disabled ? "disabled" : ""
+            className={`day cursor-pointer ${day.class} ${
+              day.disabled ? 'disabled' : ''
             }`}
           >
             <DateBtn

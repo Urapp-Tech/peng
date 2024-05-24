@@ -1,11 +1,7 @@
-import SelectedServices from "../ServiceComponents/SelectedServices";
+import SelectedServices from '../ServiceComponents/SelectedServices';
 
 const ProfessionalService = () => {
-  return (
-    <>
-      <SelectedServices />
-    </>
-  );
+  return <SelectedServices />;
 };
 
 export default ProfessionalService;

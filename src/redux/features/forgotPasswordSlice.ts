@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 type InitialState = {
   forgotModal: boolean;
@@ -6,29 +6,29 @@ type InitialState = {
   forgotOtpEmail: string;
 };
 
-const initialState: InitialState =  {
+const initialState: InitialState = {
   forgotModal: false,
   forgotOtpModal: false,
   forgotOtpEmail: '',
 };
 
 export const forgotPasswordSlice = createSlice({
-  name: "forgotPasswordState",
+  name: 'forgotPasswordState',
   initialState,
   reducers: {
     showForgotModal: (state) => {
       state.forgotModal = true;
     },
-    handleShowForgotModal: (state,action: PayloadAction<boolean>) => {
+    handleShowForgotModal: (state, action: PayloadAction<boolean>) => {
       state.forgotModal = action.payload;
     },
     showForgotOtpModal: (state) => {
       state.forgotOtpModal = true;
     },
-    handleShowForgotOtpModal: (state,action: PayloadAction<boolean>) => {
+    handleShowForgotOtpModal: (state, action: PayloadAction<boolean>) => {
       state.forgotOtpModal = action.payload;
     },
-    setOtpEmail: (state,action: PayloadAction<string>) => {
+    setOtpEmail: (state, action: PayloadAction<string>) => {
       state.forgotOtpEmail = action.payload;
     },
   },

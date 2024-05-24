@@ -1,16 +1,20 @@
-import { useRoutes } from 'react-router-dom';
-import { routeObjects } from './routes/AppRoutes';
-import { useAppDispatch, useAppSelector } from './redux/redux-hooks';
-import { useErrorBoundary } from 'react-error-boundary';
-import promiseHandler from './utils/promise-handler';
-import { useEffect } from 'react';
-import { setDeviceData, setTenant, setTenantConfig } from './redux/features/deviceState';
-import { setSystemConfig } from './redux/features/appStateSlice';
+import { useToast } from '@/components/ui/use-toast';
+import axios from 'axios';
 import { ClientJS } from 'clientjs';
+import { useEffect } from 'react';
+import { useErrorBoundary } from 'react-error-boundary';
+import { useRoutes } from 'react-router-dom';
+import { setSystemConfig } from './redux/features/appStateSlice';
+import {
+  setDeviceData,
+  setTenant,
+  setTenantConfig,
+} from './redux/features/deviceState';
+import { useAppDispatch, useAppSelector } from './redux/redux-hooks';
+import routeObjects from './routes/AppRoutes';
 import appService from './services/app.service';
 import tenantService from './services/tenant.service';
-import { useToast } from "@/components/ui/use-toast"
-import axios from 'axios';
+import promiseHandler from './utils/promise-handler';
 
 // Create a separate component to handle route rendering
 function RouterOutlet() {
@@ -19,20 +23,17 @@ function RouterOutlet() {
   return routing;
 }
 
-
-
 function App() {
-
   const persistedDeviceData = useAppSelector(
     (state) => state.deviceStates.deviceData
   );
 
-  const { toast } = useToast()
-  
+  const { toast } = useToast();
+
   const dispatch = useAppDispatch();
   const client = new ClientJS();
   const agent = client.getUserAgent();
-  const {systemConfig } = useAppSelector(s => s.appState)
+  const { systemConfig } = useAppSelector((s) => s.appState);
   const fingerprint = client.getFingerprint();
   const { showBoundary } = useErrorBoundary();
   async function fetchIp() {
@@ -117,7 +118,7 @@ function App() {
     async function getSystemConfig() {
       const getSystemConfigPromise = appService.getSystemConfig();
       const [getSystemConfigResult, getSystemConfigError] =
-      await promiseHandler(getSystemConfigPromise);
+        await promiseHandler(getSystemConfigPromise);
       if (!getSystemConfigResult) {
         toast({
           title: 'System Configuration Error',
@@ -141,7 +142,6 @@ function App() {
     }
     getSystemConfig();
 
-  
     // initializeDeviceData();
   }, []);
 
@@ -152,7 +152,7 @@ function App() {
     if (systemConfig.tenant !== '') {
       initializeDeviceData();
     }
-  }, [systemConfig])
+  }, [systemConfig]);
 
   // useEffect(() => {
   //   if (!user || !user.id) {
@@ -166,9 +166,7 @@ function App() {
     console.warn = () => {};
   }
 
-  return (
-      <RouterOutlet />
-  )
+  return <RouterOutlet />;
 }
 
-export default App
+export default App;

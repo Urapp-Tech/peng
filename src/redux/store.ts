@@ -1,18 +1,17 @@
-/* eslint-disable import/no-cycle */
 import { configureStore } from '@reduxjs/toolkit';
 import appStateReducer from './features/appStateSlice';
-import authStateReducer from './features/authStateSlice';
-import StoreCategoryStateReducer from './features/storeCategorySlice';
-import StoreCategoryItemStateReducer from './features/storeCategoryItemsSlice';
-import deviceStateReducer from './features/deviceState';
-import { ratingAPI } from './features/ratingSliceAPI';
-import { orderAPI } from './features/orderStateSliceAPI';
 import AppointmentSliceReducer from './features/appointmentSlice';
-import employeeRatingSliceReducer from './features/employeeRatingSlice';
-import bookingSliceReducer from './features/bookingSlice';
+import authStateReducer from './features/authStateSlice';
 import barberSliceReducer from './features/barberSlice';
-import groupBookingSliceReducer from './features/groupBookingSlice';
+import bookingSliceReducer from './features/bookingSlice';
+import deviceStateReducer from './features/deviceState';
+import employeeRatingSliceReducer from './features/employeeRatingSlice';
 import forgotPasswordSliceReducer from './features/forgotPasswordSlice';
+import groupBookingSliceReducer from './features/groupBookingSlice';
+import { orderAPI } from './features/orderStateSliceAPI';
+import { ratingAPI } from './features/ratingSliceAPI';
+import StoreCategoryItemStateReducer from './features/storeCategoryItemsSlice';
+import StoreCategoryStateReducer from './features/storeCategorySlice';
 
 export const store = configureStore({
   reducer: {
@@ -31,10 +30,7 @@ export const store = configureStore({
     [orderAPI.reducerPath]: orderAPI.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(
-      orderAPI.middleware,
-      ratingAPI.middleware
-    ),
+    getDefaultMiddleware().concat(orderAPI.middleware, ratingAPI.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

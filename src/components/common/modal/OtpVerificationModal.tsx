@@ -1,23 +1,23 @@
-import axiosInstance from "@/api/axiosInstance";
-import assets from "@/assets";
+import axiosInstance from '@/api/axiosInstance';
+import assets from '@/assets';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { login } from "@/redux/features/authStateSlice";
-import { useAppDispatch } from "@/redux/redux-hooks";
-import { getTenantId } from "@/utils/constant";
-import { getItem } from "@/utils/local-storage";
-import promiseHandler from "@/utils/promise-handler";
-import { zodResolver } from "@hookform/resolvers/zod";
-import dayjs from "dayjs";
-import { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import OTPInput from "react18-otp-input";
-import { z } from "zod";
-import Loader from "../Loader";
+} from '@/components/ui/dialog';
+import { login } from '@/redux/features/authStateSlice';
+import { useAppDispatch } from '@/redux/redux-hooks';
+import { getTenantId } from '@/utils/constant';
+import { getItem } from '@/utils/local-storage';
+import promiseHandler from '@/utils/promise-handler';
+import { zodResolver } from '@hookform/resolvers/zod';
+import dayjs from 'dayjs';
+import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import OTPInput from 'react18-otp-input';
+import { z } from 'zod';
+import Loader from '../Loader';
 
 interface LoginModalProps {
   openModal: boolean;
@@ -25,7 +25,7 @@ interface LoginModalProps {
 }
 
 const otpSchema = z.object({
-  otp: z.string().length(4, "OTP must be 4 digits"),
+  otp: z.string().length(4, 'OTP must be 4 digits'),
 });
 
 type OtpFormData = z.infer<typeof otpSchema>;
@@ -34,7 +34,7 @@ const OtpVerificationModal: React.FC<LoginModalProps> = ({
   openModal,
   closeModal,
 }) => {
-  const signUpData = getItem<any>("SIGN_UP_DATA");
+  const signUpData = getItem<any>('SIGN_UP_DATA');
   const [isLoader, setIsLoader] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -67,11 +67,11 @@ const OtpVerificationModal: React.FC<LoginModalProps> = ({
     setIsLoader(false);
 
     if (!signUpResult) {
-      console.error("error :>> ", signUpError.message);
+      console.error('error :>> ', signUpError.message);
       return;
     }
     if (!signUpResult.data.success) {
-      console.error("error :>> ", signUpResult.data.message);
+      console.error('error :>> ', signUpResult.data.message);
       return;
     }
 
@@ -83,11 +83,11 @@ const OtpVerificationModal: React.FC<LoginModalProps> = ({
 
   return (
     <div className="bg-modals rounded-[30px] bg-[#000]">
-      { isLoader && <Loader /> }
+      {isLoader && <Loader />}
       <Dialog open={openModal} onOpenChange={toggleModal}>
-        <DialogContent className="sm:max-w-[425px] bg-white rounded-[30px]">
+        <DialogContent className="rounded-[30px] bg-white sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle className="text-center w-full mt-[15px]">
+            <DialogTitle className="mt-[15px] w-full text-center">
               <img
                 src={assets.images.greenLogo}
                 alt="logo"
@@ -98,16 +98,16 @@ const OtpVerificationModal: React.FC<LoginModalProps> = ({
           <div className="w-full">
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="bg-white px-1 pt-6 pb-8 mb-4"
+              className="mb-4 bg-white px-1 pb-8 pt-6"
             >
               <div className="mb-1">
                 <span className="block text-center text-[14px] font-normal leading-[normal] text-[#6A6A6A]">
                   A 4 digit code has been sent to
                 </span>
                 <span className="block text-center text-[14px] font-medium leading-[normal] text-[#6A6A6A]">
-                  {signUpData?.email ?? ""}
+                  {signUpData?.email ?? ''}
                 </span>
-                <div className="justify-center flex my-5">
+                <div className="my-5 flex justify-center">
                   <Controller
                     name="otp"
                     control={control}
@@ -117,19 +117,19 @@ const OtpVerificationModal: React.FC<LoginModalProps> = ({
                         className="mx-2"
                         containerStyle="otp-container"
                         inputStyle={{
-                          width: "3rem",
-                          aspectRatio: "1/1",
-                          borderRadius: "0.625rem",
-                          outlineStyle: "solid",
-                          outlineWidth: "1px",
-                          outlineColor: "#E5E5E5",
-                          fontFamily: "Open Sans",
-                          fontSize: "1.25rem",
-                          lineHeight: "1.5rem",
+                          width: '3rem',
+                          aspectRatio: '1/1',
+                          borderRadius: '0.625rem',
+                          outlineStyle: 'solid',
+                          outlineWidth: '1px',
+                          outlineColor: '#E5E5E5',
+                          fontFamily: 'Open Sans',
+                          fontSize: '1.25rem',
+                          lineHeight: '1.5rem',
                           fontWeight: 600,
-                          color: "#000000",
+                          color: '#000000',
                         }}
-                        focusStyle={{ outlineColor: "#000000" }}
+                        focusStyle={{ outlineColor: '#000000' }}
                         numInputs={4}
                         onChange={field.onChange}
                         separator={<span> </span>}
@@ -141,14 +141,14 @@ const OtpVerificationModal: React.FC<LoginModalProps> = ({
                   />
                 </div>
                 {errors.otp && (
-                  <p className="text-red-500 text-center my-5 text-xs">
+                  <p className="my-5 text-center text-xs text-red-500">
                     {errors.otp?.message}
                   </p>
                 )}
               </div>
               <div className="flex items-center justify-center">
                 <button
-                  className="w-full text-center bg-primary text-white font-bold py-3 px-4 text-[12px] leading-noramal rounded focus:outline-none focus:shadow-outline"
+                  className="leading-noramal focus:shadow-outline w-full rounded bg-primary px-4 py-3 text-center text-[12px] font-bold text-white focus:outline-none"
                   type="submit"
                 >
                   Verify OTP

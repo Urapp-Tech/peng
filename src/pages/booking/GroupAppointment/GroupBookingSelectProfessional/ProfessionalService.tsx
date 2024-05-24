@@ -1,11 +1,7 @@
-import SelectedServices from "../GroupBookingServiceComponents/SelectedServices";
+import SelectedServices from '../GroupBookingServiceComponents/SelectedServices';
 
 const ProfessionalService = () => {
-  return (
-    <>
-      <SelectedServices />
-    </>
-  );
+  return <SelectedServices />;
 };
 
 export default ProfessionalService;

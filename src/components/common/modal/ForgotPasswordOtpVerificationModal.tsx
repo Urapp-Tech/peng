@@ -1,19 +1,19 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import OTPInput from "react18-otp-input";
-import assets from "../../../assets";
-import { useAppSelector } from "../../../redux/redux-hooks";
-import { useToast } from "@/components/ui/use-toast";
+import axiosInstance from '@/api/axiosInstance';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from "@/utils/constant";
-import axiosInstance from "@/api/axiosInstance";
-import RegisterModal from "./RegisterModal";
-import LoginModal from "./LoginModal";
+} from '@/components/ui/dialog';
+import { useToast } from '@/components/ui/use-toast';
+import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '@/utils/constant';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import OTPInput from 'react18-otp-input';
+import assets from '../../../assets';
+import { useAppSelector } from '../../../redux/redux-hooks';
+import LoginModal from './LoginModal';
+import RegisterModal from './RegisterModal';
 
 type Pass = {
   newPassword: string;
@@ -31,15 +31,13 @@ const ForgotPasswordOtpVerificationModal: React.FC<LoginModalProps> = ({
   email,
   closeModal,
 }) => {
-  const [OTP, setOTP] = useState("");
+  const [OTP, setOTP] = useState('');
   const [isLoader, setIsLoader] = useState(false);
   const { toast } = useToast();
   const [showLogin, setShowLogin] = useState<boolean>(false);
-  const { systemConfig } = useAppSelector( (state) => state.appState );
+  const { systemConfig } = useAppSelector((state) => state.appState);
 
-  
   const [showRegister, setShowRegister] = useState<boolean>(false);
-
 
   const {
     register,
@@ -52,32 +50,31 @@ const ForgotPasswordOtpVerificationModal: React.FC<LoginModalProps> = ({
     closeModal(val);
   };
 
-
-
   const submitHandler = (data: Pass) => {
     setIsLoader(true);
     const newPassObj = {
       password: data.newPassword,
-      email: email,
+      email,
       otp: OTP,
-      tenant: systemConfig?.tenant
+      tenant: systemConfig?.tenant,
     };
-    axiosInstance.post(`app/app-user/resetPassword/app`, newPassObj)
+    axiosInstance
+      .post(`app/app-user/resetPassword/app`, newPassObj)
       .then((res: any) => {
         if (res.data.success) {
           setIsLoader(false);
           setTimeout(() => {
             toast({
-              title: "Success!",
-              variant: "default",
+              title: 'Success!',
+              variant: 'default',
               description: res.data.message,
             });
             toggleModal(false);
           }, 500);
         } else {
           toast({
-            title: "Error!",
-            variant: "destructive",
+            title: 'Error!',
+            variant: 'destructive',
             description: res.data.message,
           });
           setIsLoader(false);
@@ -86,8 +83,8 @@ const ForgotPasswordOtpVerificationModal: React.FC<LoginModalProps> = ({
       .catch((err: Error) => {
         setIsLoader(false);
         toast({
-          title: "Error!",
-          variant: "destructive",
+          title: 'Error!',
+          variant: 'destructive',
           description: err.message,
         });
       });
@@ -96,9 +93,9 @@ const ForgotPasswordOtpVerificationModal: React.FC<LoginModalProps> = ({
   return (
     <div className="bg-modals rounded-[30px] bg-[#000]">
       <Dialog open={openModal} onOpenChange={toggleModal}>
-        <DialogContent className="sm:max-w-[425px] bg-white rounded-[30px]">
+        <DialogContent className="rounded-[30px] bg-white sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle className="text-center w-full mt-[15px]">
+            <DialogTitle className="mt-[15px] w-full text-center">
               <img
                 src={assets.images.greenLogo}
                 alt="logo"
@@ -107,7 +104,7 @@ const ForgotPasswordOtpVerificationModal: React.FC<LoginModalProps> = ({
             </DialogTitle>
           </DialogHeader>
           <div className="pt-[100px]">
-            <div className="text-center"></div>
+            <div className="text-center" />
             <div className="mt-2">
               <span className="block text-center text-[14px] font-normal leading-[normal] text-[#6A6A6A]">
                 A 4 digit code has been sent to
@@ -125,19 +122,19 @@ const ForgotPasswordOtpVerificationModal: React.FC<LoginModalProps> = ({
                   className="mx-2"
                   containerStyle="otp-container"
                   inputStyle={{
-                    width: "3rem",
-                    aspectRatio: "1/1",
-                    borderRadius: "0.625rem",
-                    outlineStyle: "solid",
-                    outlineWidth: "1px",
-                    outlineColor: "#E5E5E5",
-                    fontFamily: "Open Sans",
-                    fontSize: "1.25rem",
-                    lineHeight: "1.5rem",
+                    width: '3rem',
+                    aspectRatio: '1/1',
+                    borderRadius: '0.625rem',
+                    outlineStyle: 'solid',
+                    outlineWidth: '1px',
+                    outlineColor: '#E5E5E5',
+                    fontFamily: 'Open Sans',
+                    fontSize: '1.25rem',
+                    lineHeight: '1.5rem',
                     fontWeight: 600,
-                    color: "#000000",
+                    color: '#000000',
                   }}
-                  focusStyle={{ outlineColor: "#000000" }}
+                  focusStyle={{ outlineColor: '#000000' }}
                   numInputs={4}
                   onChange={(value: string) => setOTP(value)}
                   separator={<span> </span>}
@@ -152,35 +149,35 @@ const ForgotPasswordOtpVerificationModal: React.FC<LoginModalProps> = ({
                     <div className="form-group mt-[42px] w-full">
                       <label
                         htmlFor="newPassword"
-                        className="block text-txt-color text-[12px] font-semibold mb-2"
+                        className="mb-2 block text-[12px] font-semibold text-txt-color"
                       >
                         New Password
                       </label>
                       <br />
                       <input
-                        className="appearance-none border border-primary rounded w-full py-2 px-3 text-txt-color leading-tight focus:outline-none"
+                        className="w-full appearance-none rounded border border-primary px-3 py-2 leading-tight text-txt-color focus:outline-none"
                         id="newPassword"
                         placeholder="Enter your password"
                         autoComplete="new-password"
                         type="password"
-                        {...register("newPassword", {
-                          required: "Password is required",
+                        {...register('newPassword', {
+                          required: 'Password is required',
                           pattern: PATTERN.PASSWORD,
                           validate: (value) => value.length <= 150,
                         })}
                       />
                       {errors.newPassword && (
-                        <p className="text-red-500 text-center my-5 text-xs">
+                        <p className="my-5 text-center text-xs text-red-500">
                           {errors.newPassword.message}
                         </p>
                       )}
-                      {errors.newPassword?.type === "pattern" && (
-                        <p className="text-red-500 text-center my-5 text-xs">
+                      {errors.newPassword?.type === 'pattern' && (
+                        <p className="my-5 text-center text-xs text-red-500">
                           {INVALID_CHAR}
                         </p>
                       )}
-                      {errors.newPassword?.type === "validate" && (
-                        <p className="text-red-500 text-center my-5 text-xs">
+                      {errors.newPassword?.type === 'validate' && (
+                        <p className="my-5 text-center text-xs text-red-500">
                           {MAX_LENGTH_EXCEEDED}
                         </p>
                       )}
@@ -188,42 +185,42 @@ const ForgotPasswordOtpVerificationModal: React.FC<LoginModalProps> = ({
                     <div className="form-group mt-2 w-full">
                       <label
                         htmlFor="reNewPassword"
-                        className="block text-txt-color text-[12px] font-semibold mb-2"
+                        className="mb-2 block text-[12px] font-semibold text-txt-color"
                       >
                         Confirm New Password
                       </label>
                       <br />
                       <input
-                        className="appearance-none border border-primary rounded w-full py-2 px-3 text-txt-color leading-tight focus:outline-none"
+                        className="w-full appearance-none rounded border border-primary px-3 py-2 leading-tight text-txt-color focus:outline-none"
                         id="reNewPassword"
                         placeholder="Enter your password"
                         autoComplete="new-password"
                         type="password"
-                        {...register("reNewPassword", {
-                          required: "Confirm Password is required",
+                        {...register('reNewPassword', {
+                          required: 'Confirm Password is required',
                           pattern: PATTERN.PASSWORD,
                           validate: {
                             maxlength: (value) =>
                               value.length <= 100 || MAX_LENGTH_EXCEEDED,
                             matchesPrevious: (value) =>
-                              value === watch("newPassword") ||
-                              "Passwords do not match",
+                              value === watch('newPassword') ||
+                              'Passwords do not match',
                           },
                         })}
                       />
                       {errors.reNewPassword && (
-                        <p className="text-red-500 text-center my-5 text-xs">
+                        <p className="my-5 text-center text-xs text-red-500">
                           {errors.reNewPassword.message}
                         </p>
                       )}
-                      {errors.reNewPassword?.type === "pattern" && (
-                        <p className="text-red-500 text-center my-5 text-xs">
+                      {errors.reNewPassword?.type === 'pattern' && (
+                        <p className="my-5 text-center text-xs text-red-500">
                           {INVALID_CHAR}
                         </p>
                       )}
-                      {(errors.reNewPassword?.type === "matchesPrevious" ||
-                        errors.reNewPassword?.type === "maxlength") && (
-                        <p className="text-red-500 text-center my-5 text-xs">
+                      {(errors.reNewPassword?.type === 'matchesPrevious' ||
+                        errors.reNewPassword?.type === 'maxlength') && (
+                        <p className="my-5 text-center text-xs text-red-500">
                           {errors.reNewPassword.message}
                         </p>
                       )}
@@ -231,10 +228,10 @@ const ForgotPasswordOtpVerificationModal: React.FC<LoginModalProps> = ({
                   </div>
                   <div className="mt-[100px] w-full px-4">
                     <button
-                      className="w-full bg-primary text-white font-bold py-2 px-4 text-[12px] leading-noramal rounded focus:outline-none focus:shadow-outline"
+                      className="leading-noramal focus:shadow-outline w-full rounded bg-primary px-4 py-2 text-[12px] font-bold text-white focus:outline-none"
                       type="submit"
                     >
-                      {isLoader ? "Loading..." : "Submit"}
+                      {isLoader ? 'Loading...' : 'Submit'}
                     </button>
                   </div>
                 </form>
@@ -250,7 +247,6 @@ const ForgotPasswordOtpVerificationModal: React.FC<LoginModalProps> = ({
       />
       <RegisterModal openModal={showRegister} closeModal={setShowRegister} />
     </div>
-
   );
 };
 

@@ -1,11 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { getToken } from '../../utils/constant';
-import { BASE_URL } from '@/utils/constants/Endpoints';
+import { MAIN_BASE_URL, getToken } from '../../utils/constant';
 
 export const ratingAPI = createApi({
   reducerPath: 'rating-api',
   baseQuery: fetchBaseQuery({
-    baseUrl: BASE_URL,
+    baseUrl: MAIN_BASE_URL,
     prepareHeaders: (headers) => {
       const token = getToken();
       if (token) {

@@ -28,9 +28,11 @@ type DeviceState = {
   tenant: TenantDetails | null;
 };
 
-const initialDeviceData = LocalStorageUtil.getItem<DevicePayload>('DEVICE_DATA');
+const initialDeviceData =
+  LocalStorageUtil.getItem<DevicePayload>('DEVICE_DATA');
 const initialAddressList = LocalStorageUtil.getItem<any[]>('ADDRESS') ?? [];
-const initialTenantConfig = LocalStorageUtil.getItem<TenantConfigPayload>('TENANT_CONFIG');
+const initialTenantConfig =
+  LocalStorageUtil.getItem<TenantConfigPayload>('TENANT_CONFIG');
 const initialTenant = LocalStorageUtil.getItem<TenantDetails>('TENANT');
 
 const initialState: DeviceState = {

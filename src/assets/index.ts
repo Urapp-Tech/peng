@@ -1,37 +1,35 @@
-import avatar from '../assets/images/avatarr-01.png';
-import cross from '../assets/images/cross-icon.png';
-import greenLogo from '../assets/images/green-logo.svg';
-import addd from '../assets/images/ic-add.png';
-import done from '../assets/images/ic-done.png';
-import facebook from '../assets/images/ic-fb.png';
-import google from '../assets/images/ic-google.png';
-import interior from '../assets/images/intertior-01.png';
-import leftArrow from '../assets/images/left--arrow.png';
-import logo from '../assets/images/logo.svg';
-import rank from '../assets/images/rating-star.png';
-import service from '../assets/images/service-01.png';
-import groups from '../assets/images/services-022.png';
+import avatar from './images/avatarr-01.png';
+import cross from './images/cross-icon.png';
+import greenLogo from './images/green-logo.svg';
+import addd from './images/ic-add.png';
+import done from './images/ic-done.png';
+import facebook from './images/ic-fb.png';
+import google from './images/ic-google.png';
+import interior from './images/intertior-01.png';
+import leftArrow from './images/left--arrow.png';
+import logo from './images/logo.svg';
+import rank from './images/rating-star.png';
+import service from './images/service-01.png';
+import groups from './images/services-022.png';
 import speechBubble from './images/speech-bubble.png';
 
-const assets ={
-    images:{
-        logo,
-        interior,
-        leftArrow,
-        cross,
-        done,
-        addd,
-        rank,
-        avatar,
-        service,
-        groups,
-        greenLogo,
-        google,
-        facebook,
-        speechBubble
-    },
-
-    
-}    as const;
+const assets = {
+  images: {
+    logo,
+    interior,
+    leftArrow,
+    cross,
+    done,
+    addd,
+    rank,
+    avatar,
+    service,
+    groups,
+    greenLogo,
+    google,
+    facebook,
+    speechBubble,
+  },
+} as const;
 
 export default assets;
