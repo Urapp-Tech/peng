@@ -20,7 +20,7 @@ const ProfessionalAnyCard = ({
 }: Props) => {
   return (
     <div
-      className={`border-2 border-primary ${checked ?? 'bg-primary text-white shadow-2xl'} cursor-pointer rounded-[10px] px-2 py-[15px] ${customClass} ${customHeight ?? 'h-[174px]'}`}
+      className={`border-2 border-primary ${checked ? 'bg-primary text-white shadow-2xl' : ''} cursor-pointer rounded-[10px] px-2 py-[15px] ${customClass} ${customHeight ?? 'h-[174px]'}`}
       onClick={onclick}
     >
       <div className="my-[5px] mb-[10px] mt-[30px] text-center">

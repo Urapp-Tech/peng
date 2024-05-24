@@ -1,8 +1,9 @@
 import { SignUpPayload } from '../types/auth.types';
 import LocalStorageUtil from './LocalStorageUtil';
+// eslint-disable-next-line import/no-named-as-default
+import BASE_URL from './constants/Endpoints';
 
-const HOST = 'https://dev.urapptech.com';
-export const MAIN_BASE_URL = `${HOST}/api/v1/app/`;
+export const MAIN_BASE_URL = BASE_URL;
 
 export const APP_USER_PREFIXES = 'app-user';
 
