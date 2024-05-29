@@ -21,16 +21,24 @@ import _ from 'lodash';
 import { memo, useRef, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import PayFastForm from './PayFastForm';
+import PaymentMethodModal from '@/components/common/modal/PaymentMethodModal';
+import {
+  handleShowGuestLoginModal,
+  handleShowLoginModal,
+} from '@/redux/features/authModalSlice';
+import GuestLoginModal from '@/components/common/modal/GuestLoginModal';
 
 dayjs.extend(utcPlugin);
 
 const Booking = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const [showLogin, setShowLogin] = useState<boolean>(false);
   const [showRegister, setShowRegister] = useState<boolean>(false);
   const [showMsg, setShowMsg] = useState<boolean>(false);
-  const { user } = useAppSelector((x) => x.authState);
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  const [_paymentMethod, _setPaymentMethod] = useState<string>('Cash');
+  const [showPaymentModal, setShowPaymentModal] = useState<boolean>(false);
+  const { user, guest } = useAppSelector((x) => x.authState);
   const [, setFirstVisit] = useState<string>('No');
   const [loading, setLoading] = useState<boolean>(false);
   const [payFastFormData, setPayFastFormData] = useState<any>(null);
@@ -42,9 +50,39 @@ const Booking = () => {
   const { forgotModal, forgotOtpModal, forgotOtpEmail } = useAppSelector(
     (x) => x.forgotPasswordState
   );
+  const { loginModal, GuestLoginModal: showGuestLoginModal } = useAppSelector(
+    (x) => x.authModalState
+  );
 
   const showMsgModal = () => {
     setShowMsg(true);
+  };
+
+  const getUser = ():
+    | {
+        phone: string;
+        name?: string;
+        email?: string;
+      }
+    | null
+    | undefined => {
+    if (user && user.id) {
+      return { ...user, name: `${user.firstName} ${user.lastName}` };
+    }
+    if (guest && !_.isEmpty(guest.name)) {
+      return guest;
+    }
+    return null;
+  };
+
+  /** LOGIN MODAL */
+  const handleLoginModal = (val: boolean = true) => {
+    dispatch(handleShowLoginModal(val));
+  };
+
+  /** GUEST LOGIN MODAL */
+  const handleGuestLoginModal = (val: boolean = true) => {
+    dispatch(handleShowGuestLoginModal(val));
   };
 
   const handleShowPasswordModalState = (val: boolean) => {
@@ -52,6 +90,30 @@ const Booking = () => {
   };
   const handleShowPasswordModalOtpState = (val: boolean) => {
     dispatch(handleShowForgotOtpModal(val));
+  };
+
+  const selectProfessional = () => {
+    if (bookings.length === 0) {
+      toast({
+        title: 'Error!',
+        variant: 'destructive',
+        description: 'Please select service before selecting professional.',
+      });
+      return;
+    }
+    navigate('/booking/appointment/professionals');
+  };
+  const selectTime = () => {
+    if (bookings.length === 0) {
+      toast({
+        title: 'Error!',
+        variant: 'destructive',
+        description:
+          'Please select service & professional before selecting Time.',
+      });
+      return;
+    }
+    navigate('/booking/appointment/time');
   };
 
   const handleClick = (path: string) => {
@@ -70,14 +132,14 @@ const Booking = () => {
           navigate(nextStep.path);
         }
       } else if (nextStep && nextStep.auth) {
-        if (user && user.id) {
+        if (getUser()) {
           if (nextStep.isFunction) {
             nextStep.callback();
           } else {
             navigate(nextStep.path);
           }
         } else {
-          setShowLogin(true);
+          handleLoginModal(true);
         }
       } else {
         navigate('/booking/appointment/services');
@@ -87,7 +149,14 @@ const Booking = () => {
 
   const visitConfirmation = (val: string) => {
     setFirstVisit(val);
-    handleClick('SubmitFunction');
+    setShowMsg(false);
+    setShowPaymentModal(true);
+  };
+
+  const PaymentMethodConfirmation = (val: string) => {
+    _setPaymentMethod(val);
+    setShowPaymentModal(false);
+    submitBooking(val);
   };
 
   const paymentByPayFast = async (code: string, grandTotal: string) => {
@@ -121,10 +190,10 @@ const Booking = () => {
       successURL: window.location.origin,
       failureURL: window.location.origin,
       webHookURL: payFastTokenResult.data.data.payFastHookUrl,
-      userName: user?.firstName,
+      userName: getUser()?.name,
       totalPrice: grandTotal,
-      phoneNumber: user?.phone,
-      emailAddress: user?.email,
+      phoneNumber: getUser()?.phone,
+      emailAddress: getUser()?.email,
       orderId: code,
       currencyType: import.meta.env.VITE_CURRENCY_SYMBOL,
     });
@@ -133,7 +202,7 @@ const Booking = () => {
     }, 0);
   };
 
-  const submitBooking = async () => {
+  const submitBooking = async (_pm: string = 'Cash') => {
     if (bookings.length === 0) {
       toast({
         title: 'Error!',
@@ -165,19 +234,29 @@ const Booking = () => {
     });
 
     const data = {
-      name: `${user?.firstName} ${user?.lastName}`,
-      phone: user?.phone,
-      email: user?.email,
+      name: getUser()?.name,
+      phone: getUser()?.phone,
+      email: getUser()?.email,
       status: 'New',
       note: '',
       appointments,
     };
 
-    setShowMsg(false);
+    let p: object = {
+      tenant: systemConfig?.tenant,
+    };
+    if (user?.id) {
+      p = {
+        tenant: systemConfig?.tenant,
+        app_user: user?.id,
+      };
+    }
 
+    setShowMsg(false);
+    setLoading(true);
     await axiosInstance
-      .post(`/app/store/appointment/create`, data, {
-        params: { tenant: systemConfig?.tenant, app_user: user?.id },
+      .post(`/app/store/appointment/peng/create`, data, {
+        params: p,
       })
       .then((res: any) => {
         if (res.data.success) {
@@ -191,19 +270,21 @@ const Booking = () => {
 
           dispatch(clearBookings());
 
-          if (
-            !_.isEmpty(res.data.data[0][0]) &&
-            _.isObject(res.data.data[0][0])
-          ) {
-            paymentByPayFast(
-              (res.data.data[0][0] as any).code,
-              (res.data.data[0][0] as any).grandTotalAmount
-            );
+          if (_paymentMethod !== 'Cash') {
+            if (
+              !_.isEmpty(res.data.data[0][0]) &&
+              _.isObject(res.data.data[0][0])
+            ) {
+              paymentByPayFast(
+                (res.data.data[0][0] as any).code,
+                (res.data.data[0][0] as any).grandTotalAmount
+              );
+            }
+          } else {
+            setTimeout(() => {
+              handleClick('/booking/appointment/services');
+            }, 500);
           }
-
-          // setTimeout(() => {
-          //   handleClick("/booking/appointment/services")
-          // }, 500);
         } else {
           toast({
             title: 'Error!',
@@ -236,10 +317,10 @@ const Booking = () => {
     {
       step: 2,
       title: 'Professionals',
-      isFunction: false,
+      isFunction: true,
       path: '/booking/appointment/professionals',
       auth: false,
-      callback: () => {},
+      callback: selectProfessional,
     },
     {
       step: 2,
@@ -252,10 +333,10 @@ const Booking = () => {
     {
       step: 3,
       title: 'Time',
-      isFunction: false,
+      isFunction: true,
       path: '/booking/appointment/time',
       auth: false,
-      callback: () => {},
+      callback: selectTime,
     },
     {
       step: 4,
@@ -340,15 +421,24 @@ const Booking = () => {
         </div>
       </div>
       <LoginModal
-        openModal={showLogin}
-        closeModal={setShowLogin}
+        openModal={loginModal}
+        closeModal={handleLoginModal}
         openRegisterModal={setShowRegister}
+      />
+      <GuestLoginModal
+        openModal={showGuestLoginModal}
+        closeModal={handleGuestLoginModal}
       />
       <RegisterModal openModal={showRegister} closeModal={setShowRegister} />
       <MsgModal
         openModal={showMsg}
         closeModal={setShowMsg}
         handleClick={visitConfirmation}
+      />
+      <PaymentMethodModal
+        openModal={showPaymentModal}
+        closeModal={setShowPaymentModal}
+        handleClick={PaymentMethodConfirmation}
       />
       <ForgotPasswordModal
         openModal={forgotModal}

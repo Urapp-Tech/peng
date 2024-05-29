@@ -247,13 +247,18 @@ const GroupBookingTime = () => {
 
     const barberServiceTime: number[] = bookings.reduce(
       (st: number[], next: GroupBooking) => {
-        next.barber && st.push(next.barber?.service_time ?? 0);
+        next.barber &&
+          st.push(_.toNumber(next.service?.serviceTime ?? '15') ?? 15);
         return st;
       },
       [0]
     );
 
-    const barberMaxServiceTime: number = Math.max(...barberServiceTime);
+    let barberMaxServiceTime: number = Math.max(...barberServiceTime);
+
+    if (barberMaxServiceTime === 0) {
+      barberMaxServiceTime = 15;
+    }
 
     const bookedSlotsEndTimes = bookedAppointments.map(
       (appointment: Appointment) => {
@@ -274,7 +279,7 @@ const GroupBookingTime = () => {
     let currentSlot = maxStartTime;
 
     while (currentSlot && currentSlot.isBefore(minEndTime)) {
-      const slotEnd = currentSlot.add(15, 'minute');
+      const slotEnd = currentSlot.add(barberMaxServiceTime, 'minute');
       let slotAvailable = true;
 
       bookedSlotsEndTimes.forEach((b: { start: Dayjs; end: Dayjs }) => {
@@ -311,15 +316,21 @@ const GroupBookingTime = () => {
     generateAvailableTimeSlots();
   }, [appointments]);
 
+  const handleProfessionalButtonClick = () => {
+    if (
+      bookings.filter((x) => _.isUndefined(x.barber)).length !== bookings.length
+    ) {
+      navigate('/booking/group-appointment/professionals-by-service');
+    }
+  };
+
   return (
     <div className="px-[20px] max-lg:px-0">
       {loading && <Loader />}
       <MainHeading title="Select Date & Time" />
       <ProfessionalButton
         barber={bookings[0]?.barber}
-        onclick={() =>
-          navigate('/booking/group-appointment/professionals-by-service')
-        }
+        onclick={handleProfessionalButtonClick}
       />
       <DateCarousel
         onDateSelect={handleDateSelect}

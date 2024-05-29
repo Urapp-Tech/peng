@@ -30,13 +30,32 @@ const GroupBookingServices = () => {
   const dispatch = useAppDispatch();
   const { systemConfig } = useAppSelector((x) => x.appState);
   const { toast } = useToast();
-  const { user } = useAppSelector((x) => x.authState);
-  const { selectedCustomer } = useAppSelector((x) => x.groupBookingState);
+  const { user, guest } = useAppSelector((x) => x.authState);
+  const { selectedCustomer, bookings } = useAppSelector(
+    (x) => x.groupBookingState
+  );
   const [open, setOpen] = useState<boolean>(false);
   const [detail, setDetail] = useState<StoreService | null>();
   const { categoryItems, loading: serviceLoading } = useAppSelector(
     (s) => s.storeCategoryItemState
   );
+
+  const getUser = ():
+    | {
+        phone: string;
+        name?: string;
+        email?: string;
+      }
+    | null
+    | undefined => {
+    if (user && user.id) {
+      return { ...user, name: `${user.firstName} ${user.lastName}` };
+    }
+    if (guest && !_.isEmpty(guest.name)) {
+      return guest;
+    }
+    return null;
+  };
 
   const selectCategory = (categoryId: string) => {
     const cat = categories.find((x) => x.id === categoryId);
@@ -92,13 +111,14 @@ const GroupBookingServices = () => {
   }, [systemConfig]);
 
   useEffect(() => {
-    if (_.isEmpty(selectedCustomer)) {
-      if (!user) {
+    if (_.isEmpty(selectedCustomer) || bookings.length === 0) {
+      const u = getUser();
+      if (!u) {
         dispatch(setSelectedCustomer('Me'));
         dispatch(setMainCustomer('Me'));
       } else {
-        dispatch(setSelectedCustomer(`${user.firstName} ${user.lastName}`));
-        dispatch(setMainCustomer(`${user.firstName} ${user.lastName}`));
+        dispatch(setSelectedCustomer(`${u.name}`));
+        dispatch(setMainCustomer(`${u.name}`));
       }
     }
   }, []);

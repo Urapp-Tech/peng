@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { setToken } from '../../utils/constant';
 import LocalStorageUtil from '../../utils/LocalStorageUtil';
 
-type RegisteredUser = {
+export type RegisteredUser = {
   id: string;
   email: string;
   isActive: boolean;
@@ -19,13 +19,16 @@ type RegisteredUser = {
 
 type AuthState = {
   user: RegisteredUser | null;
+  guest?: { phone: string; name: string } | null;
 };
 
 const storedUser = LocalStorageUtil.getItem<any>('USER');
+const storedGuestUser = LocalStorageUtil.getItem<any>('GUEST_USER');
 setToken(storedUser?.token || null);
 
 const initialState: AuthState = {
   user: storedUser,
+  guest: storedGuestUser,
 };
 
 export const authStateSlice = createSlice({
@@ -37,16 +40,24 @@ export const authStateSlice = createSlice({
       LocalStorageUtil.setItem('USER', action.payload);
       setToken(action.payload.token);
     },
+    loginGuest: (
+      state,
+      action: PayloadAction<{ phone: string; name: string }>
+    ) => {
+      LocalStorageUtil.setItem('GUEST_USER', action.payload);
+      state.guest = action.payload;
+    },
     logout: (state) => {
       state.user = null;
       setToken('');
       LocalStorageUtil.removeItem('ORDER_ITEM');
       LocalStorageUtil.removeItem('USER');
+      LocalStorageUtil.removeItem('GUEST_USER');
       LocalStorageUtil.removeItem('REGISTERED_CART');
       LocalStorageUtil.removeItem('CART_ITEMS');
     },
   },
 });
 
-export const { login, logout } = authStateSlice.actions;
+export const { loginGuest, login, logout } = authStateSlice.actions;
 export default authStateSlice.reducer;

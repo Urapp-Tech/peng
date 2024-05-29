@@ -7,6 +7,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
+import { handleShowGuestLoginModal } from '@/redux/features/authModalSlice';
 import { login } from '@/redux/features/authStateSlice';
 import { handleShowForgotModal } from '@/redux/features/forgotPasswordSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/redux-hooks';
@@ -21,7 +22,7 @@ interface LoginFormValues {
 
 interface LoginModalProps {
   openModal: boolean;
-  closeModal: React.Dispatch<React.SetStateAction<boolean>>;
+  closeModal: (val: boolean) => void;
   openRegisterModal: any;
 }
 
@@ -46,6 +47,10 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
   const handleShowPasswordModalState = (val: boolean) => {
     dispatch(handleShowForgotModal(val));
+  };
+  const openGuestLoginModal = (val: boolean) => {
+    closeModal(false);
+    dispatch(handleShowGuestLoginModal(val));
   };
 
   const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
@@ -165,6 +170,15 @@ const LoginModal: React.FC<LoginModalProps> = ({
                   type="submit"
                 >
                   Sign In
+                </button>
+              </div>
+              <div className="mt-3 flex items-center justify-center">
+                <button
+                  className="leading-noramal focus:shadow-outline w-full rounded border-2 border-primary bg-white px-4 py-2 text-[12px] font-bold text-primary focus:outline-none"
+                  type="button"
+                  onClick={() => openGuestLoginModal(true)}
+                >
+                  Sign In as Guest
                 </button>
               </div>
               <div className="brk-points relative my-[20px] flex items-center justify-between opacity-[0.5]">

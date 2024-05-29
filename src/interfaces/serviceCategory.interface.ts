@@ -22,6 +22,7 @@ export interface StoreService {
   createdDate?: string;
   updatedDate?: string;
   description?: string;
+  serviceTime?: string;
   avatar?: string;
   price?: string;
   isDeleted?: boolean;

@@ -13,7 +13,7 @@ const MainScreen = () => {
     const code = params.get('err_code');
     const msg = params.get('err_msg');
     if (search && params && code) {
-      if (code === '00') {
+      if (code === '000') {
         toast({
           title: 'Payment Success!',
           variant: 'default',

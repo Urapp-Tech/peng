@@ -58,7 +58,7 @@ const RightSideBar: React.FC<RightSideBarProps> = ({ continueAction }) => {
               {b.service.name}
             </span>
             <span className="block text-[12px] font-semibold leading-normal text-txt-color">
-              {b.barber ? `${b.barber.service_time} mins with` : ''}{' '}
+              {b.service ? `${b.service.serviceTime} mins with` : ''}{' '}
               {b.barber ? b.barber.store_employee.name : 'Any Professional'}{' '}
             </span>
           </div>
