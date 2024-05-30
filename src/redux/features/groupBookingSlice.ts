@@ -62,11 +62,14 @@ export const groupBookingSlice = createSlice({
       LocalStorageUtil.setItem('GROUP_BOOKINGS', state);
     },
     removeService: (state, action: PayloadAction<StoreService>) => {
-      state.bookings = state.bookings.filter(
+      const bookingIndex = state.bookings.findIndex(
         (x) =>
-          x.service.id !== action.payload.id &&
+          x.service.id === action.payload.id &&
           x.customer === state.selectedCustomer
       );
+      if (bookingIndex > -1) {
+        state.bookings.splice(bookingIndex, 1);
+      }
       LocalStorageUtil.setItem('GROUP_BOOKINGS', state);
     },
     removeAllServiceOfCustomer: (state, action: PayloadAction<string>) => {
