@@ -96,7 +96,7 @@ const Services = () => {
           defaultValue={selectedCategory?.id || ''}
           className="w-full"
         >
-          <div className="m--tabs max-sm:overflow-y-hidden max-sm:overflow-x-scroll max-sm:pb-4">
+          <div className="m--tabs overflow-x-auto max-sm:overflow-y-hidden max-sm:overflow-x-scroll max-sm:pb-4">
             <TabsList className="main-tabs max-sm:mx-auto max-sm:w-[600px]">
               {categories.map((c, i) => (
                 <TabsTrigger

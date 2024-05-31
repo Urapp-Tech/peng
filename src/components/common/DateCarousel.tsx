@@ -2,7 +2,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
@@ -39,7 +39,10 @@ const DateCarousel: React.FC<DateCarouselProps> = ({
   disabledDates = [],
   disabledDays = [],
 }) => {
+  const sliderRef = useRef<any>(null);
   const [days, setDays] = useState<Day[]>([]);
+  const [prevDisabled, setPrevDisabled] = useState<boolean>(false);
+  const [endDisabled, setEndDisabled] = useState<boolean>(false);
   const [monthInView, setMonthInView] = useState<Dayjs>(
     dayjs().startOf('month')
   );
@@ -139,6 +142,33 @@ const DateCarousel: React.FC<DateCarouselProps> = ({
     }
   };
 
+  const detectCButtonActiveStatus = () => {
+    if (sliderRef.current && sliderRef.current.swiper) {
+      if (sliderRef.current.swiper.isBeginning) {
+        setPrevDisabled(true);
+      } else {
+        setPrevDisabled(false);
+      }
+      if (sliderRef.current.swiper.isEnd) {
+        setEndDisabled(true);
+      } else {
+        setEndDisabled(false);
+      }
+    }
+  };
+
+  const handlePrev = useCallback(() => {
+    if (!sliderRef.current) return;
+    sliderRef.current.swiper.slidePrev();
+    detectCButtonActiveStatus();
+  }, []);
+
+  const handleNext = useCallback(() => {
+    if (!sliderRef.current) return;
+    sliderRef.current.swiper.slideNext();
+    detectCButtonActiveStatus();
+  }, []);
+
   return (
     <div className="shadecn mt-5">
       <div>
@@ -162,32 +192,80 @@ const DateCarousel: React.FC<DateCarouselProps> = ({
           </Button>
         </span>
       </div>
-      <Swiper
-        modules={[Navigation]}
-        slidesPerView={6}
-        initialSlide={dayjs().date() - 1}
-        navigation
-        className="mySwiper"
-      >
-        {days.map((day) => (
-          <SwiperSlide
-            key={day.unix}
-            className={`day cursor-pointer ${day.class} ${
-              day.disabled ? 'disabled' : ''
-            }`}
+      <div className="grid grid-cols-12">
+        <div className="col-span-1 flex items-center">
+          <Button
+            className=" bg-transparent text-primary hover:bg-transparent"
+            aria-label="Previous"
+            disabled={prevDisabled}
+            onClick={handlePrev}
           >
-            <DateBtn
-              dateTitle={day.dayOfMonth}
-              dayTitle={day.dayOfWeek}
-              onclick={() =>
-                !day.disabled && handleDayPick(day.day, day.month, day.year)
-              }
-              active={day?.date?.isSame(datePicked)}
-              disabled={day.disabled}
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
+            <ChevronLeft />
+          </Button>
+        </div>
+        <div className="col-span-10">
+          <Swiper
+            ref={sliderRef}
+            modules={[Navigation]}
+            slidesPerView={6}
+            breakpoints={{
+              0: {
+                slidesPerView: 2,
+              },
+              400: {
+                slidesPerView: 2,
+              },
+              639: {
+                slidesPerView: 3,
+              },
+              865: {
+                slidesPerView: 4,
+              },
+              1000: {
+                slidesPerView: 5,
+              },
+              1500: {
+                slidesPerView: 6,
+              },
+              1700: {
+                slidesPerView: 6,
+              },
+            }}
+            onSliderMove={detectCButtonActiveStatus}
+            initialSlide={dayjs().date() - 1}
+            className="mySwiper "
+          >
+            {days.map((day) => (
+              <SwiperSlide
+                key={day.unix}
+                className={`day cursor-pointer ${day.class} ${
+                  day.disabled ? 'disabled' : ''
+                }`}
+              >
+                <DateBtn
+                  dateTitle={day.dayOfMonth}
+                  dayTitle={day.dayOfWeek}
+                  onclick={() =>
+                    !day.disabled && handleDayPick(day.day, day.month, day.year)
+                  }
+                  active={day?.date?.isSame(datePicked)}
+                  disabled={day.disabled}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+        <div className="col-span-1 flex items-center">
+          <Button
+            className=" bg-transparent text-primary hover:bg-transparent"
+            aria-label="Next"
+            disabled={endDisabled}
+            onClick={handleNext}
+          >
+            <ChevronRight />
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
