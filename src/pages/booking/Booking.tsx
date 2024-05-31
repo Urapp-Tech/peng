@@ -270,7 +270,7 @@ const Booking = () => {
 
           dispatch(clearBookings());
 
-          if (_paymentMethod !== 'Cash') {
+          if (_pm !== 'Cash') {
             if (
               !_.isEmpty(res.data.data[0][0]) &&
               _.isObject(res.data.data[0][0])
