@@ -176,7 +176,9 @@ const GroupBookingTime = () => {
     if (!selectedDate) return false;
     let anyProfessionIncluded = false;
 
-    if (bookings.filter((x) => _.isUndefined(x.barber)).length > 0) {
+    if (
+      bookings.filter((x) => _.isUndefined(x.barber)).length === bookings.length
+    ) {
       anyProfessionIncluded = true;
     }
 
