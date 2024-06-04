@@ -305,7 +305,11 @@ const Time = () => {
   };
 
   useEffect(() => {
-    if (bookings.filter((x) => _.isUndefined(x.barber)).length > 0) {
+    if (
+      bookings.filter((x) => _.isUndefined(x.barber)).length ===
+        bookings.length &&
+      selectedDate
+    ) {
       fetchAppointmentsData();
     } else {
       generateAvailableTimeSlots();
