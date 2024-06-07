@@ -31,6 +31,7 @@ import {
   handleShowLoginModal,
 } from '@/redux/features/authModalSlice';
 import GuestLoginModal from '@/components/common/modal/GuestLoginModal';
+import AppointmentSuccessAlert from '@/components/common/alert/AppointmentSuccessAlert';
 
 dayjs.extend(utcPlugin);
 
@@ -39,6 +40,8 @@ const GroupBooking = () => {
   const { pathname } = useLocation();
   const [showRegister, setShowRegister] = useState<boolean>(false);
   const [showMsg, setShowMsg] = useState<boolean>(false);
+  const [showAppointmentSuccess, setShowAppointmentSuccess] =
+    useState<boolean>(false);
   const { user, guest: guestUser } = useAppSelector((x) => x.authState);
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const [_paymentMethod, _setPaymentMethod] = useState<string>('Cash');
@@ -157,6 +160,11 @@ const GroupBooking = () => {
     navigate('/booking/group-appointment/add-guest');
   };
 
+  const handleSuccessAlertState = (val: boolean) => {
+    setShowAppointmentSuccess(val);
+    handleClick('/booking/group-appointment/services');
+  };
+
   const submitBooking = async (_pm: string = 'Cash') => {
     if (bookings.length === 0) {
       toast({
@@ -257,11 +265,11 @@ const GroupBooking = () => {
         if (res.data.success) {
           setLoading(false);
 
-          toast({
-            title: 'Success!',
-            variant: 'default',
-            description: res.data.message,
-          });
+          // toast({
+          //   title: 'Success!',
+          //   variant: 'default',
+          //   description: res.data.message,
+          // });
 
           LocalStorageUtil.removeItem('GROUP_BOOKINGS');
 
@@ -278,9 +286,11 @@ const GroupBooking = () => {
               );
             }
           } else {
-            setTimeout(() => {
-              handleClick('/booking/group-appointment/services');
-            }, 500);
+            setShowAppointmentSuccess(true);
+
+            // setTimeout(() => {
+            //   handleClick('/booking/group-appointment/services');
+            // }, 500);
           }
 
           // setTimeout(() => {
@@ -405,8 +415,9 @@ const GroupBooking = () => {
   const visitConfirmation = (val: string) => {
     setFirstVisit(val);
     setShowMsg(false);
-    setShowPaymentModal(true);
-    // handleClick('SubmitFunction');
+    /** ----- Commenting line to remove payFast modal ----- */
+    // setShowPaymentModal(true);
+    submitBooking(); // Submitting from for cash flow.
   };
 
   const PaymentMethodConfirmation = (val: string) => {
@@ -518,6 +529,11 @@ const GroupBooking = () => {
           formSubmitButtonRef={formSubmitButtonRef}
         />
       ) : null}
+
+      <AppointmentSuccessAlert
+        open={showAppointmentSuccess}
+        closeModal={handleSuccessAlertState}
+      />
     </>
   );
 };

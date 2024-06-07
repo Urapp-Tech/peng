@@ -27,6 +27,7 @@ import {
   handleShowLoginModal,
 } from '@/redux/features/authModalSlice';
 import GuestLoginModal from '@/components/common/modal/GuestLoginModal';
+import AppointmentSuccessAlert from '@/components/common/alert/AppointmentSuccessAlert';
 
 dayjs.extend(utcPlugin);
 
@@ -34,6 +35,8 @@ const Booking = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [showRegister, setShowRegister] = useState<boolean>(false);
+  const [showAppointmentSuccess, setShowAppointmentSuccess] =
+    useState<boolean>(false);
   const [showMsg, setShowMsg] = useState<boolean>(false);
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const [_paymentMethod, _setPaymentMethod] = useState<string>('Cash');
@@ -150,7 +153,9 @@ const Booking = () => {
   const visitConfirmation = (val: string) => {
     setFirstVisit(val);
     setShowMsg(false);
-    setShowPaymentModal(true);
+    /** ----- Commenting line to remove payFast modal ----- */
+    // setShowPaymentModal(true);
+    submitBooking(); // Submitting from for cash flow.
   };
 
   const PaymentMethodConfirmation = (val: string) => {
@@ -200,6 +205,11 @@ const Booking = () => {
     setTimeout(() => {
       formSubmitButtonRef?.current?.click();
     }, 0);
+  };
+
+  const handleSuccessAlertState = (val: boolean) => {
+    setShowAppointmentSuccess(val);
+    handleClick('/booking/appointment/services');
   };
 
   const submitBooking = async (_pm: string = 'Cash') => {
@@ -262,11 +272,11 @@ const Booking = () => {
         if (res.data.success) {
           setLoading(false);
 
-          toast({
-            title: 'Success!',
-            variant: 'default',
-            description: res.data.message,
-          });
+          // toast({
+          //   title: 'Success!',
+          //   variant: 'default',
+          //   description: res.data.message,
+          // });
 
           dispatch(clearBookings());
 
@@ -281,9 +291,11 @@ const Booking = () => {
               );
             }
           } else {
-            setTimeout(() => {
-              handleClick('/booking/appointment/services');
-            }, 500);
+            setShowAppointmentSuccess(true);
+
+            // setTimeout(() => {
+            //   handleClick('/booking/appointment/services');
+            // }, 500);
           }
         } else {
           toast({
@@ -469,6 +481,11 @@ const Booking = () => {
           formSubmitButtonRef={formSubmitButtonRef}
         />
       ) : null}
+
+      <AppointmentSuccessAlert
+        open={showAppointmentSuccess}
+        closeModal={handleSuccessAlertState}
+      />
     </>
   );
 };
