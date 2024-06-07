@@ -22,6 +22,7 @@ module.exports = {
     'tailwind.config.cjs',
     'vite.config.ts',
     'postcss.config.cjs',
+    'src/components/ui/*'
   ],
   plugins: ['react', '@typescript-eslint', 'prettier'],
   rules: {
