@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { CalendarIcon, Clock5Icon } from 'lucide-react';
 import { memo } from 'react';
 import SubHeading from '../common/typography/SubHeading';
+import BannerSwiper from '../common/BannerSwiper';
 
 interface RightSideBarProps {
   continueAction: (p: string) => void;
@@ -18,11 +19,7 @@ const RightSideBar: React.FC<RightSideBarProps> = ({ continueAction }) => {
   return (
     <div className="min-h-[600px] w-full rounded-[20px]  border-2 border-primary p-5 pb-0">
       <div className="max-[355px] mx-auto">
-        <img
-          src={systemConfig?.tenantConfig.banner}
-          alt="interior"
-          className="block w-full rounded-xl object-contain"
-        />
+        <BannerSwiper />
       </div>
       <div className="mt-5 flex items-center justify-between">
         <SubHeading title={systemConfig?.tenantConfig.name ?? ''} />

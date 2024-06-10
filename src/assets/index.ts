@@ -12,6 +12,7 @@ import rank from './images/rating-star.png';
 import service from './images/service-01.png';
 import groups from './images/services-022.png';
 import speechBubble from './images/speech-bubble.png';
+import noImage from './images/no-image.jpg';
 
 const assets = {
   images: {
@@ -29,6 +30,7 @@ const assets = {
     google,
     facebook,
     speechBubble,
+    noImage,
   },
 } as const;
 

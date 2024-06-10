@@ -5,8 +5,27 @@ export type GetSystemConfigResponse = {
   data: SystemConfigData;
 };
 
+export interface Banner {
+  id: string;
+  name: string;
+  tenant: string;
+  createdBy: string;
+  updatedBy: string;
+  createdDate: string; // You can use Date if you plan to parse it into a Date object
+  updatedDate: string; // You can use Date if you plan to parse it into a Date object
+  isActive: boolean;
+  isDeleted: boolean;
+  banner: string;
+  shortDesc: string | null;
+  link: string | null;
+  bannerType: string;
+  pageDetail: string | null;
+  appType: string;
+}
+
 export type SystemConfigData = {
   id: string;
+  banners: Banner[];
   tenant: string;
   layout?: any;
   createdDate: string;

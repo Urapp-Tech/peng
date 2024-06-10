@@ -1,3 +1,4 @@
+import BannerSwiper from '@/components/common/BannerSwiper';
 import SubHeading from '@/components/common/typography/SubHeading';
 import { GroupBooking } from '@/redux/features/groupBookingSlice';
 import { useAppSelector } from '@/redux/redux-hooks';
@@ -37,11 +38,7 @@ const GroupBookingRightSideBar: React.FC<RightSideBarProps> = ({
   return (
     <div className="min-h-[600px] w-full rounded-[20px]  border-2 border-primary p-5 pb-0">
       <div className="max-[355px] mx-auto">
-        <img
-          src={systemConfig?.tenantConfig.banner}
-          alt="interior"
-          className="block w-full rounded-xl object-contain"
-        />
+        <BannerSwiper />
       </div>
       <div className="mt-5 flex items-center justify-between">
         <SubHeading title={systemConfig?.tenantConfig.name ?? ''} />
