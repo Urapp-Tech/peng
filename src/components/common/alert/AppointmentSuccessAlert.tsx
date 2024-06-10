@@ -28,8 +28,9 @@ const AppointmentSuccessAlert: React.FC<AppointmentSuccessAlertPops> = ({
               />
             </DialogTitle>
             <DialogDescription className="text-center">
-              Your appointment has been booked successfully. Our representative
-              may call you soon.
+              Your appointment request has been submitted successfully. Our
+              representative will call you for the confirmation of your
+              appointment.
             </DialogDescription>
           </DialogHeader>
           <div className="w-full">
