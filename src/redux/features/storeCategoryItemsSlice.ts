@@ -28,7 +28,7 @@ export const fetchCategoriesItems = createAsyncThunk(
     try {
       const response = await axiosInstance.get(
         `/app/categories/items/list/${data.tenant}`,
-        { params: data }
+        { params: {...data,page:0,size:500} }
       );
       return response.data;
     } catch (error: any) {

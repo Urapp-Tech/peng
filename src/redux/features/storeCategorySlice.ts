@@ -24,7 +24,12 @@ export const fetchCategories = createAsyncThunk(
   async (tenant: string | undefined, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(
-        `/app/categories/list/${tenant}`
+        `/app/categories/list/${tenant}`,{
+          params: {
+            page:0,
+            size:500
+          },
+        }
       );
       return response.data;
     } catch (error: any) {
