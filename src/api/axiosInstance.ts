@@ -1,13 +1,16 @@
 import { toast } from '@/components/ui/use-toast';
+import { Branch } from '@/interfaces/branch';
 import { handleShowLoginModal } from '@/redux/features/authModalSlice';
 import { logout } from '@/redux/features/authStateSlice';
 import { store } from '@/redux/store';
 import { MAIN_BASE_URL, getTenantId, getToken } from '@/utils/constant';
+import LocalStorageUtil from '@/utils/LocalStorageUtil';
 import axios, {
   AxiosInstance,
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
+import _ from 'lodash';
 
 // Create a new Axios instance
 const axiosInstance: AxiosInstance = axios.create({
@@ -26,6 +29,11 @@ axiosInstance.interceptors.request.use(
     const tenant = getTenantId();
     if (tenant && tenant.trim().length > 0) {
       config.headers.tenant = tenant;
+    }
+
+    const branch = LocalStorageUtil.getItem<Branch>('BRANCH');
+    if (branch && !_.isEmpty(branch) && branch.id) {
+      config.headers.branch = branch.id;
     }
     return config;
   },

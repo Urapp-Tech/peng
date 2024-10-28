@@ -2,7 +2,18 @@ export type GetSystemConfigResponse = {
   success: boolean;
   code: number;
   message: string;
-  data: SystemConfigData;
+  data: {
+    id: string;
+    banners: Banner[];
+    tenant: Tenant;
+    layout?: any;
+    createdDate: string;
+    theme: SystemTheme;
+    domainWebapp: string;
+    domainAdminapp: string;
+    tenantConfig: SystemTenantConfig;
+    banner: any[];
+  };
 };
 
 export interface Banner {
@@ -27,6 +38,7 @@ export type SystemConfigData = {
   id: string;
   banners: Banner[];
   tenant: string;
+  tenantObject: Tenant;
   layout?: any;
   createdDate: string;
   theme: SystemTheme;
@@ -95,4 +107,24 @@ export type ThemeColor = {
   background: string;
   foreground: string;
   secondary2: string;
+};
+
+export type Tenant = {
+  id: string;
+  name: string;
+  isActive: boolean;
+  createdDate: string; // or Date if you plan to work with Date objects
+  updatedDate: string; // or Date
+  createdBy: string;
+  updatedBy: string;
+  tenantConfig: string;
+  desc: string | null;
+  parent: string | null;
+  trialMode: boolean;
+  trialStartDate: string | null; // or Date if working with Date objects
+  maxUserLimit: number;
+  maxBranchLimit: number;
+  trialModeLimit: number;
+  userLimit: number;
+  tenantType: string; // Replace with other possible tenant types if needed
 };

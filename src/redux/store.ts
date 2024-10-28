@@ -13,6 +13,7 @@ import { ratingAPI } from './features/ratingSliceAPI';
 import StoreCategoryItemStateReducer from './features/storeCategoryItemsSlice';
 import StoreCategoryStateReducer from './features/storeCategorySlice';
 import authModalSliceReducer from './features/authModalSlice';
+import branchSliceReducer from './features/branchSlice';
 
 export const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ export const store = configureStore({
     groupBookingState: groupBookingSliceReducer,
     forgotPasswordState: forgotPasswordSliceReducer,
     authModalState: authModalSliceReducer,
+    branchState: branchSliceReducer,
     [ratingAPI.reducerPath]: ratingAPI.reducer,
     [orderAPI.reducerPath]: orderAPI.reducer,
   },

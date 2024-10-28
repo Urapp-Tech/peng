@@ -63,7 +63,7 @@ const MainScreen = () => {
               className="w-full flex-col items-start rounded-[10px] bg-white px-[25px] py-[28px] text-[16px] font-bold leading-normal text-heading-color"
             >
               Group Appointment
-              <span className="mt-[5px] block text-left text-[10px] font-semibold leading-normal text-txt-color">
+              <span className="mt-[5px] block text-center text-[10px] font-semibold leading-normal text-txt-color">
                 For yourself & others
               </span>
             </button>

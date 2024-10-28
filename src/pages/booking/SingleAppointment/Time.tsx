@@ -50,6 +50,7 @@ const Time = () => {
   const { user } = useAppSelector((x) => x.authState);
   const { appointments } = useAppSelector((x) => x.appointmentState);
   const { systemConfig } = useAppSelector((x) => x.appState);
+  const { selectedBranch } = useAppSelector((x) => x.branchState);
 
   const fetchAppointmentsData = () => {
     const startDate = selectedDate;
@@ -236,12 +237,12 @@ const Time = () => {
 
     const maxStartTime = anyProfessionIncluded
       ? dayjs(
-          `${selectedDate} ${dayjs(systemConfig?.tenantConfig.officeTimeIn).format('HH:mm:ss')}`
+          `${selectedDate} ${dayjs(selectedBranch?.officeTimeIn).format('HH:mm:ss')}`
         )
       : dayjs.max(startTimes);
     const minEndTime = anyProfessionIncluded
       ? dayjs(
-          `${selectedDate} ${dayjs(systemConfig?.tenantConfig.officeTimeOut).format('HH:mm:ss')}`
+          `${selectedDate} ${dayjs(selectedBranch?.officeTimeOut).format('HH:mm:ss')}`
         )
       : dayjs.min(endTimes);
 

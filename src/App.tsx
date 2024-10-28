@@ -1,5 +1,5 @@
 import { useToast } from '@/components/ui/use-toast';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 import { useRoutes } from 'react-router-dom';
 import { setSystemConfig } from './redux/features/appStateSlice';
@@ -9,6 +9,9 @@ import routeObjects from './routes/AppRoutes';
 import appService from './services/app.service';
 import tenantService from './services/tenant.service';
 import promiseHandler from './utils/promise-handler';
+import { fetchBranch, setBranch } from './redux/features/branchSlice';
+import _ from 'lodash';
+import SelectBranchModal from './components/common/modal/SelectBranchModal';
 
 // Create a separate component to handle route rendering
 function RouterOutlet() {
@@ -26,7 +29,13 @@ function App() {
 
   const dispatch = useAppDispatch();
   const { systemConfig } = useAppSelector((s) => s.appState);
+  const { selectedBranch, branches } = useAppSelector((s) => s.branchState);
   const { showBoundary } = useErrorBoundary();
+  const [openBranchModal, setOpenBranchModal] = useState<boolean>(false);
+
+  const fetchBranches = (data: any) => {
+    dispatch(fetchBranch(data));
+  };
 
   async function initializeDeviceData() {
     if (persistedDeviceData) {
@@ -80,7 +89,13 @@ function App() {
         showBoundary(new Error(getSystemConfigResult.data.message || ''));
         return;
       }
-      dispatch(setSystemConfig(getSystemConfigResult.data.data));
+      const ResponeConfig = { ...getSystemConfigResult?.data?.data };
+      const config = {
+        ...ResponeConfig,
+        tenantObject: ResponeConfig?.tenant,
+        tenant: ResponeConfig?.tenant?.id,
+      };
+      dispatch(setSystemConfig(config));
     }
     getSystemConfig();
 
@@ -93,9 +108,19 @@ function App() {
     }
     if (systemConfig.tenant !== '') {
       initializeDeviceData();
+      if (_.isEmpty(selectedBranch)) {
+        fetchBranches({ tenant: systemConfig.tenant });
+      }
     }
   }, [systemConfig]);
 
+  useEffect(() => {
+    if (branches.length > 1 && _.isEmpty(selectedBranch)) {
+      setOpenBranchModal(true);
+    } else if (branches.length === 1) {
+      dispatch(setBranch(branches[0]));
+    }
+  }, [branches, selectedBranch, dispatch]);
   // useEffect(() => {
   //   if (!user || !user.id) {
   //     navigate('/auth/login');
@@ -108,7 +133,16 @@ function App() {
     console.warn = () => {};
   }
 
-  return <RouterOutlet />;
+  return (
+    <>
+      <RouterOutlet />
+      <SelectBranchModal
+        openModal={openBranchModal}
+        closeModal={() => setOpenBranchModal(false)}
+        branches={branches}
+      />
+    </>
+  );
 }
 
 export default App;

@@ -47,6 +47,7 @@ const GroupBooking = () => {
   const [_paymentMethod, _setPaymentMethod] = useState<string>('Cash');
   const [showPaymentModal, setShowPaymentModal] = useState<boolean>(false);
   const [, setFirstVisit] = useState<string>('No');
+  const { selectedBranch } = useAppSelector((x) => x.branchState);
   const [loading, setLoading] = useState<boolean>(false);
   const { bookings, appointmentTime, selectedCustomer, mainCustomer } =
     useAppSelector((x) => x.groupBookingState);
@@ -245,10 +246,12 @@ const GroupBooking = () => {
 
     let p: object = {
       tenant: systemConfig?.tenant,
+      branch: selectedBranch?.id,
     };
     if (user?.id) {
       p = {
         tenant: systemConfig?.tenant,
+        branch: selectedBranch?.id,
         app_user: user?.id,
       };
     }

@@ -40,6 +40,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
   const [, setIsLoader] = useState(false);
   const dispatch = useAppDispatch();
   const { systemConfig } = useAppSelector((x) => x.appState);
+  const { selectedBranch } = useAppSelector((x) => x.branchState);
 
   const toggleModal = (val: boolean) => {
     closeModal(val);
@@ -67,9 +68,9 @@ const LoginModal: React.FC<LoginModalProps> = ({
         tenant: systemConfig?.tenant,
       })
     );
-    setIsLoader(false);
 
     if (!loginResponse) {
+      setIsLoader(false);
       toast({
         title: 'Error while signing in',
         variant: 'destructive',
@@ -78,6 +79,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
       return;
     }
     if (!loginResponse.data.success) {
+      setIsLoader(false);
       toast({
         title: 'Error while signing in',
         variant: 'destructive',
@@ -85,7 +87,36 @@ const LoginModal: React.FC<LoginModalProps> = ({
       });
       return;
     }
-    dispatch(login(loginResponse.data.data));
+
+    const [tokenResponse, TokenError] = await promiseHandler(
+      axiosInstance.post('/app/app-user/create/token', {
+        user: loginResponse?.data?.data?.id,
+        branch: selectedBranch?.id,
+        tenant: systemConfig?.tenant,
+      })
+    );
+
+    setIsLoader(false);
+    if (!tokenResponse) {
+      toast({
+        title: 'Error while signing in',
+        variant: 'destructive',
+        description: TokenError.message,
+      });
+      return;
+    }
+    if (!tokenResponse.data.success) {
+      toast({
+        title: 'Error while signing in',
+        variant: 'destructive',
+        description: tokenResponse.data.message,
+      });
+      return;
+    }
+
+    dispatch(
+      login({ ...loginResponse.data.data, token: tokenResponse.data.data })
+    );
     toggleModal(false);
   };
 

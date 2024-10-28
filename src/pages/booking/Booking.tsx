@@ -47,6 +47,7 @@ const Booking = () => {
   const [payFastFormData, setPayFastFormData] = useState<any>(null);
   const { bookings, appointmentTime } = useAppSelector((x) => x.bookingState);
   const { systemConfig } = useAppSelector((x) => x.appState);
+  const { selectedBranch } = useAppSelector((x) => x.branchState);
   const formSubmitButtonRef = useRef<HTMLButtonElement>(null);
   const { toast } = useToast();
   const dispatch = useAppDispatch();
@@ -254,10 +255,12 @@ const Booking = () => {
 
     let p: object = {
       tenant: systemConfig?.tenant,
+      branch: selectedBranch?.id,
     };
     if (user?.id) {
       p = {
         tenant: systemConfig?.tenant,
+        branch: selectedBranch?.id,
         app_user: user?.id,
       };
     }
