@@ -2,7 +2,7 @@ import { ThemeColor } from '../types/app.types';
 
 export function getDomainName() {
   const domain = window.location.hostname;
-  return domain.split('.')[0];
+  return domain;
 }
 
 function setThemeColor(themeColor: ThemeColor) {
