@@ -29,6 +29,7 @@ const GroupBookingServices = () => {
   } = useAppSelector((x) => x.storeCategoryState);
   const dispatch = useAppDispatch();
   const { systemConfig } = useAppSelector((x) => x.appState);
+  const { selectedBranch } = useAppSelector((x) => x.branchState);
   const { toast } = useToast();
   const { user, guest } = useAppSelector((x) => x.authState);
   const { selectedCustomer, bookings } = useAppSelector(
@@ -88,6 +89,7 @@ const GroupBookingServices = () => {
       dispatch(
         fetchCategoriesItems({
           tenant: systemConfig?.tenant,
+          branch: selectedBranch?.id,
           categoryId: selectedCategory.id,
         })
       );

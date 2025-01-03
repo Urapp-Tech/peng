@@ -24,6 +24,7 @@ const Services = () => {
   } = useAppSelector((x) => x.storeCategoryState);
   const dispatch = useAppDispatch();
   const { systemConfig } = useAppSelector((x) => x.appState);
+  const { selectedBranch } = useAppSelector((x) => x.branchState);
   const { toast } = useToast();
   const [open, setOpen] = useState<boolean>(false);
   const [detail, setDetail] = useState<StoreService | null>();
@@ -62,6 +63,7 @@ const Services = () => {
       dispatch(
         fetchCategoriesItems({
           tenant: systemConfig?.tenant,
+          branch: selectedBranch?.id,
           categoryId: selectedCategory.id,
         })
       );
