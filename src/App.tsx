@@ -127,11 +127,11 @@ function App() {
   //   }
   // }, [user]);
 
-  if (process.env.NODE_ENV === 'production') {
-    console.log = () => {};
-    console.error = () => {};
-    console.warn = () => {};
-  }
+  // if (process.env.NODE_ENV === 'production') {
+  //   console.log = () => {};
+  //   console.error = () => {};
+  //   console.warn = () => {};
+  // }
 
   return (
     <>

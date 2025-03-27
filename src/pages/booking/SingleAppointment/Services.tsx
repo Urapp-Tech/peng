@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/redux-hooks';
 import _ from 'lodash';
 import { memo, useEffect, useState } from 'react';
 import ServiceCard from './ServiceComponents/ServiceCard';
+import { getItem } from '@/utils/local-storage';
 
 const Services = () => {
   const {
@@ -24,6 +25,7 @@ const Services = () => {
   } = useAppSelector((x) => x.storeCategoryState);
   const dispatch = useAppDispatch();
   const { systemConfig } = useAppSelector((x) => x.appState);
+  const branchData: any = getItem('BRANCH');
   const { toast } = useToast();
   const [open, setOpen] = useState<boolean>(false);
   const [detail, setDetail] = useState<StoreService | null>();
@@ -57,12 +59,17 @@ const Services = () => {
     }
   }, [notify]);
 
+  // console.log('🚀 ~ Services ~ branchData:', branchData);
+  // console.log('systemConfig', systemConfig);
+
   useEffect(() => {
     if (selectedCategory?.id) {
       dispatch(
         fetchCategoriesItems({
+          branch: branchData?.id,
           tenant: systemConfig?.tenant,
           categoryId: selectedCategory.id,
+          search: undefined,
         })
       );
     }
@@ -86,7 +93,7 @@ const Services = () => {
 
   return (
     <>
-      <MainHeading title="Select Services" />
+      <MainHeading title="Select Servicesss" />
       {CatLoading && <Skeleton className="h-[50px] w-full rounded-3xl" />}
 
       {!CatLoading && (

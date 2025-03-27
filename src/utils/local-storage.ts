@@ -8,6 +8,7 @@ type Key =
   | 'SYSTEM_CONFIG'
   | 'TENANT_CONFIG'
   | 'TENANT'
+  | 'BRANCH'
   | 'USER';
 
 function addKeyPrefix(key: string) {

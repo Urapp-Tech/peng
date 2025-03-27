@@ -22,13 +22,25 @@ const initialState: InitialState = {
 export const fetchCategoriesItems = createAsyncThunk(
   'store/fetchCategoriesItems',
   async (
-    data: { tenant: string | undefined; categoryId: string },
+    data: {
+      branch: any | undefined;
+      tenant: string | undefined;
+      categoryId: string;
+      search: string | undefined;
+    },
     { rejectWithValue }
   ) => {
     try {
       const response = await axiosInstance.get(
-        `/app/categories/items/list/${data.tenant}`,
-        { params: {...data,page:0,size:500} }
+        `/app/categories/items/list/${data.tenant}/${data.branch}`,
+        {
+          params: {
+            search: data.search,
+            categoryId: data.categoryId,
+            page: 0,
+            size: 500,
+          },
+        }
       );
       return response.data;
     } catch (error: any) {

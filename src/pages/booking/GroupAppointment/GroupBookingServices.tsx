@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/redux-hooks';
 import _ from 'lodash';
 import { memo, useEffect, useState } from 'react';
 import ServiceCard from './GroupBookingServiceComponents/ServiceCard';
+import { getItem } from '@/utils/local-storage';
 
 const GroupBookingServices = () => {
   const {
@@ -29,6 +30,7 @@ const GroupBookingServices = () => {
   } = useAppSelector((x) => x.storeCategoryState);
   const dispatch = useAppDispatch();
   const { systemConfig } = useAppSelector((x) => x.appState);
+  const branchData: any = getItem('BRANCH');
   const { toast } = useToast();
   const { user, guest } = useAppSelector((x) => x.authState);
   const { selectedCustomer, bookings } = useAppSelector(
@@ -87,8 +89,10 @@ const GroupBookingServices = () => {
     if (selectedCategory?.id) {
       dispatch(
         fetchCategoriesItems({
+          branch: branchData?.id,
           tenant: systemConfig?.tenant,
           categoryId: selectedCategory.id,
+          search: undefined,
         })
       );
     }
