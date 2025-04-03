@@ -1,11 +1,14 @@
 import assets from '@/assets';
 import { useToast } from '@/components/ui/use-toast';
+import { logout } from '@/redux/features/authStateSlice';
+import { useAppDispatch } from '@/redux/redux-hooks';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const MainScreen = () => {
   const { search } = useLocation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -39,6 +42,12 @@ const MainScreen = () => {
             className="h-auto w-full object-contain"
           />
         </div>
+        <button
+          onClick={() => dispatch(logout())}
+          className="absolute right-[100px] top-[40px] z-[11] flex-col items-start rounded-[10px] bg-white px-[25px] py-[28px] text-[16px] font-bold leading-normal text-heading-color"
+        >
+          Logout
+        </button>
       </div>
 
       <div className="flex items-center justify-center pt-[10%]">
