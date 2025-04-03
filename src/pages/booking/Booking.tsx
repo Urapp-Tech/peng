@@ -28,6 +28,7 @@ import {
 } from '@/redux/features/authModalSlice';
 import GuestLoginModal from '@/components/common/modal/GuestLoginModal';
 import AppointmentSuccessAlert from '@/components/common/alert/AppointmentSuccessAlert';
+import { login, RegisteredUser } from '@/redux/features/authStateSlice';
 
 dayjs.extend(utcPlugin);
 
@@ -57,6 +58,10 @@ const Booking = () => {
   const { loginModal, GuestLoginModal: showGuestLoginModal } = useAppSelector(
     (x) => x.authModalState
   );
+  const loginUser = useAppSelector((state) => state.authState.user);
+  // const { systemConfig } = useAppSelector((x) => x.appState);
+
+  // console.log('loginUser', loginUser);
 
   const showMsgModal = () => {
     setShowMsg(true);
@@ -265,6 +270,8 @@ const Booking = () => {
       };
     }
 
+    // console.log('p', data, p);
+
     setShowMsg(false);
     setLoading(true);
     await axiosInstance
@@ -280,7 +287,20 @@ const Booking = () => {
           //   variant: 'default',
           //   description: res.data.message,
           // });
-
+          if (
+            loginUser?.loyaltyCoins >=
+            (systemConfig?.tenantConfig?.requiredCoinsToRedeem || 0)
+          ) {
+            const coins: any =
+              Number(loginUser?.loyaltyCoins) -
+              Number(systemConfig?.tenantConfig?.requiredCoinsToRedeem);
+            dispatch(
+              login({
+                ...loginUser,
+                loyaltyCoins: coins || 0,
+              } as RegisteredUser)
+            );
+          }
           dispatch(clearBookings());
 
           if (_pm !== 'Cash') {

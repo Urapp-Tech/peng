@@ -13,6 +13,7 @@ export type RegisteredUser = {
   firstName: string;
   lastName: string;
   postalCode: string;
+  loyaltyCoins: number | any;
   userType: string;
   token: string;
 };

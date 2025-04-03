@@ -12,6 +12,8 @@ import promiseHandler from './utils/promise-handler';
 import { fetchBranch, setBranch } from './redux/features/branchSlice';
 import _ from 'lodash';
 import SelectBranchModal from './components/common/modal/SelectBranchModal';
+import axiosInstance from './api/axiosInstance';
+import { login, RegisteredUser } from './redux/features/authStateSlice';
 
 // Create a separate component to handle route rendering
 function RouterOutlet() {
@@ -24,6 +26,7 @@ function App() {
   const persistedDeviceData = useAppSelector(
     (state) => state.deviceStates.deviceData
   );
+  const loginUser = useAppSelector((state) => state.authState.user);
 
   const { toast } = useToast();
 
@@ -64,6 +67,20 @@ function App() {
     dispatch(setTenantConfig(getTenantResult.data.data.tenantConfig));
     dispatch(setTenant(getTenantResult.data.data));
   }
+
+  useEffect(() => {
+    const getProfile = async () => {
+      const userProfile = await axiosInstance.get(`/app/app-user/profile`);
+      dispatch(
+        login({
+          ...loginUser,
+          loyaltyCoins: Number(userProfile.data.data.loyaltyCoins) || 0,
+        } as RegisteredUser)
+      );
+      // console.log('userProfile', userProfile);
+    };
+    getProfile();
+  }, []);
 
   useEffect(() => {
     async function getSystemConfig() {

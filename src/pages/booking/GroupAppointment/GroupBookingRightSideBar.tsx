@@ -18,8 +18,26 @@ const GroupBookingRightSideBar: React.FC<RightSideBarProps> = ({
   const { bookings, appointmentTime } = useAppSelector(
     (x) => x.groupBookingState
   );
-  const { systemConfig } = useAppSelector((x) => x.appState);
   const [customers, setCustomers] = useState<string[]>([]);
+  const { systemConfig } = useAppSelector((x) => x.appState);
+  const { user } = useAppSelector((x) => x.authState);
+
+  // console.log('enableLoyaltyProgram', systemConfig, user);
+
+  const getDiscount = () => {
+    if (
+      bookings.reduce(
+        (total: number, next: GroupBooking) =>
+          total + _.toNumber(next.service.price),
+        0
+      ) > 0 &&
+      systemConfig?.tenantConfig?.enableLoyaltyProgram &&
+      user?.loyaltyCoins >= systemConfig?.tenantConfig?.requiredCoinsToRedeem
+    ) {
+      return systemConfig?.tenantConfig?.loyaltyCoinConversionRate;
+    }
+    return 0;
+  };
 
   useEffect(() => {
     const c = bookings.reduce(
@@ -67,6 +85,28 @@ const GroupBookingRightSideBar: React.FC<RightSideBarProps> = ({
         )}
       </div>
 
+      {systemConfig?.tenantConfig?.enableLoyaltyProgram && (
+        <div className="mt-[30px] border-t-2 border-primary py-[15px]">
+          <div className="py-[3px]">
+            <span className="block text-[16px] font-bold leading-normal text-heading-color">
+              Loyalty Coins
+            </span>
+          </div>
+          <span className="block text-[12px] font-semibold leading-normal text-heading-color">
+            Loyalty Coins Conversion Rate :{' '}
+            {systemConfig?.tenantConfig?.loyaltyCoinConversionRate || 0}
+          </span>
+          <span className="block text-[12px] font-semibold leading-normal text-heading-color">
+            Minimum Coins to Redeem :{' '}
+            {systemConfig?.tenantConfig?.requiredCoinsToRedeem}
+          </span>
+          <span className="block text-[12px] font-semibold leading-normal text-heading-color">
+            {`${user?.firstName || ''} ${user?.lastName || ''}`} Coins :{' '}
+            {user?.loyaltyCoins || 0}
+          </span>
+        </div>
+      )}
+
       {customers?.map((customer, j) => (
         <div key={j} className="mt-3">
           {j > 0 && <hr />}
@@ -97,10 +137,10 @@ const GroupBookingRightSideBar: React.FC<RightSideBarProps> = ({
         </div>
       ))}
 
-      <div className="mt-[30px] flex justify-between border-t-2 border-primary py-[15px]">
+      <div className="mt-[30px] flex justify-between border-t-2 border-primary py-[2px]">
         <div className="py-[10px]">
           <span className="block text-[16px] font-bold leading-normal text-heading-color">
-            Total
+            Sub Total
           </span>
         </div>
 
@@ -113,6 +153,54 @@ const GroupBookingRightSideBar: React.FC<RightSideBarProps> = ({
                 total + _.toNumber(next.service.price),
               0
             )}{' '}
+          </span>
+        </div>
+      </div>
+
+      {systemConfig?.tenantConfig?.enableLoyaltyProgram && (
+        <div className="flex justify-between">
+          <div className="py-[2px]">
+            <span className="block text-[16px] font-bold leading-normal text-heading-color">
+              Discount
+            </span>
+          </div>
+
+          <div className="py-[2px]">
+            <span className="block text-[16px] font-bold leading-normal text-heading-color">
+              {' '}
+              {CURRENCY_SYMBOL}{' '}
+              {(bookings.reduce(
+                (total: number, next: GroupBooking) =>
+                  total + _.toNumber(next.service.price),
+                0
+              ) > 0 &&
+                user?.loyaltyCoins >=
+                  (systemConfig?.tenantConfig?.requiredCoinsToRedeem || 0) &&
+                systemConfig?.tenantConfig?.loyaltyCoinConversionRate) ||
+                0}
+            </span>
+          </div>
+        </div>
+      )}
+
+      <div className="flex justify-between">
+        <div className="py-[2px]">
+          <span className="block text-[16px] font-bold leading-normal text-heading-color">
+            Grand Total
+          </span>
+        </div>
+
+        <div className="py-[2px]">
+          <span className="block text-[16px] font-bold leading-normal text-heading-color">
+            <span className="text-[12px] font-normal leading-normal text-heading-color">
+              ( Price exclusive of Tax )
+            </span>{' '}
+            {CURRENCY_SYMBOL}{' '}
+            {bookings.reduce(
+              (total: number, next: GroupBooking) =>
+                total + _.toNumber(next.service.price),
+              0
+            ) - getDiscount()}
           </span>
         </div>
       </div>
