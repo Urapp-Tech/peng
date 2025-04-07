@@ -28,6 +28,8 @@ function App() {
   );
   const loginUser = useAppSelector((state) => state.authState.user);
 
+  console.log('loginUser', loginUser);
+
   const { toast } = useToast();
 
   const dispatch = useAppDispatch();

@@ -93,7 +93,7 @@ const Services = () => {
 
   return (
     <>
-      <MainHeading title="Select Servicesss" />
+      <MainHeading title="Select Services" />
       {CatLoading && <Skeleton className="h-[50px] w-full rounded-3xl" />}
 
       {!CatLoading && (
